@@ -7,5 +7,5 @@ public interface ItemView {
     Item addUI();
     Item deleteUI(List<Item> list);
     void printList(List<Item> list);
-    Item updateUI(Item item);
+    Item updateUI(List<Item> list);
 }

@@ -29,7 +29,7 @@ public class ItemViewImpl implements ItemView {
     }
 
     @Override
-    public Item updateUI(Item item) {
+    public Item updateUI(List<Item> list) {
         return null;
     }
 }

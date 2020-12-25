@@ -60,6 +60,9 @@ public class ItemControllerImpl implements ItemController {
 
     @Override
     public void update() {
+        List<Item> items = dao.selectAll();
+        Item item = view.updateUI(items);
+        dao.update(item);
 
     }
 }
