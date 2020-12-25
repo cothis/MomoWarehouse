@@ -12,7 +12,7 @@ public class ItemDao {
 
     public void addItem(Item item) {
         String sql = "insert into ITEM(ITEM_ID, NAME, PRICE_BY_HOUR)" +
-                " values(ITEM_ID_SEQ.nextval, ?, ?";
+                " values(ITEM_ID_SEQ.nextval, ?, ?)";
         try {
             connect();
             PreparedStatement pstmt = getPreparedStatement(sql);
@@ -25,11 +25,12 @@ public class ItemDao {
             close();
         }
     }
+
     private List<Item> parseItemList(ResultSet rs) {
         List<Item> list = new ArrayList<>();
 
         try {
-            while(rs.next()) {
+            while (rs.next()) {
                 int item_id = rs.getInt("ITEM_ID");
                 String name = rs.getString("NAME");
                 int price_by_hour = rs.getInt("PRICE_BY_HOUR");
@@ -55,7 +56,7 @@ public class ItemDao {
             ResultSet rs = executeQuery();
 
             List<Item> items = parseItemList(rs);
-            if(items.size() > 0) {
+            if (items.size() > 0) {
                 result = items.get(0);
             }
 
@@ -91,10 +92,39 @@ public class ItemDao {
     }
 
     public void delete(Item item) {
+        if(item == null) return;
 
+        try {
+            connect();
+            String sql = "delete from ITEM" +
+                    " where ITEM_ID = ?";
+            getPreparedStatement(sql).setInt(1, item.getItemId());
+
+            execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
     }
 
     public void update(Item item) {
+        try {
+            connect();
+            String sql = "update ITEM" +
+                    " set NAME = ?, PRICE_BY_HOUR = ?" +
+                    " where ITEM_ID = ?";
 
+            PreparedStatement pstmt = getPreparedStatement(sql);
+            pstmt.setString(1, item.getName());
+            pstmt.setInt(2, item.getPriceByHour());
+            pstmt.setInt(3, item.getItemId());
+
+            execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
     }
 }
