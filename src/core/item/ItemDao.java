@@ -18,6 +18,7 @@ public class ItemDao {
             PreparedStatement pstmt = getPreparedStatement(sql);
             pstmt.setString(1, item.getName());
             pstmt.setInt(2, item.getPriceByHour());
+            execute();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

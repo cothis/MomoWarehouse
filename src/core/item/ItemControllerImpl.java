@@ -41,6 +41,7 @@ public class ItemControllerImpl implements ItemController {
     @Override
     public void add() {
         Item item = view.addUI();
+        item = new Item("abc", 1000);
         dao.addItem(item);
     }
 

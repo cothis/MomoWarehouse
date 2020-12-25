@@ -15,6 +15,10 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public Item addUI() {
+        System.out.println("항목 추가 화면입니다.");
+        Item item = null;
+
+        System.out.print("이름 : ");
         return null;
     }
 
@@ -25,7 +29,9 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public void printList(List<Item> list) {
-
+        for (Item item : list) {
+            System.out.println(item);
+        }
     }
 
     @Override

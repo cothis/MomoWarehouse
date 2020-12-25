@@ -24,13 +24,13 @@ create sequence SPOT_ID_SEQ start with 2001 increment by 1 nocache;
 create table MEMBER
 (
     MEMBER_ID VARCHAR2(60),
-    PW        VARCHAR2(60)           not null,
-    NAME      VARCHAR2(60)           not null,
-    PHONE     VARCHAR2(20)           not null,
+    PW        VARCHAR2(60)                not null,
+    NAME      VARCHAR2(60)                not null,
+    PHONE     VARCHAR2(20)                not null,
     EMAIL     VARCHAR2(60),
-    CASH      NUMBER(8) default 1000 not null,
+    CASH      NUMBER(8)    default 1000   not null,
     SPOT_ID   NUMBER(8),
-    GRADE     VARCHAR2(20)           not null,
+    GRADE     VARCHAR2(20) default 'USER' not null,
     constraint MEMBER_ID_PK primary key (MEMBER_ID),
     constraint MEMBER_SPOT_FK foreign key (SPOT_ID) references SPOT (SPOT_ID)
 );
@@ -59,8 +59,9 @@ create table MomoInfo
     constraint MOMO_TIME_CHK check ( OUT_TIME >= IN_TIME )
 );
 create sequence MOMO_ID_SEQ start with 3001 increment by 1 nocache;
-create index MOMO_IN_TIME_IDX on MomoInfo(IN_TIME);
-create index MOMO_STATUS_IDX on MomoInfo(STATUS);
+create index MOMO_IN_TIME_IDX on MomoInfo (IN_TIME);
+create index MOMO_STATUS_IDX on MomoInfo (STATUS);
+
 
 -- 회원정보 변경 로그 테이블
 create table MEMBER_LOG
@@ -89,15 +90,16 @@ DROP SEQUENCE LOG_ID_SEQ;
 
 -- 회원정보 변경 시, 로그 기록 트리거
 create or replace trigger MEMBER_LOG_TRIGGER
-    after insert or update or delete on MEMBER
+    after insert or update or delete
+    on MEMBER
     for each row
 declare
     V_MEMBER_ID MEMBER_LOG.MEMBER_ID%type;
-    V_PW MEMBER_LOG.PW%type;
-    V_NAME MEMBER_LOG.NAME%type;
-    V_PHONE MEMBER_LOG.PHONE%type;
-    V_EMAIL MEMBER_LOG.EMAIL%type;
-    V_LOG_MODE MEMBER_LOG.LOG_MODE%type;
+    V_PW        MEMBER_LOG.PW%type;
+    V_NAME      MEMBER_LOG.NAME%type;
+    V_PHONE     MEMBER_LOG.PHONE%type;
+    V_EMAIL     MEMBER_LOG.EMAIL%type;
+    V_LOG_MODE  MEMBER_LOG.LOG_MODE%type;
 BEGIN
     IF INSERTING THEN
         V_MEMBER_ID := :NEW.MEMBER_ID;
@@ -141,11 +143,11 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE(V_MEMBER_ID || '유저 : ' || V_LOG_MODE);
 
     INSERT INTO MEMBER_LOG(LOG_ID, MEMBER_ID, PW, NAME, PHONE, EMAIL, LOG_MODE)
-    VALUES(LOG_ID_SEQ.nextval, V_MEMBER_ID, V_PW, V_NAME, V_PHONE, V_EMAIL, V_LOG_MODE);
+    VALUES (LOG_ID_SEQ.nextval, V_MEMBER_ID, V_PW, V_NAME, V_PHONE, V_EMAIL, V_LOG_MODE);
 END;
 
 -- admin data
-alter trigger MEMBER_LOG_TRIGGER disable;
+    alter trigger MEMBER_LOG_TRIGGER disable;
 insert into MEMBER(MEMBER_ID, PW, NAME, PHONE, EMAIL, GRADE)
 values ('admin', 'admin', 'admin', '010-1234-5678', 'admin@momo.com', 'ADMIN');
 alter trigger MEMBER_LOG_TRIGGER enable;
