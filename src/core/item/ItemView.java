@@ -1,5 +1,11 @@
 package core.item;
 
-public interface ItemView {
+import java.util.List;
 
+public interface ItemView {
+    String itemIndex();
+    Item addUI();
+    Item deleteUI(List<Item> list);
+    void printList(List<Item> list);
+    Item updateUI(Item item);
 }
