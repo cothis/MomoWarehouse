@@ -9,7 +9,6 @@ create table ITEM
     constraint ITEM_NAME_UK unique (NAME)
 );
 create sequence ITEM_ID_SEQ start with 1001 increment by 1 nocache;
-
 -- 보관소 테이블
 create table SPOT
 (
@@ -41,14 +40,6 @@ create index MEMBER_NAME_IDX ON MEMBER (NAME);
 alter table MEMBER
 add (CASH NUMBER(8) default 1000);
 */
-
-alter trigger MEMBER_LOG_TRIGGER disable;
-insert into MEMBER(MEMBER_ID, PW, NAME, PHONE, EMAIL, GRADE)
-values ('admin', 'admin', 'admin', '010-1234-5678', 'admin@momo.com', 'ADMIN');
-alter trigger MEMBER_LOG_TRIGGER enable;
-
-select * from MEMBER;
-select * from MEMBER_LOG;
 
 -- ITEM_LIST 테이블
 create table MomoInfo
@@ -90,8 +81,11 @@ create index LOG_MODE_IDX on MEMBER_LOG (LOG_MODE);
 create index LOG_MEMBER_ID_IDX on MEMBER_LOG (MEMBER_ID);
 create index LOG_MEMBER_NAME_IDX on MEMBER_LOG (NAME);
 
+/*
 -- 시퀀스 삭제
 DROP SEQUENCE LOG_ID_SEQ;
+*/
+
 
 -- 회원정보 변경 시, 로그 기록 트리거
 create or replace trigger MEMBER_LOG_TRIGGER
@@ -119,9 +113,9 @@ BEGIN
         V_PHONE := :OLD.PHONE;
         V_EMAIL := :OLD.EMAIL;
         V_LOG_MODE := '회원수정';
-        
+
         IF :OLD.MEMBER_ID != :NEW.MEMBER_ID THEN
-            V_MEMBER_ID := :OLD.MEMBER_ID || ' -> ' || :NEW.MEMBER_ID; 
+            V_MEMBER_ID := :OLD.MEMBER_ID || ' -> ' || :NEW.MEMBER_ID;
         end if;
         IF :OLD.PW != :NEW.PW THEN
             V_PW := :OLD.PW || ' -> ' || :NEW.PW;
@@ -150,14 +144,25 @@ BEGIN
     VALUES(LOG_ID_SEQ.nextval, V_MEMBER_ID, V_PW, V_NAME, V_PHONE, V_EMAIL, V_LOG_MODE);
 END;
 
+-- admin data
+alter trigger MEMBER_LOG_TRIGGER disable;
+insert into MEMBER(MEMBER_ID, PW, NAME, PHONE, EMAIL, GRADE)
+values ('admin', 'admin', 'admin', '010-1234-5678', 'admin@momo.com', 'ADMIN');
+alter trigger MEMBER_LOG_TRIGGER enable;
+
+/*
 INSERT INTO MEMBER(MEMBER_ID, PW, NAME, PHONE, EMAIL)
 VALUES ('MINHO', '1234', 'YUNMINHO', '010-2232-2342', 'MINHO@HA.COM');
-
 UPDATE MEMBER SET PW='5678' WHERE 1 = 1;
 DELETE FROM MEMBER WHERE 1 = 1;
-DELETE FROM MEMBER_LOG WHERE 1 = 1;
 
+DELETE FROM MEMBER_LOG WHERE 1 = 1;
 SELECT * FROM MEMBER;
+
+
+
 SELECT * FROM MEMBER_LOG;
 
-
+select * from MEMBER;
+select * from MEMBER_LOG;
+*/
