@@ -10,6 +10,26 @@ public class SpotControllerImpl implements SpotController{
     }
 
     @Override
+    public void create() {
+        
+    }
+
+    @Override
+    public void read() {
+
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void delete() {
+
+    }
+
+    @Override
     public List<Spot> findAll() {
         List<Spot> list = new ArrayList<>();
         list.add(new Spot(1, "비트보관소", "서울"));
