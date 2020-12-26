@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class InputValidator {
     public static Scanner sc = new Scanner(System.in);
 
-    public static String inputUserChoice(String[] commands) {
+    public static String inputUserChoice(String... commands) {
         String result = null;
         boolean exit = false;
 

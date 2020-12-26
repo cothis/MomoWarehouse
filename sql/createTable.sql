@@ -70,7 +70,7 @@ create table MEMBER_LOG
     MEMBER_ID VARCHAR2(60)         not null,
     PW        VARCHAR2(60)         not null,
     NAME      VARCHAR2(60)         not null,
-    PHONE     VARCHAR2(20)         not null,
+    PHONE     VARCHAR2(60)         not null,
     EMAIL     VARCHAR2(60),
     LOG_DATE  DATE default SYSDATE not null,
     LOG_MODE  VARCHAR2(30)         not null,
