@@ -24,10 +24,6 @@ public class InputValidator {
                     break;
                 }
             }
-            if ("exit".equals(result)) {
-                result = "exit";
-                exit = true;
-            }
         }
         return result;
 

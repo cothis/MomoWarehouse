@@ -11,7 +11,7 @@ public class ItemViewImpl implements ItemView {
     @Override
     public String itemIndex() {
         System.out.println("항목 관리 화면입니다.");
-        String[] commands = {"항목추가", "항목삭제", "항목조회", "항목변경"};
+        String[] commands = {"항목추가", "항목삭제", "항목조회", "항목변경", "종료"};
         return InputValidator.inputUserChoice(commands);
     }
 
@@ -46,15 +46,13 @@ public class ItemViewImpl implements ItemView {
     @Override
     public Item addUI() {
         System.out.println("항목 추가 화면입니다.");
-        Item item = null;
         String name;
         int priceByHour;
 
         name = inputName();
 
         priceByHour = inputPriceByHour();
-        item = new Item(name, priceByHour);
-        return item;
+        return new Item(name, priceByHour);
     }
 
     @Override

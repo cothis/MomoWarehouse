@@ -1,7 +1,5 @@
 package core.item;
 
-import core.common.InputValidator;
-
 import java.util.List;
 
 public class ItemControllerImpl implements ItemController {
@@ -16,30 +14,31 @@ public class ItemControllerImpl implements ItemController {
 
     @Override
     public void itemMenu() {
-        while(true) {
+        boolean exit = false;
+        while(!exit) {
             String select = view.itemIndex();
             switch (select) {
                 case "항목추가":
-                    add();
+                    create();
                     break;
                 case "항목삭제":
                     delete();
                     break;
                 case "항목조회":
-                    select();
+                    read();
                     break;
                 case "항목변경":
                     update();
                     break;
-            }
-            if("exit".equals(select)) {
-                break;
+                case "종료":
+                    exit = true;
+                    break;
             }
         }
     }
 
     @Override
-    public void add() {
+    public void create() {
         Item item = view.addUI();
         dao.addItem(item);
     }
@@ -53,7 +52,7 @@ public class ItemControllerImpl implements ItemController {
     }
 
     @Override
-    public void select() {
+    public void read() {
         List<Item> items = dao.selectAll();
         view.printList(items);
     }
