@@ -152,6 +152,7 @@ insert into MEMBER(MEMBER_ID, PW, NAME, PHONE, EMAIL, GRADE)
 values ('admin', 'admin', 'admin', '010-1234-5678', 'admin@momo.com', 'ADMIN');
 alter trigger MEMBER_LOG_TRIGGER enable;
 
+
 /*
 INSERT INTO MEMBER(MEMBER_ID, PW, NAME, PHONE, EMAIL)
 VALUES ('MINHO', '1234', 'YUNMINHO', '010-2232-2342', 'MINHO@HA.COM');

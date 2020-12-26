@@ -21,8 +21,12 @@ public class Member {
 		this.grade = grade;
 		this.cash = cash;
 	}
-	
-	
+
+	public Member(String memberId, String name) {
+		this.memberId = memberId;
+		this.name = name;
+		this.grade = "USER";
+	}
 
 	public String getMemberId() {
 		return memberId;

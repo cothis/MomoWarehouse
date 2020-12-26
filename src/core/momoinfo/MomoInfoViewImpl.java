@@ -1,21 +1,40 @@
 package core.momoinfo;
 
-import core.common.InputValidator;
+import core.item.Item;
 import core.member.Member;
+import core.momoinfo.option.HistoryOption;
+import core.momoinfo.option.InOutOption;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+
+import static core.common.InputValidator.*;
+import static core.momoinfo.option.HistoryOption.*;
+import static core.momoinfo.option.InOutOption.*;
 
 public class MomoInfoViewImpl implements MomoInfoView {
 
     private final Scanner sc = new Scanner(System.in);
 
     @Override
-    public String history() {
+    public InOutOption inOut() {
+        System.out.println("입출고 메뉴");
+        String select = inputUserChoice(IN_SPOT.toString(), OUT_SPOT.toString(), EXIT_SPOT.toString());
+
+        return parseInOutOption(select);
+    }
+
+    @Override
+    public HistoryOption history() {
         System.out.println("입출고 내역");
 
-        return InputValidator.inputUserChoice("입고내역", "출고내역", "전체보기", "종료");
+        String select = inputUserChoice(
+                IN_HISTORY.toString(),
+                OUT_HISTORY.toString(),
+                ALL_HISTORY.toString(),
+                EXIT_HISTORY.toString());
+        return parseHistoryOption(select);
     }
 
     @Override
@@ -52,6 +71,59 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 } else {
                     return Optional.of(list.get(rowNum - 1));
                 }
+            } catch (Exception e) {
+                System.out.println("잘못 입력하셨습니다.");
+            }
+        }
+    }
+
+    @Override
+    public Optional<Item> selectItem(List<Item> read) {
+        for (Item item : read) {
+            System.out.println(item);
+        }
+        while (true) {
+            try {
+                System.out.println("입고할 아이템 ID를 입력해주세요");
+                System.out.print(">> ");
+                String select = sc.nextLine();
+                if (select.equals("exit")) {
+                    return Optional.empty();
+                }
+                Optional<Item> any = read.stream()
+                        .filter(item -> item.getItemId() == Integer.parseInt(select))
+                        .findAny();
+                if (any.isEmpty()) {
+                    throw new IllegalStateException("잘못 입력하셨습니다.");
+                }
+                return any;
+            } catch (Exception e) {
+                System.out.println("잘못 입력하셨습니다.");
+            }
+        }
+    }
+
+    @Override
+    public Optional<MomoInfo> selectOutItem(List<MomoInfo> inItems) {
+        for (MomoInfo inItem : inItems) {
+            System.out.println(inItem);
+        }
+        while(true) {
+            try {
+                System.out.println("출고할 아이템 ID를 입력해주세요");
+                System.out.print(">> ");
+                String select = sc.nextLine();
+                if (select.equals("exit")) {
+                    return Optional.empty();
+                }
+                Optional<MomoInfo> any = inItems.stream()
+                        .filter(momoInfo -> momoInfo.getItemId() == Integer.parseInt(select))
+                        .findAny();
+                System.out.println("any = " + any);
+                if (any.isEmpty()) {
+                    throw new IllegalStateException("잘못 입력하셨습니다.");
+                }
+                return any;
             } catch (Exception e) {
                 System.out.println("잘못 입력하셨습니다.");
             }

@@ -1,24 +1,26 @@
 package core.momoinfo;
 
+import java.sql.Date;
+
 public class MomoInfo {
 	private int momoId;
 	private int spotId;
 	private int itemId;
-	private int memberId;
-	private String inDate;
-	private String outDate;
+	private String memberId;
+	private Date inTime;
+	private Date outTime;
 	private int priceByHour;
 	private String status;
 	
-	public MomoInfo(int momoId, int spotId, int itemId, int memberId, String inDate, String outDate, int priceByHour,
+	public MomoInfo(int momoId, int spotId, int itemId, String memberId, Date inTime, Date outTime, int priceByHour,
 			String status) {
 		super();
 		this.momoId = momoId;
 		this.spotId = spotId;
 		this.itemId = itemId;
 		this.memberId = memberId;
-		this.inDate = inDate;
-		this.outDate = outDate;
+		this.inTime = inTime;
+		this.outTime = outTime;
 		this.priceByHour = priceByHour;
 		this.status = status;
 	}
@@ -47,28 +49,28 @@ public class MomoInfo {
 		this.itemId = itemId;
 	}
 
-	public int getMemberId() {
+	public String getMemberId() {
 		return memberId;
 	}
 
-	public void setMemberId(int memberId) {
+	public void setMemberId(String memberId) {
 		this.memberId = memberId;
 	}
 
-	public String getInDate() {
-		return inDate;
+	public Date getInTime() {
+		return inTime;
 	}
 
-	public void setInDate(String inDate) {
-		this.inDate = inDate;
+	public void setInTime(Date inTime) {
+		this.inTime = inTime;
 	}
 
-	public String getOutDate() {
-		return outDate;
+	public Date getOutTime() {
+		return outTime;
 	}
 
-	public void setOutDate(String outDate) {
-		this.outDate = outDate;
+	public void setOutTime(Date outTime) {
+		this.outTime = outTime;
 	}
 
 	public int getPriceByHour() {
@@ -90,7 +92,7 @@ public class MomoInfo {
 	@Override
 	public String toString() {
 		return "MomoInfo [momoId=" + momoId + ", spotId=" + spotId + ", itemId=" + itemId + ", memberId=" + memberId
-				+ ", inDate=" + inDate + ", outDate=" + outDate + ", priceByHour=" + priceByHour + ", status=" + status
+				+ ", inTime=" + inTime + ", outTime=" + outTime + ", priceByHour=" + priceByHour + ", status=" + status
 				+ "]";
 	}	
 }

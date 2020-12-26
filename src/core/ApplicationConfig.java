@@ -18,15 +18,15 @@ public class ApplicationConfig {
 	private final MomoInfoDao momoInfoDao = new MomoInfoDao();
 	private final MomoInfoView momoInfoView = new MomoInfoViewImpl();
 	private final MomoInfoController momoInfoController =
-			new MomoInfoControllerImpl(spotController, itemController, momoInfoDao, momoInfoView);
+			new MomoInfoControllerImpl(itemController, momoInfoDao, momoInfoView);
 
 	private final MemberController memberController = null;
 	
 	public void start() {
 //		memberController.indexMenu();
-//		spotController.spotMenu();
+		spotController.spotMenu();
 		Member admin = new Member("admin", "admin", "admin", "123", "123", 0, "ADMIN", 0);
-		Member user = new Member("user", "user", "user", "123", "123", 2004, "USER", 10000);
-		momoInfoController.inOutHistory(admin);
+		Member user = new Member("MINHO", "1234", "YUNMINHO", "010-2232-2342", "123", 2001, "USER", 10000);
+		momoInfoController.inOutMenu(user);
 	}
 }

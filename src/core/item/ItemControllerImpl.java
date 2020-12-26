@@ -25,7 +25,8 @@ public class ItemControllerImpl implements ItemController {
                     delete();
                     break;
                 case "항목조회":
-                    read();
+                    List<Item> read = read();
+                    view.printList(read);
                     break;
                 case "항목변경":
                     update();
@@ -52,16 +53,14 @@ public class ItemControllerImpl implements ItemController {
     }
 
     @Override
-    public void read() {
-        List<Item> items = dao.selectAll();
-        view.printList(items);
+    public List<Item> read() {
+        return dao.selectAll();
     }
 
     @Override
     public void update() {
-        List<Item> items = dao.selectAll();
+        List<Item> items = read();
         Item item = view.updateUI(items);
         dao.update(item);
-
     }
 }
