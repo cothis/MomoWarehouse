@@ -67,11 +67,6 @@ public class SpotControllerImpl implements SpotController{
 
     @Override
     public List<Spot> findAll() {
-        List<Spot> list = new ArrayList<>();
-        list.add(new Spot(1, "비트보관소", "서울"));
-        list.add(new Spot(2, "제주다락", "제주"));
-        list.add(new Spot(3, "기브", "성북"));
-
-        return list;
+        return dao.selectAll();
     }
 }
