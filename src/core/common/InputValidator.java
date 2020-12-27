@@ -26,6 +26,5 @@ public class InputValidator {
             }
         }
         return result;
-
     }
 }
