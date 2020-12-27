@@ -59,10 +59,11 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
             int i = 1;
             for (Member member : list) {
-                System.out.printf("%d. id: %s, name: %s%n", i + 1, member.getMemberId(), member.getName());
+                System.out.printf("%d. id: %s, name: %s%n", i, member.getMemberId(), member.getName());
                 i++;
             }
-            System.out.printf("%d. 전체보기", i);
+            System.out.printf("%d. 전체보기%n", i);
+            System.out.print(">>");
 
             try {
                 int rowNum = Integer.parseInt(sc.nextLine());
@@ -93,7 +94,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 Optional<Item> any = read.stream()
                         .filter(item -> item.getItemId() == Integer.parseInt(select))
                         .findAny();
-                if (any.isEmpty()) {
+                if (!any.isPresent()) {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
                 }
                 return any;
@@ -120,7 +121,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
                         .filter(momoInfo -> momoInfo.getItemId() == Integer.parseInt(select))
                         .findAny();
                 System.out.println("any = " + any);
-                if (any.isEmpty()) {
+                if (!any.isPresent()) {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
                 }
                 return any;

@@ -9,6 +9,19 @@ public class Member {
 	private int spot_id;
 	private String grade;
 	private int cash;
+		
+	public Member() {
+	}
+	
+	public Member(String memberId, String pw, String name, String phone, String email, int spot_id) {
+		this.memberId = memberId;
+		this.pw = pw;
+		this.name = name;
+		this.phone = phone;
+		this.email = email;
+		this.spot_id = spot_id;
+	}
+	
 
 	public Member(String memberId, String pw, String name, String phone, String email, int spot_id, String grade,
 			int cash) {
@@ -22,10 +35,14 @@ public class Member {
 		this.cash = cash;
 	}
 
-	public Member(String memberId, String name) {
+    public Member(String memberId, String name) {
 		this.memberId = memberId;
 		this.name = name;
-		this.grade = "USER";
+    }
+
+
+    public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 
 	public String getMemberId() {
@@ -63,9 +80,20 @@ public class Member {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	
+
+	public void setSpot_id(int spot_id) {
+		this.spot_id = spot_id;
+	}
 
 	public int getSpot_id() {
 		return spot_id;
+	}
+	
+
+	public void setGrade(String grade) {
+		this.grade = grade;
 	}
 
 	public String getGrade() {
@@ -83,5 +111,15 @@ public class Member {
 	public boolean checkPassword(String pw) {
 		return this.pw == pw;
 	}
+
+	@Override
+	public String toString() {
+		return memberId + " 회원님의 정보 | 이름 = " + name + ", 전화번호 = " + phone + ", 이메일 = "
+				+ email + ", 보관소ID = " + spot_id + ", 등급 = " + grade + ", 충전금액 = " + cash ;
+	}
+	
+	
+	
+	
 	
 }

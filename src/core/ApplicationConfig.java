@@ -1,8 +1,7 @@
 package core;
 
 import core.item.*;
-import core.member.Member;
-import core.member.MemberController;
+import core.member.*;
 import core.momoinfo.*;
 import core.spot.*;
 
@@ -20,13 +19,22 @@ public class ApplicationConfig {
 	private final MomoInfoController momoInfoController =
 			new MomoInfoControllerImpl(itemController, momoInfoDao, momoInfoView);
 
-	private final MemberController memberController = null;
+	MemberDao memberDao = new MemberDao();
+	MemberView memberView = new MemberViewImpl(memberDao);
+	private final MemberController memberController =
+			new MemberControllerImpl(memberView,
+					memberDao,
+					momoInfoController,
+					itemController,
+					spotController);
 	
 	public void start() {
-//		memberController.indexMenu();
-		spotController.spotMenu();
-		Member admin = new Member("admin", "admin", "admin", "123", "123", 0, "ADMIN", 0);
-		Member user = new Member("MINHO", "1234", "YUNMINHO", "010-2232-2342", "123", 2001, "USER", 10000);
-		momoInfoController.inOutMenu(user);
+//		itemController.itemMenu();
+//		spotController.spotMenu();
+//		Member admin = new Member("admin", "admin", "admin", "123", "123", 0, "ADMIN", 0);
+//		Member user = new Member("MINHO", "1234", "YUNMINHO", "010-2232-2342", "123", 2005, "USER", 10000);
+//		momoInfoController.inOutMenu(user);
+//		momoInfoController.inOutHistory(admin);
+		memberController.indexMenu();
 	}
 }
