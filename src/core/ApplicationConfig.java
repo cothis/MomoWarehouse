@@ -6,28 +6,33 @@ import core.momoinfo.*;
 import core.spot.*;
 
 public class ApplicationConfig {
-	private final ItemDao itemDao = new ItemDao();
-	private final ItemView itemView = new ItemViewImpl();
-	private final ItemController itemController = new ItemControllerImpl(itemDao, itemView);
+	private static final ItemDao itemDao = new ItemDao();
+	private static final ItemView itemView = new ItemViewImpl();
+	private static final ItemController itemController = new ItemControllerImpl(itemDao, itemView);
 
-	private final SpotDao spotDao = new SpotDao();
-	private final SpotView spotView = new SpotViewImpl();
-	private final SpotController spotController = new SpotControllerImpl(spotDao, spotView);
+	private static final SpotDao spotDao = new SpotDao();
+	private static final SpotView spotView = new SpotViewImpl();
+	private static final SpotController spotController = new SpotControllerImpl(spotDao, spotView);
 
-	private final MomoInfoDao momoInfoDao = new MomoInfoDao();
-	private final MomoInfoView momoInfoView = new MomoInfoViewImpl();
-	private final MomoInfoController momoInfoController =
+	private static final MomoInfoDao momoInfoDao = new MomoInfoDao();
+	private static final MomoInfoView momoInfoView = new MomoInfoViewImpl();
+	private static final MomoInfoController momoInfoController =
 			new MomoInfoControllerImpl(itemController, momoInfoDao, momoInfoView);
 
-	MemberDao memberDao = new MemberDao();
-	MemberView memberView = new MemberViewImpl();
-	private final MemberController memberController =
+	private static final MemberDao memberDao = new MemberDao();
+	private static final MemberView memberView = new MemberViewImpl();
+	private static final MemberController memberController =
 			new MemberControllerImpl(memberView,
 					memberDao,
 					momoInfoController,
 					itemController,
 					spotController);
-	
+
+	public static MemberController getMemberController() {
+		return memberController;
+	}
+
+
 	public void start() {
 //		itemController.itemMenu();
 //		spotController.spotMenu();

@@ -1,5 +1,6 @@
 package core.momoinfo;
 
+import core.ApplicationConfig;
 import core.item.Item;
 import core.item.ItemController;
 import core.member.Member;

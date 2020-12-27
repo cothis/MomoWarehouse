@@ -214,4 +214,9 @@ public class MemberControllerImpl implements MemberController{
 			}
 		}
 	}
+
+	@Override
+	public boolean payStorageCost(int payPrice) {
+		return false;
+	}
 }

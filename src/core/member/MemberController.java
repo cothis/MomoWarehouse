@@ -35,7 +35,8 @@ public interface MemberController {
 	//4. 모모인포컨트롤러 메뉴호출
 	//5. 종료
 	void adminMenu();
-	
-	
+
+	//가격을 입력받고 결제 처리 후에 성공여부 리턴
+	boolean payStorageCost(int payPrice);
 	
 }
