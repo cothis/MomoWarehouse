@@ -21,5 +21,7 @@ public interface MemberView {
 	int chargeMoneyUI();//금액 충전 및 충전할 금액 리턴 
 	
 	String adminUI(); //admin메뉴 출력하고 선택값 리턴
+
+	void print(String str);
 	
 }

@@ -40,7 +40,7 @@ public class MemberControllerImpl implements MemberController{
 	public void join() {
 		Member newMember = view.joinUI(getSpotController().findAll(), dao);
 		int result = dao.insert(newMember);//입력받아 JOIN에서 MEMBER 객체 DB에 저장
-		System.out.println("처리건수 : "+ result);
+		view.print("처리건수 : "+ result);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class MemberControllerImpl implements MemberController{
 			return;
 		}
 		String grade = session.getGrade();
-		System.out.println("로그인 완료! " + session);
+		view.print("로그인 완료! " + session);
 		if(grade.equals("USER")) {
 			userMenu();
 		}else if(grade.equals("ADMIN")) {
@@ -106,19 +106,19 @@ public class MemberControllerImpl implements MemberController{
 			result = userUpdatingInput(userRudSelect);
 			
 			if(result > 0) {
-				System.out.println("처리건수 : " + result);
+				view.print("처리건수 : " + result);
 			}else {
-				System.out.println("다시 입력해 주세요.");
+				view.print("다시 입력해 주세요.");
 			}
 			
 		}else if(userMenuSelect.equals("탈퇴")) {
 			String pw = view.userOutUI(id);
 			if(pw.equals(member.getPw())) {
 				dao.delete(id);
-				System.out.println("탈퇴완료. 안녕히가십시오...");
+				view.print("탈퇴완료. 안녕히가십시오...");
 				signOut = true;
 			}else {
-				System.out.println("비밀번호가 일치하지 않습니다.");
+				view.print("비밀번호가 일치하지 않습니다.");
 			}
 		}
 		return signOut;
@@ -161,10 +161,10 @@ public class MemberControllerImpl implements MemberController{
 		if(updatingCash > 0) {
 			int newCash = originCash + updatingCash;
 			if (dao.updatingCash(session, newCash)) {
-				System.out.println(updatingCash+"원을 충전 완료하였습니다. 총 금액 : " + session.getCash());
+				view.print(updatingCash+"원을 충전 완료하였습니다. 총 금액 : " + session.getCash());
 			}
 		} else {
-			System.out.println("올바르지 않은 금액입니다. 다시 입력하세요.");
+			view.print("올바르지 않은 금액입니다. 다시 입력하세요.");
 		}
 		
 	}

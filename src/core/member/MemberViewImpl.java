@@ -74,7 +74,7 @@ public class MemberViewImpl implements MemberView {
 		System.out.print("id : ");
 		String id = sc.next().trim();
 
-		System.out.println("password : ");
+		System.out.print("password : ");
 		String password = sc.next().trim();
 
 		return new LoginInfo(id, password);
@@ -135,5 +135,12 @@ public class MemberViewImpl implements MemberView {
 
 		return inputUserChoice("물건관리", "SPOT관리", "회원로그", "입출고내역", "로그아웃");
 	}
+
+	@Override
+	public void print(String str) {
+		System.out.println(str);
+	}
+	
+	
 
 }
