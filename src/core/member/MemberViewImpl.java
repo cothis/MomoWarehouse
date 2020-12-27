@@ -97,7 +97,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public String userRudUI() {
-		printSubject("Change Infomation");
+		printSubject("Change Information");
 		return inputUserChoice("비밀번호", "이름", "전화번호", "이메일");
 	}
 
