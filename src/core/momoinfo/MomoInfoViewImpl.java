@@ -120,7 +120,6 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 Optional<MomoInfo> any = inItems.stream()
                         .filter(momoInfo -> momoInfo.getItemId() == Integer.parseInt(select))
                         .findAny();
-                System.out.println("any = " + any);
                 if (!any.isPresent()) {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
                 }

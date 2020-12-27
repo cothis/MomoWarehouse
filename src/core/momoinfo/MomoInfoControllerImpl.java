@@ -1,12 +1,9 @@
 package core.momoinfo;
 
-import core.ApplicationConfig;
 import core.item.Item;
-import core.item.ItemController;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
 import core.momoinfo.option.InOutOption;
-import core.spot.SpotController;
 
 import java.sql.Date;
 import java.util.List;
@@ -65,7 +62,9 @@ public class MomoInfoControllerImpl implements MomoInfoController {
 
                     MomoInfo momoItem = momoInfo.get();
                     int payPrice = calculateStoragePrice(momoItem);
+                    System.out.println("payPrice = " + payPrice);
                     int newMoney = session.getCash() - payPrice;
+                    System.out.println("newMoney = " + newMoney);
                     if (newMoney >= 0) {
                         if (getMemberController().updateCash(newMoney)) {
                             dao.update(momoItem);
@@ -86,7 +85,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
         Date inTime = momoInfo.getInTime();
         Date outTime = new Date(System.currentTimeMillis());
         int elapsedTime = (int) ((outTime.getTime() - inTime.getTime()) / 1000);
-        int elapsedHour = elapsedTime / 60; //원래 3600인데 임시로 분당 요금으로 처리
+        int elapsedHour = elapsedTime / 3600; //원래 3600인데 임시로 분당 요금으로 처리
 
         return priceByHour * elapsedHour;
     }

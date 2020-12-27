@@ -8,10 +8,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static core.common.CommonJdbc.*;
 import static core.momoinfo.option.HistoryOption.*;
@@ -40,14 +38,20 @@ public class MomoInfoDao {
 
     public List<MomoInfo> find(HistoryOption option) {
         List<MomoInfo> list = new ArrayList<>();
+
         try {
             connect();
             String sql = "select MOMO_ID, SPOT_ID, ITEM_ID, MEMBER_ID, IN_TIME, OUT_TIME, PRICE_BY_HOUR, STATUS" +
                     " from MOMOINFO";
+            if (selectedUser.getGrade().equals("ADMIN")) {
+                sql = sql + " where 1 = 1";
+            } else {
+                sql = sql + " where MEMBER_ID = '" + selectedUser.getMemberId() + "'";
+            }
             if(option == IN_HISTORY) {
-                sql = sql + " where STATUS = '입고'";
+                sql = sql + " and STATUS = '입고'";
             } else if (option == OUT_HISTORY) {
-                sql = sql + " where STATUS = '출고'";
+                sql = sql + " and STATUS = '출고'";
             }
             sql = sql + " order by IN_TIME";
             getPreparedStatement(sql);
