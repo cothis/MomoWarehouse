@@ -26,7 +26,7 @@ public interface MemberController {
 	
 	
 	// view(chargeMoneyUI : int) -> dao/memvo 적용
-	void chargeMoney(Member member);
+	void chargeMoney();
 	
 	//1.물건관리 2.SPOT관리 3.회원로그 4.입출고내역 5.로그아웃
 	//1. 아이템컨트롤러 메뉴 호출
@@ -37,6 +37,5 @@ public interface MemberController {
 	void adminMenu();
 
 	//가격을 입력받고 결제 처리 후에 성공여부 리턴
-	boolean payStorageCost(int payPrice);
-	
+	boolean updateCash(int newMoney);
 }

@@ -16,30 +16,29 @@ public class ApplicationConfig {
 
 	private static final MomoInfoDao momoInfoDao = new MomoInfoDao();
 	private static final MomoInfoView momoInfoView = new MomoInfoViewImpl();
-	private static final MomoInfoController momoInfoController =
-			new MomoInfoControllerImpl(itemController, momoInfoDao, momoInfoView);
+	private static final MomoInfoController momoInfoController = new MomoInfoControllerImpl(momoInfoDao, momoInfoView);
 
 	private static final MemberDao memberDao = new MemberDao();
 	private static final MemberView memberView = new MemberViewImpl();
-	private static final MemberController memberController =
-			new MemberControllerImpl(memberView,
-					memberDao,
-					momoInfoController,
-					itemController,
-					spotController);
+	private static final MemberController memberController = new MemberControllerImpl(memberView, memberDao);
 
 	public static MemberController getMemberController() {
 		return memberController;
 	}
 
+	public static MomoInfoController getMomoInfoController() {
+		return momoInfoController;
+	}
+
+	public static SpotController getSpotController() {
+		return spotController;
+	}
+
+	public static ItemController getItemController() {
+		return itemController;
+	}
 
 	public void start() {
-//		itemController.itemMenu();
-//		spotController.spotMenu();
-//		Member admin = new Member("admin", "admin", "admin", "123", "123", 0, "ADMIN", 0);
-//		Member user = new Member("MINHO", "1234", "YUNMINHO", "010-2232-2342", "123", 2005, "USER", 10000);
-//		momoInfoController.inOutMenu(user);
-//		momoInfoController.inOutHistory(admin);
 		memberController.indexMenu();
 	}
 }

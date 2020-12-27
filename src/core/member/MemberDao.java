@@ -136,8 +136,8 @@ public class MemberDao {
 	}
 
 	//Update - 충전금액 변경
-	public int updatingCash(Member member) {
-		int result = 0;
+	public boolean updatingCash(Member session, int newCash) {
+		boolean result = false;
 
 		try {
 			connect();
@@ -147,15 +147,15 @@ public class MemberDao {
 					"  WHERE MEMBER_ID = ? ";
 			PreparedStatement pstmt = getPreparedStatement(sql);
 
-			pstmt.setInt(1, member.getCash());
-			pstmt.setString(2, member.getMemberId());
+			pstmt.setInt(1, newCash);
+			pstmt.setString(2, session.getMemberId());
 
-			result = executeUpdate();
-
+			execute();
+			session.setCash(newCash);
+			result = true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
+		} finally {
 			close();
 		}
 

@@ -1,35 +1,24 @@
 package core.member;
 
-import core.item.ItemController;
-import core.momoinfo.MomoInfoController;
-import core.spot.SpotController;
+import static core.ApplicationConfig.*;
 
 public class MemberControllerImpl implements MemberController{
 	
 	private final MemberView view;
 	private final MemberDao dao;
-	private final MomoInfoController momoInfoController;
-	private final ItemController itemController;
-	private final SpotController spotController;
 	private Member session;
 
 	public MemberControllerImpl(MemberView view,
-								MemberDao dao,
-								MomoInfoController momoInfoControl,
-								ItemController itemController,
-								SpotController spotController) {
+								MemberDao dao) {
 		this.view = view;
 		this.dao = dao;
-		this.momoInfoController = momoInfoControl;
-		this.itemController = itemController;
-		this.spotController = spotController;
 	}
 	
 	@Override
 	public void indexMenu() {
-		//boolean b = true;
 		boolean exit = false;
 		while(!exit) {
+			session = null;
 			String select = view.index();
 			
 			//1.회원가입 2.로그인 3.종료
@@ -49,7 +38,7 @@ public class MemberControllerImpl implements MemberController{
 
 	@Override
 	public void join() {
-		Member newMember = view.joinUI(spotController.findAll(), dao);
+		Member newMember = view.joinUI(getSpotController().findAll(), dao);
 		int result = dao.insert(newMember);//입력받아 JOIN에서 MEMBER 객체 DB에 저장
 		System.out.println("처리건수 : "+ result);
 	}
@@ -82,16 +71,16 @@ public class MemberControllerImpl implements MemberController{
 
 			switch (select) {
 				case "회원정보수정":
-					exit = !userUpdating(session);
+					exit = userUpdating(session);
 					break;
 				case "입출고":
-					momoInfoController.inOutMenu(session);
+					getMomoInfoController().inOutMenu(session);
 					break;
 				case "입출고내역":
-					momoInfoController.inOutHistory(session);
+					getMomoInfoController().inOutHistory(session);
 					break;
 				case "충전":
-					chargeMoney(session);
+					chargeMoney();
 					break;
 				case "로그아웃":
 					exit = true;
@@ -104,9 +93,8 @@ public class MemberControllerImpl implements MemberController{
 	/*회원정보 수정*/
 	@Override
 	public boolean userUpdating(Member member) {
-		boolean loopcheck = true;
+		boolean signOut = false;
 		int result = 0;
-
 		String id = member.getMemberId();
 		
 		String userMenuSelect = view.userUpdateUI();
@@ -127,15 +115,13 @@ public class MemberControllerImpl implements MemberController{
 			String pw = view.userOutUI(id);
 			if(pw.equals(member.getPw())) {
 				dao.delete(id);
-				loopcheck = false;
 				System.out.println("탈퇴완료. 안녕히가십시오...");
+				signOut = true;
 			}else {
 				System.out.println("비밀번호가 일치하지 않습니다.");
 			}
 		}
-		
-		return loopcheck;
-		
+		return signOut;
 	}
 
 	//정보수정 -> 값 입력 -> dao에서 수정처리
@@ -166,18 +152,18 @@ public class MemberControllerImpl implements MemberController{
 		
 		return result;
 	}
-	
 
 	@Override
-	public void chargeMoney(Member member) {
-		int originCash = member.getCash(); //기존 금액
+	public void chargeMoney() {
+		int originCash = session.getCash(); //기존 금액
 		int updatingCash = view.chargeMoneyUI(); //충전금액
 		
 		if(updatingCash > 0) {
-			member.setCash(originCash + updatingCash);
-			dao.updatingCash(member);
-			System.out.println(updatingCash+"원을 충전 완료하였습니다. 총 금액 : " + member.getCash());
-		}else {
+			int newCash = originCash + updatingCash;
+			if (dao.updatingCash(session, newCash)) {
+				System.out.println(updatingCash+"원을 충전 완료하였습니다. 총 금액 : " + session.getCash());
+			}
+		} else {
 			System.out.println("올바르지 않은 금액입니다. 다시 입력하세요.");
 		}
 		
@@ -193,18 +179,18 @@ public class MemberControllerImpl implements MemberController{
 			String select = view.adminUI();
 			switch (select) {
 				case "물건관리": {
-					itemController.itemMenu();
+					getItemController().itemMenu();
 					break;
 				}
 				case "SPOT관리": {
-					spotController.spotMenu();
+					getSpotController().spotMenu();
 					break;
 				}
 				case "회원로그": {
 					break;
 				}
 				case "입출고내역": {
-					momoInfoController.inOutHistory(session);
+					getMomoInfoController().inOutHistory(session);
 					break;
 				}
 				case "로그아웃": {
@@ -216,7 +202,7 @@ public class MemberControllerImpl implements MemberController{
 	}
 
 	@Override
-	public boolean payStorageCost(int payPrice) {
-		return false;
+	public boolean updateCash(int newMoney) {
+		return dao.updatingCash(session, newMoney);
 	}
 }

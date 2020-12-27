@@ -8,19 +8,20 @@ import core.momoinfo.option.HistoryOption;
 import core.momoinfo.option.InOutOption;
 import core.spot.SpotController;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static core.ApplicationConfig.*;
+
 public class MomoInfoControllerImpl implements MomoInfoController {
 
-    private final ItemController itemCo;
     private final MomoInfoDao dao;
     private final MomoInfoView view;
 
     private Member session;
 
-    public MomoInfoControllerImpl(ItemController itemCo, MomoInfoDao dao, MomoInfoView view) {
-        this.itemCo = itemCo;
+    public MomoInfoControllerImpl(MomoInfoDao dao, MomoInfoView view) {
         this.dao = dao;
         this.view = view;
     }
@@ -48,7 +49,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
 
             switch (select) {
                 case IN_SPOT: {
-                    List<Item> read = itemCo.read();
+                    List<Item> read = getItemController().read();
                     if (read.size() > 0) {
                         Optional<Item> item = view.selectItem(read);
                         item.ifPresent(dao::create);
@@ -57,9 +58,18 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                 }
                 case OUT_SPOT: {
                     List<MomoInfo> inItems = dao.find(HistoryOption.IN_HISTORY);
-                    if (inItems.size() > 0) {
-                        Optional<MomoInfo> momoInfo = view.selectOutItem(inItems);
-                        momoInfo.ifPresent(dao::update);
+                    if (inItems.size() == 0) break;
+
+                    Optional<MomoInfo> momoInfo = view.selectOutItem(inItems);
+                    if (!momoInfo.isPresent()) break;
+
+                    MomoInfo momoItem = momoInfo.get();
+                    int payPrice = calculateStoragePrice(momoItem);
+                    int newMoney = session.getCash() - payPrice;
+                    if (newMoney >= 0) {
+                        if (getMemberController().updateCash(newMoney)) {
+                            dao.update(momoItem);
+                        }
                     }
                     break;
                 }
@@ -69,6 +79,16 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                 }
             }
         }
+    }
+
+    private int calculateStoragePrice(MomoInfo momoInfo) {
+        int priceByHour = momoInfo.getPriceByHour();
+        Date inTime = momoInfo.getInTime();
+        Date outTime = new Date(System.currentTimeMillis());
+        int elapsedTime = (int) ((outTime.getTime() - inTime.getTime()) / 1000);
+        int elapsedHour = elapsedTime / 60; //원래 3600인데 임시로 분당 요금으로 처리
+
+        return priceByHour * elapsedHour;
     }
 
     @Override
