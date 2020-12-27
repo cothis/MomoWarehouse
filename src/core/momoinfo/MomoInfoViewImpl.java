@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
 import static core.momoinfo.option.HistoryOption.*;
 import static core.momoinfo.option.InOutOption.*;
@@ -19,7 +20,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
     @Override
     public InOutOption inOut() {
-        System.out.println("-----InOut Menu-----");
+        printSubject("InOut Menu");
         String select = inputUserChoice(IN_SPOT.toString(), OUT_SPOT.toString(), EXIT_SPOT.toString());
 
         return parseInOutOption(select);
@@ -27,13 +28,13 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
     @Override
     public HistoryOption history() {
-        System.out.println("-----InOut History-----");
-
+        printSubject("InOut History");
         String select = inputUserChoice(
                 IN_HISTORY.toString(),
                 OUT_HISTORY.toString(),
                 ALL_HISTORY.toString(),
                 EXIT_HISTORY.toString());
+
         return parseHistoryOption(select);
     }
 

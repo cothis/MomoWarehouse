@@ -1,16 +1,19 @@
 package core.spot;
 
+import core.common.CommonView;
 import core.common.InputValidator;
 
 import java.util.List;
 import java.util.Scanner;
+
+import static core.common.CommonView.*;
 
 public class SpotViewImpl implements SpotView {
     private final Scanner sc = new Scanner(System.in);
 
     @Override
     public String spotIndex() {
-        System.out.println("보관소 관리 화면입니다.");
+        printSubject("보관소 관리 Menu");
         String[] commands = {"보관소추가", "보관소삭제", "보관소조회", "보관소변경", "종료"};
         return InputValidator.inputUserChoice(commands);
     }
@@ -31,7 +34,7 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public Spot addUI() {
-        System.out.println("보관소 추가 화면입니다.");
+        printSubject("보관소 추가 Menu");
         String name;
         String location;
 
@@ -43,7 +46,7 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public Spot deleteUI(List<Spot> list) {
-        System.out.println("보관소 삭제 화면입니다.");
+        printSubject("보관소 삭제 Menu");
         return selectOneSpot(list);
     }
 
@@ -56,7 +59,7 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public Spot updateUI(List<Spot> list) {
-        System.out.println("보관소 변경 화면입니다.");
+        printSubject("보관소 변경 Menu");
 
         Spot Spot = selectOneSpot(list);
         if(Spot == null) {

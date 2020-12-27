@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import core.spot.Spot;
 
+import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
 
 public class MemberViewImpl implements MemberView {
@@ -12,7 +13,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public String index() {
-		System.out.println("------MAIN MENU------");
+		printSubject("Main Menu");
 		return inputUserChoice("회원가입", "로그인", "종료");
 	}
 
@@ -26,7 +27,7 @@ public class MemberViewImpl implements MemberView {
 		int spot_id;
 
 		while(true) {
-			System.out.println("------JOIN MENU------");
+			printSubject("Join Menu");
 			System.out.print("ID : ");
 			id = sc.next().trim();
 			
@@ -69,7 +70,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public LoginInfo loginUI() {
-		System.out.println("------LOGIN MENU------");
+		printSubject("Login Menu");
 		
 		System.out.print("id : ");
 		String id = sc.next().trim();
@@ -82,7 +83,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public String userUI() {
-		System.out.println("------USER MENU------");
+		printSubject("User Menu");
 
 		return inputUserChoice("회원정보수정", "입출고", "입출고내역", "충전", "로그아웃");
 	}
@@ -90,13 +91,13 @@ public class MemberViewImpl implements MemberView {
 	/*회원정보*/
 	@Override
 	public String userUpdateUI() {
-		System.out.println("------USER INFO------");
+		printSubject("User Information");
 		return inputUserChoice("정보수정", "탈퇴");
 	}
 
 	@Override
 	public String userRudUI() {
-		System.out.println("------CHANGING INFO------");
+		printSubject("Change Infomation");
 		return inputUserChoice("비밀번호", "이름", "전화번호", "이메일");
 	}
 
@@ -108,7 +109,7 @@ public class MemberViewImpl implements MemberView {
 	
 	@Override
 	public String userOutUI(String id) {
-		System.out.println("------SIGN OUT------");
+		printSubject("Sign Out");
 		
 		System.out.print("확인을 위해 비밀번호를 입력하세요 : ");
 
@@ -118,7 +119,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public int chargeMoneyUI() {
-		System.out.println("------CHARGE CASH------");
+		printSubject("Charge Cash");
 		
 		System.out.print("충전하실 금액을 입력해 주세요 : ");
 
@@ -131,7 +132,7 @@ public class MemberViewImpl implements MemberView {
 	@Override
 	public String adminUI() {
 		System.out.println("관리자님 안녕하세요!");
-		System.out.println("------ADMIN MENU------");
+		printSubject("ADMIN Menu");
 
 		return inputUserChoice("물건관리", "SPOT관리", "회원로그", "입출고내역", "로그아웃");
 	}

@@ -5,12 +5,14 @@ import core.common.InputValidator;
 import java.util.List;
 import java.util.Scanner;
 
+import static core.common.CommonView.*;
+
 public class ItemViewImpl implements ItemView {
     private final Scanner sc = new Scanner(System.in);
 
     @Override
     public String itemIndex() {
-        System.out.println("항목 관리 화면입니다.");
+        printSubject("Item Menu");
         String[] commands = {"항목추가", "항목삭제", "항목조회", "항목변경", "종료"};
         return InputValidator.inputUserChoice(commands);
     }
@@ -45,7 +47,7 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public Item addUI() {
-        System.out.println("항목 추가 화면입니다.");
+        printSubject("Add Item Menu");
         String name;
         int priceByHour;
 
@@ -57,7 +59,7 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public Item deleteUI(List<Item> list) {
-        System.out.println("항목 삭제 화면입니다.");
+        printSubject("Delete Item Menu");
         return selectOneItem(list);
     }
 
@@ -70,7 +72,7 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public Item updateUI(List<Item> list) {
-        System.out.println("항목 변경 화면입니다.");
+        printSubject("Change Item Menu");
 
         Item item = selectOneItem(list);
         if(item == null) {
