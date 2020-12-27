@@ -22,6 +22,10 @@ public class CommonJdbc {
         return rs;
     }
 
+    public static int executeUpdate() throws SQLException {
+        return pstmt.executeUpdate();
+    }
+
     public static Connection getConn() {
         return conn;
     }

@@ -6,11 +6,11 @@ public interface MemberController {
 	void indexMenu(); 
 	
 	//가입 : view에서 받은 Member를 Dao의 addMember에 넣기
-	void join(Member member); 
+	void join();
 	
 	//로그인 : view에서 id/password 입력받고 dao에서 셀렉트해서 return된 결과로 menu 호출
 	// view.loginUI -> dao.select(id, pw), 인스턴스변수에 값 넣기 -> userMenu / adminMenu 호출 -> 끝나면 index
-	void login(Member member); 
+	void login();
 	
 	//1.회원정보 수정 2.입출고 3.입출고내역 4.충전 5.로그아웃
 	void userMenu(); //회원정보 출력하고 메뉴 보여주기
@@ -18,7 +18,7 @@ public interface MemberController {
 	//userMenu - 1.회원정보수정 - 메뉴 부분
 	boolean userUpdating(Member member);
 	//- 정보수정 선택 후 입력값 입력 
-	int userUpdatingInput(String userMenuSelect, String id);
+	int userUpdatingInput(String userMenuSelect);
 	
 	//모모인포에서 가지고 옴
 	//userMenu - 3. 입출고내역

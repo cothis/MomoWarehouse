@@ -3,31 +3,21 @@ package core.member;
 import java.util.List;
 import java.util.Scanner;
 
-import core.common.InputValidator;
 import core.spot.Spot;
-import core.spot.SpotControllerImpl;
 
 import static core.common.InputValidator.*;
 
 public class MemberViewImpl implements MemberView {
-	
-	Scanner sc = new Scanner(System.in);
-	private Member member;
-	private MemberDao memdao;
-	public MemberViewImpl(MemberDao memdao) {
-		this.memdao = memdao;
-	}
+	private final Scanner sc = new Scanner(System.in);
 
 	@Override
 	public String index() {
-		
 		System.out.println("------MAIN MENU------");
-
 		return inputUserChoice("회원가입", "로그인", "종료");
 	}
 
 	@Override
-	public Member joinUI(List<Spot> list) {
+	public Member joinUI(List<Spot> list, MemberDao dao) {
 		String id;
 		String pw;
 		String name;
@@ -41,12 +31,9 @@ public class MemberViewImpl implements MemberView {
 			id = sc.next().trim();
 			
 			//아이디 중복조건
-			String checkid = memdao.checkId(id);
-			if(checkid != null) {
-				if(checkid.equals(id)) {
-					System.out.println("중복된 아이디가 존재합니다. 다시 입력해 주세요.");
-					continue;
-				}
+			if(dao.hasId(id)) {
+				System.out.println("중복된 아이디가 존재합니다. 다시 입력해 주세요.");
+				continue;
 			}
 			
 			System.out.println("비밀번호 4자리 이상 입력해 주세요.");
@@ -76,25 +63,21 @@ public class MemberViewImpl implements MemberView {
 			System.out.println("정상적으로 가입이 완료되었습니다.");
 			break;
 		}
-		
-		member =  new Member(id, pw, name, phone, email, spot_id);
-		
-		return member;
+
+		return new Member(id, pw, name, phone, email, spot_id);
 	}
 
 	@Override
-	public String[] loginUI() {
-		String[] userInfo = new String[2];
-		
+	public LoginInfo loginUI() {
 		System.out.println("------LOGIN MENU------");
 		
 		System.out.print("id : ");
-		userInfo[0] = sc.next().trim();
-		
+		String id = sc.next().trim();
+
 		System.out.println("password : ");
-		userInfo[1] = sc.next().trim();
-		
-		return userInfo;
+		String password = sc.next().trim();
+
+		return new LoginInfo(id, password);
 	}
 
 	@Override
@@ -119,11 +102,8 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public String updateObjectUI(String select) {
-		
 		System.out.print("수정하실 " + select + "의 내용을 입력 해 주세요 :");
-
 		return sc.next().trim();
-		
 	}
 	
 	@Override

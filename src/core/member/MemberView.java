@@ -7,8 +7,8 @@ import java.util.List;
 public interface MemberView {
 	
 	String index();
-	Member joinUI(List<Spot> list);
-	String[] loginUI(); //배열에 id , password 받아서 출력
+	Member joinUI(List<Spot> list, MemberDao dao);
+	LoginInfo loginUI(); //배열에 id , password 받아서 출력
 	
 	String userUI(); //메뉴 출력하고  선택값 리턴
 	

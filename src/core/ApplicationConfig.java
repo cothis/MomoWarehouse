@@ -20,7 +20,7 @@ public class ApplicationConfig {
 			new MomoInfoControllerImpl(itemController, momoInfoDao, momoInfoView);
 
 	MemberDao memberDao = new MemberDao();
-	MemberView memberView = new MemberViewImpl(memberDao);
+	MemberView memberView = new MemberViewImpl();
 	private final MemberController memberController =
 			new MemberControllerImpl(memberView,
 					memberDao,
