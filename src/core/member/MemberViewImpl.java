@@ -140,7 +140,4 @@ public class MemberViewImpl implements MemberView {
 	public void print(String str) {
 		System.out.println(str);
 	}
-	
-	
-
 }

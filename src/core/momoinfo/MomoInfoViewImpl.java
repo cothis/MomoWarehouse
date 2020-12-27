@@ -19,7 +19,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
     @Override
     public InOutOption inOut() {
-        System.out.println("입출고 메뉴");
+        System.out.println("-----InOut Menu-----");
         String select = inputUserChoice(IN_SPOT.toString(), OUT_SPOT.toString(), EXIT_SPOT.toString());
 
         return parseInOutOption(select);
@@ -27,7 +27,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
     @Override
     public HistoryOption history() {
-        System.out.println("입출고 내역");
+        System.out.println("-----InOut History-----");
 
         String select = inputUserChoice(
                 IN_HISTORY.toString(),
@@ -111,14 +111,14 @@ public class MomoInfoViewImpl implements MomoInfoView {
         }
         while(true) {
             try {
-                System.out.println("출고할 아이템 ID를 입력해주세요");
+                System.out.println("출고할 MOMO ID를 입력해주세요");
                 System.out.print(">> ");
                 String select = sc.nextLine();
                 if (select.equals("exit")) {
                     return Optional.empty();
                 }
                 Optional<MomoInfo> any = inItems.stream()
-                        .filter(momoInfo -> momoInfo.getItemId() == Integer.parseInt(select))
+                        .filter(momoInfo -> momoInfo.getMomoId() == Integer.parseInt(select))
                         .findAny();
                 if (!any.isPresent()) {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
