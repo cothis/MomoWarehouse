@@ -1,7 +1,9 @@
 package core.memberlog;
 
 import static core.common.CommonView.*;
+import static core.common.InputValidator.*;
 
+import java.util.List;
 import java.util.Scanner;
 
 import core.common.InputValidator;
@@ -13,7 +15,7 @@ public class MemberLogViewImple implements MemberLogView {
 	public String logIndex() {
 		printSubject("Log Menu");
 		String[] commands = {"회원기록삭제" , "회원출력", "종료"};
-		return InputValidator.inputUserChoice(commands);
+		return inputUserChoice(commands);
 	}
 
 	@Override
@@ -26,8 +28,13 @@ public class MemberLogViewImple implements MemberLogView {
 	@Override
 	public String printUI() {
 		printSubject("Printing User Record");
-		String[] commands = {"전체" , "가입", "수정", "탈퇴"};
-		return InputValidator.inputUserChoice(commands);
+		return inputUserChoice("전체" , "가입", "수정", "탈퇴");
 	}
 
+	@Override
+	public void printAll(List<MemberLog> list) {
+		for (MemberLog memberLog : list) {
+			System.out.println(memberLog);
+		}
+	}
 }

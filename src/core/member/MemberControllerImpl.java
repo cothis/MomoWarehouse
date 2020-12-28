@@ -5,6 +5,7 @@ import static core.ApplicationConfig.*;
 import java.util.List;
 
 import core.ApplicationConfig;
+import core.common.CommonView;
 
 public class MemberControllerImpl implements MemberController{
 	
@@ -145,25 +146,29 @@ public class MemberControllerImpl implements MemberController{
 		//입력값의 수정내용을 받음
 		String userInfoUp = view.updateObjectUI(userRudSelect);
 		int result = 0;
+		Member member = new Member(session);
 
 		switch (userRudSelect) {
 			case "비밀번호":
-				session.setPw(userInfoUp);
-				loginInfo.setPw(userInfoUp); //비밀번호 요기서 수정하고 로그아웃 하지않고 loginInfo에 업데이트가 안되면 나의정보 출력할때 null로 오류발생시킴
-				result = dao.update(session, "PW");
+				member.setPw(userInfoUp);
+				result = dao.update(member, "PW");
 				break;
 			case "이름":
-				session.setName(userInfoUp);
-				result = dao.update(session, "NAME");
+				member.setName(userInfoUp);
+				result = dao.update(member, "NAME");
 				break;
 			case "전화번호":
-				session.setPhone(userInfoUp);
-				result = dao.update(session, "PHONE");
+				member.setPhone(userInfoUp);
+				result = dao.update(member, "PHONE");
 				break;
 			case "이메일":
-				session.setEmail(userInfoUp);
-				result = dao.update(session, "EMAIL");
+				member.setEmail(userInfoUp);
+				result = dao.update(member, "EMAIL");
 				break;
+		}
+		if (result > 0) {
+			session = member;
+			loginInfo = new LoginInfo(session.getMemberId(), session.getPw());
 		}
 		
 		return result;
@@ -190,6 +195,8 @@ public class MemberControllerImpl implements MemberController{
 	@Override
 	public void adminMenu() {
 		boolean exit = false;
+
+		CommonView.printMessage("관리자님 안녕하세요!");
 
 		while (!exit) {
 			String select = view.adminUI();

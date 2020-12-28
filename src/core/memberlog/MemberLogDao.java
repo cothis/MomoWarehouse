@@ -19,7 +19,7 @@ public class MemberLogDao {
 	
 	
 	//Select - 전체, 가입, 수정, 탈퇴
-	public void findUser(String select) {
+	public List<MemberLog> findUser(String select) {
 		List<MemberLog> list = new ArrayList<>();
 
 		try {
@@ -29,7 +29,7 @@ public class MemberLogDao {
 			if(select.equals("전체")) {
 				sql = "SELECT * FROM MEMBER_LOG "
 						+ "  ORDER BY MEMBER_ID";
-			}else {
+			} else {
 				sql = "SELECT * FROM MEMBER_LOG "
 								+ "  WHERE LOG_MODE = ?"
 								+ "  ORDER BY MEMBER_ID";
@@ -78,17 +78,12 @@ public class MemberLogDao {
 			close();
 		}
 		
-		for (MemberLog log : list) {
-			System.out.println(log);
-		}
-		
+		return list;
 	}
 
 
 	//Delete
 	public void delete(String id) {
-			int result = 0;
-
 			try {
 				connect();
 
@@ -98,16 +93,17 @@ public class MemberLogDao {
 
 				pstmt.setString(1, id);
 
-				result = executeUpdate();
-
+				if (executeUpdate() > 0) {
+					printMessage("성공적으로 " + id + "의 기록을 삭제하였습니다.");
+				} else {
+					printMessage("해당 아이디가 없습니다.");
+				}
 			} catch (SQLException e) {
-				//System.out.println("해당 id의 기록이 존재하지 않습니다.");
-				e.printStackTrace(); 
+				e.printStackTrace();
 			}finally {
 				close();
 			}
-			
-			printMessage("성공적으로 " + id + "의 기록을 삭제하였습니다.");
-			
+
+
 		}
 }

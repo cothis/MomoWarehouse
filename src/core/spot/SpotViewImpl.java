@@ -14,7 +14,7 @@ public class SpotViewImpl implements SpotView {
     @Override
     public String spotIndex() {
         printSubject("보관소 관리 Menu");
-        String[] commands = {"보관소추가", "보관소삭제", "보관소조회", "보관소변경", "종료"};
+        String[] commands = {"보관소추가", "보관소삭제", "보관소조회", "보관소변경"};
         return InputValidator.inputUserChoice(commands);
     }
 

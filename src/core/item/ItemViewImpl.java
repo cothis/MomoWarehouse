@@ -13,7 +13,7 @@ public class ItemViewImpl implements ItemView {
     @Override
     public String itemIndex() {
         printSubject("Item Menu");
-        String[] commands = {"항목추가", "항목삭제", "항목조회", "항목변경", "종료"};
+        String[] commands = {"항목추가", "항목삭제", "항목조회", "항목변경"};
         return InputValidator.inputUserChoice(commands);
     }
 

@@ -12,6 +12,17 @@ public class Member {
 		
 	public Member() {
 	}
+
+	public Member(Member member) {
+		this.memberId = member.memberId;
+		this.pw = member.pw;
+		this.name = member.name;
+		this.phone = member.phone;
+		this.email = member.email;
+		this.spot_id = member.spot_id;
+		this.grade = member.grade;
+		this.cash = member.cash;
+	}
 	
 	public Member(String memberId, String pw, String name, String phone, String email, int spot_id) {
 		this.memberId = memberId;

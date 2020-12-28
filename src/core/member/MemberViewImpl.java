@@ -14,7 +14,7 @@ public class MemberViewImpl implements MemberView {
 	@Override
 	public String index() {
 		printSubject("Main Menu");
-		return inputUserChoice("회원가입", "로그인", "종료");
+		return inputUserChoice("회원가입", "로그인");
 	}
 
 	@Override
@@ -131,7 +131,6 @@ public class MemberViewImpl implements MemberView {
 	/*관리자 메뉴*/
 	@Override
 	public String adminUI() {
-		System.out.println("관리자님 안녕하세요!");
 		printSubject("ADMIN Menu");
 
 		return inputUserChoice("물건관리", "SPOT관리", "회원로그", "회원목록" , "입출고내역", "로그아웃");

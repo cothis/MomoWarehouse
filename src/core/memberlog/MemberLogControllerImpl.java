@@ -41,23 +41,11 @@ public class MemberLogControllerImpl implements MemberLogController {
 
 	@Override
 	public void read() {
-		
 		String select = view.printUI();
-		switch(select) {
-			case "전체" : 
-				dao.findUser("전체");
-				break;
-			case "가입" : 
-				dao.findUser("가입");
-				break;
-			case "수정" : 
-				dao.findUser("수정");
-				break;
-			case "탈퇴" : 
-				dao.findUser("탈퇴");
-				break;
+		if(select.equals("exit")) {
+			return;
 		}
-		
+		List<MemberLog> list = dao.findUser(select);
+		view.printAll(list);
 	}
-
 }
