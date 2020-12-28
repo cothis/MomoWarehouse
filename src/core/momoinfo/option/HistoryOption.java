@@ -3,10 +3,10 @@ package core.momoinfo.option;
 import java.util.Arrays;
 
 public enum HistoryOption {
-    IN_HISTORY("입고내역"),
-    OUT_HISTORY("출고내역"),
-    ALL_HISTORY("전체보기"),
-    EXIT_HISTORY("종료");
+    IN_HISTORY("In"),
+    OUT_HISTORY("Out"),
+    ALL_HISTORY("All"),
+    EXIT_HISTORY("EXIT");
 
     private final String select;
 
@@ -21,7 +21,7 @@ public enum HistoryOption {
 
     public static HistoryOption parseHistoryOption(String select) {
         return Arrays.stream(HistoryOption.values())
-                .filter(historyOption -> historyOption.toString().equals(select))
+                .filter(historyOption -> historyOption.toString().equalsIgnoreCase(select))
                 .findAny()
                 .orElse(null);
     }

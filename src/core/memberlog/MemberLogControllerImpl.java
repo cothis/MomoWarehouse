@@ -22,13 +22,13 @@ public class MemberLogControllerImpl implements MemberLogController {
 		while(!exit) {
 			String select = view.logIndex();
 			switch(select) {
-				case "회원기록삭제" :
+				case "DELETE LOG" :
 					delete();
 					break;
-				case "회원출력" : 
+				case "MEMBER LIST" :
 					read();
 					break;
-				case "종료" : 
+				case "EXIT" :
 					exit = true;
 					break;
 			}

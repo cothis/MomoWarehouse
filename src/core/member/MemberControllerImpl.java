@@ -1,6 +1,7 @@
 package core.member;
 
 import static core.ApplicationConfig.*;
+import static core.common.CommonView.*;
 
 import java.util.List;
 
@@ -28,13 +29,13 @@ public class MemberControllerImpl implements MemberController{
 			
 			//1.회원가입 2.로그인 3.종료
 			switch (select) {
-				case "회원가입":
+				case "JOIN":
 					join();
 					break;
-				case "로그인":
+				case "LOG IN":
 					login();
 					break;
-				case "종료":
+				case "EXIT":
 					exit = true;
 					break;
 			}
@@ -45,7 +46,12 @@ public class MemberControllerImpl implements MemberController{
 	public void join() {
 		Member newMember = view.joinUI(getSpotController().findAll(), dao);
 		int result = dao.insert(newMember);//입력받아 JOIN에서 MEMBER 객체 DB에 저장
-		view.print("처리건수 : "+ result);
+		if (result > 0) {
+			printMessage("가입되었습니다.");
+			printMessage("처리건수 : "+ result);
+		} else {
+			printMessage("잘 못 입력하셨습니다.");
+		}
 	}
 
 	@Override
@@ -73,24 +79,23 @@ public class MemberControllerImpl implements MemberController{
 		boolean exit = false;
 		while (!exit) {
 			String select = view.userUI();
-
 			switch (select) {
-				case "회원정보수정":
+				case "CHANGE INFO":
 					exit = userUpdating(session);
 					break;
-				case "나의정보":
+				case "MY INFO":
 					myInfo(loginInfo);
 					break;
-				case "입출고":
+				case "IN-OUT":
 					getMomoInfoController().inOutMenu(session);
 					break;
-				case "입출고내역":
+				case "HISTORY":
 					getMomoInfoController().inOutHistory(session);
 					break;
-				case "충전":
+				case "CHARGE":
 					chargeMoney();
 					break;
-				case "로그아웃":
+				case "LOG OUT":
 					exit = true;
 					break;
 			}
@@ -152,19 +157,19 @@ public class MemberControllerImpl implements MemberController{
 		Member member = new Member(session);
 
 		switch (userRudSelect) {
-			case "비밀번호":
+			case "PASSWORD":
 				member.setPw(userInfoUp);
 				result = dao.update(member, "PW");
 				break;
-			case "이름":
+			case "NAME":
 				member.setName(userInfoUp);
 				result = dao.update(member, "NAME");
 				break;
-			case "전화번호":
+			case "PHONE":
 				member.setPhone(userInfoUp);
 				result = dao.update(member, "PHONE");
 				break;
-			case "이메일":
+			case "EMAIL":
 				member.setEmail(userInfoUp);
 				result = dao.update(member, "EMAIL");
 				break;
@@ -199,32 +204,32 @@ public class MemberControllerImpl implements MemberController{
 	public void adminMenu() {
 		boolean exit = false;
 
-		CommonView.printMessage("관리자님 안녕하세요!");
+		printMessage("관리자님 안녕하세요!");
 
 		while (!exit) {
 			String select = view.adminUI();
 			switch (select) {
-				case "물건관리": {
+				case "MANAGE ITEM": {
 					getItemController().itemMenu();
 					break;
 				}
-				case "SPOT관리": {
+				case "MANAGE SPOT": {
 					getSpotController().spotMenu();
 					break;
 				}
-				case "회원로그": {
+				case "MEMBER LOG": {
 					getMemberLogController().logMenu();
 					break;
 				}
-				case "회원목록": {
+				case "MEMBER LIST": {
 					dao.findAll();
 					break;
 				}
-				case "입출고내역": {
+				case "IN-OUT HISTORY": {
 					getMomoInfoController().inOutHistory(session);
 					break;
 				}
-				case "로그아웃": {
+				case "LOG OUT": {
 					exit = true;
 					break;
 				}

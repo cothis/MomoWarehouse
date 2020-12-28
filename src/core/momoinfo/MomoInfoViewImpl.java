@@ -20,16 +20,14 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
     @Override
     public InOutOption inOut() {
-        printSubject("InOut Menu");
-        String select = inputUserChoice(IN_SPOT.toString(), OUT_SPOT.toString(), EXIT_SPOT.toString());
+        String select = inputUserChoice("InOut Menu", IN_SPOT.toString(), OUT_SPOT.toString(), EXIT_SPOT.toString());
 
         return parseInOutOption(select);
     }
 
     @Override
     public HistoryOption history() {
-        printSubject("InOut History");
-        String select = inputUserChoice(
+        String select = inputUserChoice("InOut History",
                 IN_HISTORY.toString(),
                 OUT_HISTORY.toString(),
                 ALL_HISTORY.toString(),

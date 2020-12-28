@@ -13,9 +13,8 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public String spotIndex() {
-        printSubject("보관소 관리 Menu");
-        String[] commands = {"보관소추가", "보관소삭제", "보관소조회", "보관소변경"};
-        return InputValidator.inputUserChoice(commands);
+        String[] commands = {"Add", "Delete", "View", "Change"};
+        return InputValidator.inputUserChoice("Spot Menu", commands);
     }
 
     private String inputString(String queryName) {
@@ -34,7 +33,7 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public Spot addUI() {
-        printSubject("보관소 추가 Menu");
+        printHead("Add Spot Menu");
         String name;
         String location;
 
@@ -46,7 +45,7 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public Spot deleteUI(List<Spot> list) {
-        printSubject("보관소 삭제 Menu");
+        printHead("Delete Spot Menu");
         return selectOneSpot(list);
     }
 
@@ -59,7 +58,7 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public Spot updateUI(List<Spot> list) {
-        printSubject("보관소 변경 Menu");
+        printHead("Change Spot Menu");
 
         Spot Spot = selectOneSpot(list);
         if(Spot == null) {

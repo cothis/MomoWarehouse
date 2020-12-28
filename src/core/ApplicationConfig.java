@@ -6,7 +6,7 @@ import core.memberlog.MemberLogController;
 import core.memberlog.MemberLogControllerImpl;
 import core.memberlog.MemberLogDao;
 import core.memberlog.MemberLogView;
-import core.memberlog.MemberLogViewImple;
+import core.memberlog.MemberLogViewImpl;
 import core.momoinfo.*;
 import core.spot.*;
 
@@ -28,7 +28,7 @@ public class ApplicationConfig {
 	private static final MemberController memberController = new MemberControllerImpl(memberView, memberDao);
 	
 	private static final MemberLogDao memberLogDao = new MemberLogDao();
-	private static final MemberLogView memberLogView = new MemberLogViewImple();
+	private static final MemberLogView memberLogView = new MemberLogViewImpl();
 	private static final MemberLogController memberLogController = new MemberLogControllerImpl(memberLogDao, memberLogView);
 
 	public static MemberController getMemberController() {

@@ -3,9 +3,9 @@ package core.momoinfo.option;
 import java.util.Arrays;
 
 public enum InOutOption {
-    IN_SPOT("입고"),
-    OUT_SPOT("출고"),
-    EXIT_SPOT("종료");
+    IN_SPOT("In"),
+    OUT_SPOT("Out"),
+    EXIT_SPOT("EXIT");
 
     private final String select;
 
@@ -20,7 +20,7 @@ public enum InOutOption {
 
     public static InOutOption parseInOutOption(String select) {
         return Arrays.stream(InOutOption.values())
-                .filter(historyOption -> historyOption.toString().equals(select))
+                .filter(historyOption -> historyOption.toString().equalsIgnoreCase(select))
                 .findAny()
                 .orElse(null);
     }

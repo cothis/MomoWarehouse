@@ -18,20 +18,20 @@ public class ItemControllerImpl implements ItemController {
         while(!exit) {
             String select = view.itemIndex();
             switch (select) {
-                case "항목추가":
+                case "ADD":
                     create();
                     break;
-                case "항목삭제":
+                case "DELETE":
                     delete();
                     break;
-                case "항목조회":
+                case "VIEW":
                     List<Item> read = read();
                     view.printList(read);
                     break;
-                case "항목변경":
+                case "CHANGE":
                     update();
                     break;
-                case "종료":
+                case "EXIT":
                     exit = true;
                     break;
             }

@@ -1,5 +1,6 @@
 package core.item;
 
+import core.common.CommonView;
 import core.common.InputValidator;
 
 import java.util.List;
@@ -12,17 +13,20 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public String itemIndex() {
-        printSubject("Item Menu");
-        String[] commands = {"항목추가", "항목삭제", "항목조회", "항목변경"};
-        return InputValidator.inputUserChoice(commands);
+        String[] commands = {"Add", "Delete", "View", "Change"};
+        return InputValidator.inputUserChoice("Item Menu", commands);
     }
 
     private String inputName() {
         String name;
         while (true) {
             try {
+                System.out.println("이름을 입력해주세요. 취소(exit)");
                 System.out.print("이름 : ");
                 name = sc.nextLine();
+                if ("exit".equals(name)) {
+                    return name;
+                }
                 break;
             } catch (Exception e) {
                 System.out.println("잘못 입력하셨습니다.");
@@ -47,11 +51,14 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public Item addUI() {
-        printSubject("Add Item Menu");
+        printHead("Add Item Menu");
         String name;
         int priceByHour;
 
         name = inputName();
+        if(name.equals("exit")) {
+            return null;
+        }
 
         priceByHour = inputPriceByHour();
         return new Item(name, priceByHour);
@@ -59,8 +66,9 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public Item deleteUI(List<Item> list) {
-        printSubject("Delete Item Menu");
-        return selectOneItem(list);
+        printHead("Delete Item Menu");
+
+        return selectOneItem(list, "삭제");
     }
 
     @Override
@@ -72,9 +80,9 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public Item updateUI(List<Item> list) {
-        printSubject("Change Item Menu");
+        printHead("Change Item Menu");
 
-        Item item = selectOneItem(list);
+        Item item = selectOneItem(list, "변경");
         if(item == null) {
             return null;
         }
@@ -84,17 +92,17 @@ public class ItemViewImpl implements ItemView {
         return item;
     }
 
-    private Item selectOneItem(List<Item> list) {
+    private Item selectOneItem(List<Item> list, String jobType) {
         Item item = null;
 
         if(list == null || list.size() ==0) {
-            System.out.println("항목이 없습니다");
+            CommonView.printMessage("항목이 없습니다.");
             return null;
         }
         printList(list);
 
         while (true) {
-            System.out.print("변경할 항목 id를 입력해주세요 : ");
+            System.out.print(jobType + "할 항목 id를 입력해주세요(취소 : exit) : ");
             String select = sc.nextLine();
             if ("exit".equals(select)) {
                 break;
@@ -105,11 +113,11 @@ public class ItemViewImpl implements ItemView {
                 for (Item selected : list) {
                     if (selected.getItemId() == id) {
                         item = selected;
-
                         break;
                     }
                 }
                 if (item != null) break;
+                System.out.println("항목이 없습니다.");
             } catch (NumberFormatException e) {
                 System.out.println("잘못 입력하셨습니다.");
             }

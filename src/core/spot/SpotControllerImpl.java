@@ -18,16 +18,16 @@ public class SpotControllerImpl implements SpotController{
         while(!exit) {
             String select = view.spotIndex();
             switch (select) {
-                case "보관소추가":
+                case "ADD":
                     create();
                     break;
-                case "보관소삭제":
+                case "DELETE":
                     delete();
                     break;
-                case "보관소조회":
+                case "VIEW":
                     read();
                     break;
-                case "보관소변경":
+                case "CHANGE":
                     update();
                     break;
                 case "종료":

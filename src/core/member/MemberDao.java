@@ -32,8 +32,8 @@ public class MemberDao {
 			pstmt.setInt(6, member.getSpot_id());
 
 			result = executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException ignored) {
+
 		}finally {
 			close();
 		}
