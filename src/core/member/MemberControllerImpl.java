@@ -112,10 +112,10 @@ public class MemberControllerImpl implements MemberController{
 		
 		String userMenuSelect = view.userUpdateUI();
 		
-		if(userMenuSelect.equals("정보수정")) {
+		if(userMenuSelect.equals("CHANGE INFO")) {
 			//정보수정 메뉴 뜨고 입력값 받음
 			String userRudSelect = view.userRudUI();
-			if ("종료".equals(userRudSelect)) {
+			if ("exit".equals(userRudSelect)) {
 				return false;
 			}
 			//정보수정 후 처리건수 int값으로 받음

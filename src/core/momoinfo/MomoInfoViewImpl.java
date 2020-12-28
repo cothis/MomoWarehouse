@@ -87,7 +87,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 System.out.println("입고할 아이템 ID를 입력해주세요");
                 System.out.print(">> ");
                 String select = sc.nextLine();
-                if (select.equals("exit")) {
+                if (select.equals("EXIT")) {
                     return Optional.empty();
                 }
                 Optional<Item> any = read.stream()
