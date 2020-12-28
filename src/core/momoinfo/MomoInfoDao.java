@@ -90,7 +90,7 @@ public class MomoInfoDao {
             while (rs.next()) {
                 String memberId = rs.getString("MEMBER_ID");
                 String name = rs.getString("NAME");
-                list.add(new Member(memberId, name));
+                list.add(new Member(memberId, name, "USER"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

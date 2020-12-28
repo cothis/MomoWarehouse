@@ -24,6 +24,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     }
 
     private void selectUser() {
+        System.out.println("session = " + session);
         Member selectedUser;
         if (session.getGrade().equals("USER")) {
             selectedUser = session;
@@ -32,6 +33,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
             Optional<Member> member = view.selectUser(list);
             selectedUser = member.orElseGet(() -> session);
         }
+        System.out.println("selectedUser = " + selectedUser);
         dao.setSelectedUser(selectedUser);
     }
 

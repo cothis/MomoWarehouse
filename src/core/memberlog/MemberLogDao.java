@@ -83,27 +83,22 @@ public class MemberLogDao {
 
 
 	//Delete
-	public void delete(String id) {
-			try {
-				connect();
+	public boolean delete(String id) {
+		try {
+			connect();
 
-				String sql = "DELETE FROM MEMBER_LOG WHERE MEMBER_ID = ?";
+			String sql = "DELETE FROM MEMBER_LOG WHERE MEMBER_ID = ?";
 
-				PreparedStatement pstmt = getPreparedStatement(sql);
+			PreparedStatement pstmt = getPreparedStatement(sql);
 
-				pstmt.setString(1, id);
+			pstmt.setString(1, id);
 
-				if (executeUpdate() > 0) {
-					printMessage("성공적으로 " + id + "의 기록을 삭제하였습니다.");
-				} else {
-					printMessage("해당 아이디가 없습니다.");
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}finally {
-				close();
-			}
-
-
+			return executeUpdate() > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
+		return false;
+	}
 }

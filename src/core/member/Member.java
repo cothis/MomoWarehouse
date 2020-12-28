@@ -46,9 +46,10 @@ public class Member {
 		this.cash = cash;
 	}
 
-    public Member(String memberId, String name) {
+    public Member(String memberId, String name, String grade) {
 		this.memberId = memberId;
 		this.name = name;
+		this.grade = grade;
     }
 
 

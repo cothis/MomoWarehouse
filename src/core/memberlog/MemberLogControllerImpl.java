@@ -4,6 +4,8 @@ import java.util.List;
 
 import core.member.Member;
 
+import static core.common.CommonView.printMessage;
+
 public class MemberLogControllerImpl implements MemberLogController {
 	MemberLogDao dao;
 	MemberLogView view;
@@ -36,7 +38,11 @@ public class MemberLogControllerImpl implements MemberLogController {
 	@Override
 	public void delete() {
 		String id = view.deleteUI();
-		dao.delete(id);
+		if (dao.delete(id)) {
+			printMessage("성공적으로 " + id + "의 기록을 삭제하였습니다.");
+		} else {
+			printMessage("해당 아이디가 없습니다.");
+		}
 	}
 
 	@Override
