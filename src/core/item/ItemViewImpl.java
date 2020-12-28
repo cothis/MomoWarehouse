@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static core.common.CommonView.*;
+import static core.common.InputValidator.*;
 
 public class ItemViewImpl implements ItemView {
     private final Scanner sc = new Scanner(System.in);
@@ -14,33 +15,20 @@ public class ItemViewImpl implements ItemView {
     @Override
     public String itemIndex() {
         String[] commands = {"Add", "Delete", "View", "Change"};
-        return InputValidator.inputUserChoice("Item Menu", commands);
+        return inputUserChoice("Item Menu", commands);
     }
 
-    private String inputName() {
-        String name;
-        while (true) {
-            try {
-                System.out.println("이름을 입력해주세요. 취소(exit)");
-                System.out.print("이름 : ");
-                name = sc.nextLine();
-                if ("exit".equals(name)) {
-                    return name;
-                }
-                break;
-            } catch (Exception e) {
-                System.out.println("잘못 입력하셨습니다.");
-            }
-        }
-        return name;
+    private String inputName() throws Exception {
+        return inputString("이름");
     }
 
-    private int inputPriceByHour() {
+    private int inputPriceByHour() throws Exception {
         int priceByHour;
         while (true) {
             try {
-                System.out.print("시간 당 가격 : ");
-                priceByHour = Integer.parseInt(sc.nextLine());
+                String str = inputString("시간 당 가격");
+                priceByHour = Integer.parseInt(str);
+
                 break;
             } catch (NumberFormatException e) {
                 System.out.println("잘못 입력하셨습니다.");
@@ -50,17 +38,14 @@ public class ItemViewImpl implements ItemView {
     }
 
     @Override
-    public Item addUI() {
+    public Item addUI() throws Exception {
         printHead("Add Item Menu");
         String name;
         int priceByHour;
 
         name = inputName();
-        if(name.equals("exit")) {
-            return null;
-        }
-
         priceByHour = inputPriceByHour();
+
         return new Item(name, priceByHour);
     }
 
@@ -79,7 +64,7 @@ public class ItemViewImpl implements ItemView {
     }
 
     @Override
-    public Item updateUI(List<Item> list) {
+    public Item updateUI(List<Item> list) throws Exception {
         printHead("Change Item Menu");
 
         Item item = selectOneItem(list, "변경");

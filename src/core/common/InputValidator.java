@@ -5,6 +5,17 @@ import java.util.*;
 public class InputValidator {
     public static Scanner sc = new Scanner(System.in);
 
+    public static String inputString(String valueName) throws Exception {
+        System.out.println(valueName + "을 입력해주세요. 취소(exit)");
+        System.out.print(valueName + " : ");
+
+        String str = sc.nextLine();
+        if (str.equalsIgnoreCase("exit")) {
+            throw new Exception("exit exception");
+        }
+        return str;
+    }
+
     public static String inputUserChoice(String subject, String... commands) {
 
         String result = null;

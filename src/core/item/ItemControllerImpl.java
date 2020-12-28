@@ -1,5 +1,7 @@
 package core.item;
 
+import core.common.CommonView;
+
 import java.util.List;
 
 public class ItemControllerImpl implements ItemController {
@@ -40,8 +42,13 @@ public class ItemControllerImpl implements ItemController {
 
     @Override
     public void create() {
-        Item item = view.addUI();
-        dao.addItem(item);
+        Item item = null;
+        try {
+            item = view.addUI();
+            dao.addItem(item);
+        } catch (Exception e) {
+            CommonView.printMessage("취소되었습니다.");
+        }
     }
 
     @Override
@@ -60,7 +67,11 @@ public class ItemControllerImpl implements ItemController {
     @Override
     public void update() {
         List<Item> items = read();
-        Item item = view.updateUI(items);
-        dao.update(item);
+        try {
+            Item item = view.updateUI(items);
+            dao.update(item);
+        } catch (Exception exception) {
+            CommonView.printMessage("취소되었습니다.");
+        }
     }
 }

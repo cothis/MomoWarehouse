@@ -62,7 +62,7 @@ public class MemberControllerImpl implements MemberController{
 			return;
 		}
 		String grade = session.getGrade();
-		view.print("로그인 완료! " + session);
+		printMessage("로그인 완료! " + session);
 		if(grade.equals("USER")) {
 			userMenu();
 		}else if(grade.equals("ADMIN")) {
@@ -112,7 +112,7 @@ public class MemberControllerImpl implements MemberController{
 		
 		String userMenuSelect = view.userUpdateUI();
 		
-		if(userMenuSelect.equals("CHANGE INFO")) {
+		if(userMenuSelect.equalsIgnoreCase("CHANGE INFO")) {
 			//정보수정 메뉴 뜨고 입력값 받음
 			String userRudSelect = view.userRudUI();
 			if ("exit".equals(userRudSelect)) {
@@ -122,9 +122,9 @@ public class MemberControllerImpl implements MemberController{
 			result = userUpdatingInput(userRudSelect);
 			
 			if(result > 0) {
-				view.print("처리건수 : " + result);
+				printMessage("처리건수 : " + result);
 			}else {
-				view.print("다시 입력해 주세요.");
+				printMessage("다시 입력해 주세요.");
 			}
 			
 		}else if(userMenuSelect.equals("탈퇴")) {
@@ -132,11 +132,11 @@ public class MemberControllerImpl implements MemberController{
 			if(pw.equals(member.getPw())) {
 				result = dao.delete(session);
 				if(result > 0) {
-					view.print("탈퇴완료. 안녕히가십시오...");
+					printMessage("탈퇴완료. 안녕히가십시오...");
 					signOut = true;
 				}
 			}else {
-				view.print("비밀번호가 일치하지 않습니다.");
+				printMessage("비밀번호가 일치하지 않습니다.");
 			}
 		}
 		return signOut;
@@ -145,7 +145,7 @@ public class MemberControllerImpl implements MemberController{
 	//나의정보
 	public void myInfo(LoginInfo loginInfo) {
 		session = dao.select(loginInfo);
-		view.print(session.toString());
+		printMessage(session.toString());
 	}
 
 	//정보수정 -> 값 입력 -> dao에서 수정처리
@@ -190,10 +190,10 @@ public class MemberControllerImpl implements MemberController{
 		if(updatingCash > 0) {
 			int newCash = originCash + updatingCash;
 			if (dao.updatingCash(session, newCash)) {
-				view.print(updatingCash+"원을 충전 완료하였습니다. 총 금액 : " + session.getCash());
+				printMessage(updatingCash+"원을 충전 완료하였습니다. 총 금액 : " + session.getCash());
 			}
 		} else {
-			view.print("올바르지 않은 금액입니다. 다시 입력하세요.");
+			printMessage("올바르지 않은 금액입니다. 다시 입력하세요.");
 		}
 		
 	}

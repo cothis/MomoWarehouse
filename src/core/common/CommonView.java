@@ -42,6 +42,6 @@ public class CommonView {
     }
 
     public static void printMessage(String message) {
-        System.out.println("\"" + message + "\"");
+        System.out.println("\n\"" + message + "\"");
     }
 }
