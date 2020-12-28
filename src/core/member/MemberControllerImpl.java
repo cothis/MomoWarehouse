@@ -3,6 +3,7 @@ package core.member;
 import core.common.exception.ChargeMoneyException;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static core.ApplicationConfig.*;
 import static core.common.CommonView.*;
@@ -59,7 +60,7 @@ public class MemberControllerImpl implements MemberController {
             session = dao.select(loginInfo); //다오 셀렉 유저I,P 넣어 찾아서 멤버객체로 받음
 
             String grade = session.getGrade();
-            printMessage("로그인 완료! " + session);
+            printMessage("로그인 완료! " + session.userInfoPrint());
             if (grade.equals("USER")) {
                 userMenu();
             } else if (grade.equals("ADMIN")) {
@@ -124,7 +125,7 @@ public class MemberControllerImpl implements MemberController {
             } catch (Exception e) {
                 noticeError(e);
             }
-        } else if (userMenuSelect.equals("탈퇴")) {
+        } else if (userMenuSelect.equalsIgnoreCase("LEAVE")) {
             try {
                 String pw = view.userOutUI();
                 if (pw.equals(member.getPw())) {
@@ -214,7 +215,7 @@ public class MemberControllerImpl implements MemberController {
                     break;
                 }
                 case "MEMBER LIST": {
-                    dao.findAll();
+                    read();
                     break;
                 }
                 case "IN-OUT HISTORY": {
@@ -232,5 +233,10 @@ public class MemberControllerImpl implements MemberController {
     @Override
     public boolean updateCash(int newMoney) throws ChargeMoneyException {
         return dao.updatingCash(session, newMoney);
+    }
+
+    public void read(){
+        List<Member> list = dao.findAll();
+        view.printAll(list);
     }
 }

@@ -23,6 +23,6 @@ public interface MemberView {
 	
 	String adminUI(); //admin메뉴 출력하고 선택값 리턴
 
-	void print(String str);
+	void printAll(List<Member> list);
 	
 }

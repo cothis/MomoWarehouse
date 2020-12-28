@@ -1,7 +1,6 @@
 package core.item;
 
 import core.common.CommonView;
-import core.common.InputValidator;
 import core.common.exception.ExitException;
 
 import java.util.List;
@@ -59,9 +58,13 @@ public class ItemViewImpl implements ItemView {
 
     @Override
     public void printList(List<Item> list) {
+        printSubList("Item List");
+        printContent(Item.getHeader(),0);
+        printDivider();
         for (Item item : list) {
-            System.out.println(item);
+            printContent(item,6);
         }
+        printBottom();
     }
 
     @Override

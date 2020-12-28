@@ -39,8 +39,8 @@ public class MemberDao {
 	}
 
 	//Select - 전체 출력
-	public void findAll() {
-		List<Member> list= new ArrayList<Member>();
+	public List<Member> findAll() {
+		List<Member> list = new ArrayList<>();
 
 		try {
 			connect();
@@ -64,17 +64,15 @@ public class MemberDao {
 				member.setCash(rs.getInt("CASH"));
 				list.add(member);
 			}
-			
-			for (Member mem : list) {
-				System.out.println(mem);
-			}
+
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		
+
+		return list;
 	}
 	
 	//Select - ID, PW

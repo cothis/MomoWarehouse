@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import core.common.exception.ExitException;
+import core.memberlog.MemberLog;
 import core.spot.Spot;
 
 import static core.common.CommonView.*;
@@ -35,6 +36,7 @@ public class MemberViewImpl implements MemberView {
 				}
 				//아이디 중복조건
 				if(dao.hasId(id)) {
+					id = null;
 					throw new IllegalStateException("중복된 아이디가 존재합니다. 다시 입력해 주세요.");
 				}
 
@@ -124,7 +126,15 @@ public class MemberViewImpl implements MemberView {
 	}
 
 	@Override
-	public void print(String str) {
-		System.out.println(str);
+	public void printAll(List<Member> list) {
+
+		setTempLength(110);
+		printSubList("Member List");
+		printContent(Member.getHeader(), 2);
+		printDivider();
+		for (Member member : list) {
+			printContent(member, 2);
+		}
+		printBottom();
 	}
 }

@@ -4,6 +4,8 @@ import core.common.exception.ExitException;
 
 import java.util.*;
 
+import static core.common.CommonView.*;
+
 public class InputValidator {
     public static Scanner sc = new Scanner(System.in);
 
@@ -31,18 +33,16 @@ public class InputValidator {
         }
 
         while (!exit) {
-            CommonView.printSubject(subject);
+            printSubject(subject);
             StringBuilder content = new StringBuilder();
 
             for (int i = 0; i < list.size(); i++) {
                 content.append(String.format("%d.%s ", i + 1, list.get(i)));
             }
-            String format = "| %-" + (CommonView.length() -3) + "s|\n";
+            String format = "| %-" + (length() -3) + "s|\n";
             System.out.printf(format, content.toString());
 
-            String formatEnd = "└%-" + (CommonView.length() -2) + "s┘\n";
-            String replace = String.format(formatEnd, "").replace(' ', '-');
-            System.out.print(replace);
+            printBottom();
 
             System.out.print(" >> ");
             result = sc.nextLine();

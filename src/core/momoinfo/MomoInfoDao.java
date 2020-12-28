@@ -54,6 +54,7 @@ public class MomoInfoDao {
                 sql = sql + " and STATUS = '출고'";
             }
             sql = sql + " order by IN_TIME";
+
             getPreparedStatement(sql);
 
             ResultSet rs = executeQuery();

@@ -6,7 +6,9 @@ import static core.common.InputValidator.*;
 import java.util.List;
 import java.util.Scanner;
 
+import core.common.CommonView;
 import core.common.InputValidator;
+import core.common.exception.ExitException;
 
 public class MemberLogViewImpl implements MemberLogView {
 	private final Scanner sc = new Scanner(System.in);
@@ -18,10 +20,9 @@ public class MemberLogViewImpl implements MemberLogView {
 	}
 
 	@Override
-	public String deleteUI() {
+	public String deleteUI() throws ExitException {
 		printHead("Deleting User Record");
-		printMessage("삭제를 원하시는 ID를 입력하세요.");
-		return sc.next();
+		return inputString("삭제 대상 Member ID");
 	}
 
 	@Override
@@ -32,8 +33,13 @@ public class MemberLogViewImpl implements MemberLogView {
 
 	@Override
 	public void printAll(List<MemberLog> list) {
+		setTempLength(110);
+		printSubList("Member Log");
+		printContent(MemberLog.getHeader(), 4);
+		printDivider();
 		for (MemberLog memberLog : list) {
-			System.out.println(memberLog);
+			printContent(memberLog, 8);
 		}
+		printBottom();
 	}
 }

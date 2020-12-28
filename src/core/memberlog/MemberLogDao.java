@@ -26,11 +26,11 @@ public class MemberLogDao {
 			connect();
 			String sql;
 			
-			if(select.equals("전체")) {
-				sql = "SELECT * FROM MEMBER_LOG "
+			if(select.equals("ALL")) {
+				sql = "SELECT LOG_ID, MEMBER_ID, PW, NAME, PHONE, EMAIL, LOG_DATE, LOG_MODE FROM MEMBER_LOG "
 						+ "  ORDER BY MEMBER_ID";
 			} else {
-				sql = "SELECT * FROM MEMBER_LOG "
+				sql = "SELECT LOG_ID, MEMBER_ID, PW, NAME, PHONE, EMAIL, LOG_DATE, LOG_MODE FROM MEMBER_LOG "
 								+ "  WHERE LOG_MODE = ?"
 								+ "  ORDER BY MEMBER_ID";
 			}
@@ -38,15 +38,15 @@ public class MemberLogDao {
 			PreparedStatement pstmt = getPreparedStatement(sql);
 			
 			switch(select) {
-				case "전체" :
+				case "ALL" :
 					break;
-				case "가입" : 
+				case "JOIN" :
 					pstmt.setString(1, "회원가입");
 					break;
-				case "수정" : 
+				case "UPDATE" :
 					pstmt.setString(1, "회원수정");
 					break;
-				case "탈퇴" : 
+				case "LEAVE" :
 					pstmt.setString(1, "회원탈퇴");
 					break;
 			}
@@ -83,7 +83,7 @@ public class MemberLogDao {
 
 
 	//Delete
-	public boolean delete(String id) {
+	public void delete(String id) throws IllegalStateException {
 		try {
 			connect();
 
@@ -93,12 +93,15 @@ public class MemberLogDao {
 
 			pstmt.setString(1, id);
 
-			return executeUpdate() > 0;
+
+
+			if (executeUpdate() == 0) {
+				throw new IllegalStateException("대상 ID가 없습니다.");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		return false;
 	}
 }

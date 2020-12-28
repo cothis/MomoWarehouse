@@ -2,8 +2,11 @@ package core.memberlog;
 
 import java.util.List;
 
+import core.common.CommonView;
+import core.common.exception.ExitException;
 import core.member.Member;
 
+import static core.common.CommonView.*;
 import static core.common.CommonView.printMessage;
 
 public class MemberLogControllerImpl implements MemberLogController {
@@ -37,11 +40,13 @@ public class MemberLogControllerImpl implements MemberLogController {
 
 	@Override
 	public void delete() {
-		String id = view.deleteUI();
-		if (dao.delete(id)) {
+		try {
+			String id = view.deleteUI();
+			dao.delete(id);
 			printMessage("성공적으로 " + id + "의 기록을 삭제하였습니다.");
-		} else {
-			printMessage("해당 아이디가 없습니다.");
+
+		} catch (ExitException | IllegalStateException e) {
+			noticeError(e);
 		}
 	}
 

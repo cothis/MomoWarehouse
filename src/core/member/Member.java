@@ -124,13 +124,22 @@ public class Member {
 		return this.pw == pw;
 	}
 
-	@Override
-	public String toString() {
+	public String userInfoPrint() {
 		return memberId + " 회원님의 정보 | 이름 = " + name + ", 전화번호 = " + phone + ", 이메일 = "
 				+ email + ", 보관소ID = " + spot_id + ", 등급 = " + grade + ", 충전금액 = " + cash ;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return String.format("\t%-15s | %-15s %-15s %-20s %-10s %-10s %-10s\t",
+				memberId, name, phone, email, spot_id, grade, cash);
+	}
+
+	public static String getHeader() {
+		return String.format("\t%-15s | %-15s %-15s %-20s %-10s %-10s %-10s\t",
+				"Member ID", "Name", "Phone",
+				"Email", "Spot ID", "Grade", "Cash");
+	}
 	
 	
 	

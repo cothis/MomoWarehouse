@@ -38,10 +38,15 @@ public class SpotViewImpl implements SpotView {
 
     @Override
     public void printList(List<Spot> list) {
+        printSubList("Spot List");
+        printContent(Spot.getHeader(),0);
+        printDivider();
         for (Spot spot : list) {
-            System.out.println(spot);
+            printContent(spot,6);
         }
+        printBottom();
     }
+
 
     @Override
     public Spot updateUI(List<Spot> list) throws Exception {

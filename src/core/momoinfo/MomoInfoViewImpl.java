@@ -38,13 +38,14 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
     @Override
     public void printList(List<MomoInfo> list) {
-        if (list == null) {
-            System.out.println("내역이 없습니다.");
-            return;
-        }
+        setTempLength(150);
+        printSubList("In out History");
+        printContent(MomoInfo.getHeader(), 0);
+        printDivider();
         for (MomoInfo momoInfo : list) {
-            System.out.println(momoInfo);
+            printContent(momoInfo, 0);
         }
+        printBottom();
     }
 
     @Override

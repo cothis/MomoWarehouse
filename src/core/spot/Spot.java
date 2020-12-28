@@ -80,7 +80,12 @@ public class Spot {
 
 	@Override
 	public String toString() {
-		return "Spot [id=" + id + ", name=" + name + ", location=" + location + "]";
+		return String.format("     %-4s    |    %-25s\t%-20s\t", id + "", name, location + "");
+		//return "Spot [id=" + id + ", name=" + name + ", location=" + location + "]";
+	}
+
+	public static String getHeader() {
+		return String.format("     %-4s    |    %-25s    %s    ", "ID", "Spot Name", "Location");
 	}
 
 }

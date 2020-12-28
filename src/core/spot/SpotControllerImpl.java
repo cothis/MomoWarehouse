@@ -31,7 +31,7 @@ public class SpotControllerImpl implements SpotController {
                 case "CHANGE":
                     update();
                     break;
-                case "종료":
+                case "EXIT":
                     exit = true;
                     break;
             }

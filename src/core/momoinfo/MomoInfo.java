@@ -91,8 +91,23 @@ public class MomoInfo {
 
 	@Override
 	public String toString() {
-		return "MomoInfo [momoId=" + momoId + ", spotId=" + spotId + ", itemId=" + itemId + ", memberId=" + memberId
-				+ ", inTime=" + inTime + ", outTime=" + outTime + ", priceByHour=" + priceByHour + ", status=" + status
-				+ "]";
-	}	
+		String outTimeString;
+		if (outTime == null) {
+			outTimeString = "   -   ";
+		} else {
+			outTimeString = outTime.toString();
+		}
+
+
+		return String.format("     %-8s    |    %-8s    %-8s    %-10s    %-20s    %-20s    %-10s    %-5s\t",
+				momoId + "", spotId + "", itemId + "", memberId + "",
+				inTime.toString(), outTimeString, priceByHour + "", status);
+	}
+
+	public static String getHeader() {
+		return String.format("     %-8s    |    %-8s    %-8s    %-10s    %-20s    %-20s    %-10s    %-5s\t",
+				"Momo ID", "Spot ID", "Item ID", "User ID", "In Time", "Out Time", "Price by hour", "Status");
+	}
+
+
 }
