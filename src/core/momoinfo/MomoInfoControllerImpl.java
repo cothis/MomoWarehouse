@@ -1,5 +1,7 @@
 package core.momoinfo;
 
+import core.common.CommonView;
+import core.common.exception.ChargeMoneyException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static core.ApplicationConfig.*;
+import static core.common.CommonView.*;
 
 public class MomoInfoControllerImpl implements MomoInfoController {
 
@@ -38,7 +41,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     }
 
     @Override
-    public void inOutMenu(Member member) {
+    public void inOutMenu(Member member) throws Exception {
         session = member;
         selectUser();
 
@@ -68,8 +71,11 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                     int newMoney = session.getCash() - payPrice;
                     System.out.println("newMoney = " + newMoney);
                     if (newMoney >= 0) {
-                        if (getMemberController().updateCash(newMoney)) {
+                        try {
+                            getMemberController().updateCash(newMoney);
                             dao.update(momoItem);
+                        } catch (ChargeMoneyException e) {
+                            noticeError(e);
                         }
                     }
                     break;

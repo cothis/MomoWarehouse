@@ -1,9 +1,10 @@
 package core.spot;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class SpotControllerImpl implements SpotController{
+import static core.common.CommonView.*;
+
+public class SpotControllerImpl implements SpotController {
     private final SpotDao dao;
     private final SpotView view;
 
@@ -15,7 +16,7 @@ public class SpotControllerImpl implements SpotController{
     @Override
     public void spotMenu() {
         boolean exit = false;
-        while(!exit) {
+        while (!exit) {
             String select = view.spotIndex();
             switch (select) {
                 case "ADD":
@@ -39,15 +40,23 @@ public class SpotControllerImpl implements SpotController{
 
     @Override
     public void create() {
-        Spot spot = view.addUI();
-        dao.addSpot(spot);
+        try {
+            Spot spot = view.addUI();
+            dao.addSpot(spot);
+        } catch (Exception exception) {
+            noticeError(exception);
+        }
     }
 
     @Override
     public void delete() {
         List<Spot> spots = dao.selectAll();
-        Spot spot = view.deleteUI(spots);
-        dao.delete(spot);
+        try {
+            Spot spot = view.deleteUI(spots);
+            dao.delete(spot);
+        } catch (Exception exception) {
+            noticeError(exception);
+        }
 
     }
 
@@ -60,8 +69,12 @@ public class SpotControllerImpl implements SpotController{
     @Override
     public void update() {
         List<Spot> spots = dao.selectAll();
-        Spot spot = view.updateUI(spots);
-        dao.update(spot);
+        try {
+            Spot spot = view.updateUI(spots);
+            dao.update(spot);
+        } catch (Exception exception) {
+            noticeError(exception);
+        }
 
     }
 

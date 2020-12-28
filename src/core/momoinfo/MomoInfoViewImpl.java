@@ -78,27 +78,24 @@ public class MomoInfoViewImpl implements MomoInfoView {
     }
 
     @Override
-    public Optional<Item> selectItem(List<Item> read) {
+    public Optional<Item> selectItem(List<Item> read) throws Exception {
         for (Item item : read) {
             System.out.println(item);
         }
         while (true) {
+            Optional<Item> any = Optional.empty();
             try {
-                System.out.println("입고할 아이템 ID를 입력해주세요");
-                System.out.print(">> ");
-                String select = sc.nextLine();
-                if (select.equals("EXIT")) {
-                    return Optional.empty();
-                }
-                Optional<Item> any = read.stream()
+                String select = inputString("아이템 ID");
+
+                any = read.stream()
                         .filter(item -> item.getItemId() == Integer.parseInt(select))
                         .findAny();
                 if (!any.isPresent()) {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
                 }
                 return any;
-            } catch (Exception e) {
-                System.out.println("잘못 입력하셨습니다.");
+            } catch (IllegalStateException e) {
+                noticeError(e);
             }
         }
     }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static core.common.CommonView.*;
+import static core.common.InputValidator.*;
 
 public class SpotViewImpl implements SpotView {
     private final Scanner sc = new Scanner(System.in);
@@ -14,25 +15,11 @@ public class SpotViewImpl implements SpotView {
     @Override
     public String spotIndex() {
         String[] commands = {"Add", "Delete", "View", "Change"};
-        return InputValidator.inputUserChoice("Spot Menu", commands);
-    }
-
-    private String inputString(String queryName) {
-        String result;
-        while (true) {
-            try {
-                System.out.print(queryName + " : ");
-                result = sc.nextLine();
-                break;
-            } catch (Exception e) {
-                System.out.println("잘못 입력하셨습니다.");
-            }
-        }
-        return result;
+        return inputUserChoice("Spot Menu", commands);
     }
 
     @Override
-    public Spot addUI() {
+    public Spot addUI() throws Exception {
         printHead("Add Spot Menu");
         String name;
         String location;
@@ -44,7 +31,7 @@ public class SpotViewImpl implements SpotView {
     }
 
     @Override
-    public Spot deleteUI(List<Spot> list) {
+    public Spot deleteUI(List<Spot> list) throws Exception {
         printHead("Delete Spot Menu");
         return selectOneSpot(list);
     }
@@ -57,7 +44,7 @@ public class SpotViewImpl implements SpotView {
     }
 
     @Override
-    public Spot updateUI(List<Spot> list) {
+    public Spot updateUI(List<Spot> list) throws Exception {
         printHead("Change Spot Menu");
 
         Spot Spot = selectOneSpot(list);
@@ -70,7 +57,7 @@ public class SpotViewImpl implements SpotView {
         return Spot;
     }
 
-    private Spot selectOneSpot(List<Spot> list) {
+    private Spot selectOneSpot(List<Spot> list) throws Exception {
         Spot Spot = null;
 
         if(list == null || list.size() ==0) {
@@ -80,11 +67,7 @@ public class SpotViewImpl implements SpotView {
         printList(list);
 
         while (true) {
-            System.out.print("변경할 보관소 id를 입력해주세요 : ");
-            String select = sc.nextLine();
-            if ("exit".equals(select)) {
-                break;
-            }
+            String select = inputString("보관소 id");
 
             try {
                 int id = Integer.parseInt(select);

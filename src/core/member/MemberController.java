@@ -18,7 +18,7 @@ public interface MemberController {
 	//userMenu - 1.회원정보수정 - 메뉴 부분
 	boolean userUpdating(Member member);
 	//- 정보수정 선택 후 입력값 입력 
-	int userUpdatingInput(String userMenuSelect);
+	void userUpdatingInput(String userMenuSelect) throws Exception;
 	
 	//모모인포에서 가지고 옴
 	//userMenu - 3. 입출고내역
@@ -37,5 +37,5 @@ public interface MemberController {
 	void adminMenu();
 
 	//가격을 입력받고 결제 처리 후에 성공여부 리턴
-	boolean updateCash(int newMoney);
+	boolean updateCash(int newMoney) throws Exception;
 }

@@ -2,6 +2,7 @@ package core.item;
 
 import core.common.CommonView;
 import core.common.InputValidator;
+import core.common.exception.ExitException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -18,11 +19,11 @@ public class ItemViewImpl implements ItemView {
         return inputUserChoice("Item Menu", commands);
     }
 
-    private String inputName() throws Exception {
+    private String inputName() throws ExitException {
         return inputString("이름");
     }
 
-    private int inputPriceByHour() throws Exception {
+    private int inputPriceByHour() throws ExitException {
         int priceByHour;
         while (true) {
             try {
@@ -38,7 +39,7 @@ public class ItemViewImpl implements ItemView {
     }
 
     @Override
-    public Item addUI() throws Exception {
+    public Item addUI() throws ExitException {
         printHead("Add Item Menu");
         String name;
         int priceByHour;
@@ -64,7 +65,7 @@ public class ItemViewImpl implements ItemView {
     }
 
     @Override
-    public Item updateUI(List<Item> list) throws Exception {
+    public Item updateUI(List<Item> list) throws ExitException {
         printHead("Change Item Menu");
 
         Item item = selectOneItem(list, "변경");

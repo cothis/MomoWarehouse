@@ -1,5 +1,7 @@
 package core.common;
 
+import static core.common.Color.*;
+
 public class CommonView {
     private static final int presetLength = 90;
     private static int length = 0;
@@ -12,7 +14,6 @@ public class CommonView {
         String prefix;
         String suffix;
         if(subject) {
-            insertString = "  " + insertString + "  ";
             prefix = "┌%-";
             suffix = "s┐";
         }
@@ -20,10 +21,14 @@ public class CommonView {
             prefix = "%-";
             suffix = "s";
         }
+        insertString = "  " + insertString + "  ";
 
         int remain = insertString.length() % 2;
 
         int halfLength = presetLength / 2 - insertString.length() / 2;
+        insertString = ANSI_WHITE_BACKGROUND + ANSI_BLACK + insertString + ANSI_RESET;
+
+
         String formatStart = prefix + (halfLength - remain) + "s";
         String formatEnd = "%-" + halfLength + suffix;
         return String.format(formatStart, "").replace(' ', spaceChar) +
@@ -33,7 +38,7 @@ public class CommonView {
     public static void printSubject(String subject) {
         String subjectLine = Pad(subject, '=', true);
         System.out.println("\n" + subjectLine);
-        length = subjectLine.length();
+        length = subjectLine.length() - 14;
     }
 
     public static void printHead(String head) {
@@ -43,5 +48,9 @@ public class CommonView {
 
     public static void printMessage(String message) {
         System.out.println("\n\"" + message + "\"");
+    }
+
+    public static void noticeError(Exception e) {
+        System.out.println(ANSI_YELLOW + e.getMessage() + ANSI_RESET);
     }
 }

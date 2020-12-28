@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.common.CommonView;
+import core.common.exception.ChargeMoneyException;
 
 public class MemberDao {
 	//멤버다오의 회원정보를 멤버db에 저장
 
 	//Insert
-	public int insert(Member member) {
-		int result = 0;
-
+	public void insert(Member member) throws SQLException {
 		try {
 			connect();
 
@@ -31,14 +30,12 @@ public class MemberDao {
 			pstmt.setString(5, member.getEmail());
 			pstmt.setInt(6, member.getSpot_id());
 
-			result = executeUpdate();
+			executeUpdate();
 		} catch (SQLException ignored) {
-
-		}finally {
+			throw new SQLException("Insert Fail");
+		} finally {
 			close();
 		}
-
-		return result;
 	}
 
 	//Select - 전체 출력
@@ -81,7 +78,7 @@ public class MemberDao {
 	}
 	
 	//Select - ID, PW
-	public Member select(LoginInfo loginInfo) {
+	public Member select(LoginInfo loginInfo) throws IllegalStateException {
 		Member member = null;
 
 		try {
@@ -105,8 +102,8 @@ public class MemberDao {
 				member.setSpot_id(rs.getInt("SPOT_ID"));
 				member.setGrade(rs.getString("GRADE"));
 				member.setCash(rs.getInt("CASH"));
-			}else if(!rs.next()) {
-				System.out.println("아이디가 존재하지 않거나 비밀번호가 틀렸습니다. 다시 입력 해 주세요.");
+			} else if(!rs.next()) {
+				throw new IllegalStateException("아이디가 존재하지 않거나 비밀번호가 틀렸습니다. 다시 입력 해 주세요.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -141,7 +138,7 @@ public class MemberDao {
 	}
 
 	//Update - 회원정보수정(CRUD)
-	public int update(Member member, String userInfoUpTxt) {
+	public int update(Member member, String userInfoUpTxt) throws IllegalStateException {
 		int result = 0;
 
 		try {
@@ -171,6 +168,9 @@ public class MemberDao {
 			pstmt.setString(2, member.getMemberId());
 
 			result = executeUpdate();
+			if (result <= 0) {
+				throw new IllegalStateException("업데이트 실패");
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -183,7 +183,7 @@ public class MemberDao {
 	}
 
 	//Update - 충전금액 변경
-	public boolean updatingCash(Member session, int newCash) {
+	public boolean updatingCash(Member session, int newCash) throws ChargeMoneyException {
 		boolean result = false;
 
 		try {
@@ -201,7 +201,7 @@ public class MemberDao {
 			session.setCash(newCash);
 			result = true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new ChargeMoneyException();
 		} finally {
 			close();
 		}
@@ -210,9 +210,7 @@ public class MemberDao {
 	}
 
 	//Delete
-	public int delete(Member member) {
-		int result = 0;
-
+	public void delete(Member member) throws IllegalStateException {
 		try {
 			connect();
 
@@ -222,18 +220,14 @@ public class MemberDao {
 
 			pstmt.setString(1, member.getMemberId());
 
-			result = executeUpdate();
+			executeUpdate();
 
 		} catch (SQLException e) {
-			CommonView.printMessage("입고된 물품이 있습니다. 출고 후 다시 시도해 주세요."); 
-			//e.printStackTrace();
+			throw new IllegalStateException("입고된 물품이 있습니다. 출고 후 다시 시도해 주세요.");
 		}finally {
 			close();
 		}
-
-		return result;
 	}
-
 
 	//클로즈 메서드
 	/*

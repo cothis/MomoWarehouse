@@ -1,19 +1,21 @@
 package core.common;
 
+import core.common.exception.ExitException;
+
 import java.util.*;
 
 public class InputValidator {
     public static Scanner sc = new Scanner(System.in);
 
-    public static String inputString(String valueName) throws Exception {
+    public static String inputString(String valueName) throws ExitException {
         System.out.println(valueName + "을 입력해주세요. 취소(exit)");
         System.out.print(valueName + " : ");
 
         String str = sc.nextLine();
         if (str.equalsIgnoreCase("exit")) {
-            throw new Exception("exit exception");
+            throw new ExitException();
         }
-        return str;
+        return str.trim();
     }
 
     public static String inputUserChoice(String subject, String... commands) {

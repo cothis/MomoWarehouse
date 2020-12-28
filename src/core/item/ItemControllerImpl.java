@@ -1,8 +1,8 @@
 package core.item;
 
-import core.common.CommonView;
-
 import java.util.List;
+
+import static core.common.CommonView.*;
 
 public class ItemControllerImpl implements ItemController {
 
@@ -47,7 +47,7 @@ public class ItemControllerImpl implements ItemController {
             item = view.addUI();
             dao.addItem(item);
         } catch (Exception e) {
-            CommonView.printMessage("취소되었습니다.");
+            noticeError(e);
         }
     }
 
@@ -71,7 +71,7 @@ public class ItemControllerImpl implements ItemController {
             Item item = view.updateUI(items);
             dao.update(item);
         } catch (Exception exception) {
-            CommonView.printMessage("취소되었습니다.");
+            noticeError(exception);
         }
     }
 }

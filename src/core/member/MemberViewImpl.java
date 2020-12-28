@@ -3,6 +3,7 @@ package core.member;
 import java.util.List;
 import java.util.Scanner;
 
+import core.common.exception.ExitException;
 import core.spot.Spot;
 
 import static core.common.CommonView.*;
@@ -18,8 +19,8 @@ public class MemberViewImpl implements MemberView {
 	}
 
 	@Override
-	public Member joinUI(List<Spot> list, MemberDao dao) {
-		String id;
+	public Member joinUI(List<Spot> list, MemberDao dao) throws Exception {
+		String id = null;
 		String pw;
 		String name;
 		String phone;
@@ -27,104 +28,90 @@ public class MemberViewImpl implements MemberView {
 		int spot_id;
 
 		while(true) {
-			printHead("Join Menu");
-			System.out.print("ID : ");
-			id = sc.next().trim();
-			
-			//아이디 중복조건
-			if(dao.hasId(id)) {
-				System.out.println("중복된 아이디가 존재합니다. 다시 입력해 주세요.");
-				continue;
-			}
-			
-			System.out.println("비밀번호 4자리 이상 입력해 주세요.");
-			System.out.print("PASSWORD : ");
-			pw = sc.next().trim();
-			
-			//비밀번호 4자리 이상 조건
-			if(pw.length() < 4) {
-				System.out.println("조건에 부합하지 않으니 다시 입력해 주세요.");
-				continue;
-			}
-			
-			System.out.print("NAME : ");
-			name = sc.next().trim();
-			
-			
-			System.out.print("PHONE : ");
-			phone = sc.next().trim();
-			
-			System.out.print("EMAIL : ");
-			email = sc.next().trim();
-			
-			System.out.println("원하시는 보관소 id 번호를 입력하세요.");
-			for (Spot spot : list) {
-				System.out.println(spot);
-			}
-			System.out.print(" >> ");
+			try {
+				printHead("Join Menu");
+				if (id == null) {
+					id = inputString("ID");
+				}
+				//아이디 중복조건
+				if(dao.hasId(id)) {
+					throw new IllegalStateException("중복된 아이디가 존재합니다. 다시 입력해 주세요.");
+				}
 
-			spot_id = Integer.parseInt(sc.next().trim());
-			break;
+				System.out.println("비밀번호 4자리 이상 입력해 주세요.");
+				pw = inputString("PASSWORD");
+				//비밀번호 4자리 이상 조건
+				if(pw.length() < 4) {
+					throw new IllegalStateException("조건에 부합하지 않으니 다시 입력해 주세요.");
+				}
+				name = inputString("NAME");
+				phone = inputString("PHONE");
+				email = inputString("EMAIL");
+
+				System.out.println("원하시는 보관소 id 번호를 입력하세요.");
+				for (Spot spot : list) {
+					System.out.println(spot);
+				}
+				spot_id = Integer.parseInt(inputString("보관소 id"));
+				break;
+			} catch (IllegalStateException e) {
+				printMessage(e.getMessage());
+			}
 		}
-
 		return new Member(id, pw, name, phone, email, spot_id);
 	}
 
 	@Override
-	public LoginInfo loginUI() {
+	public LoginInfo loginUI() throws Exception {
 		printHead("Login Menu");
-		
-		System.out.print("id : ");
-		String id = sc.next().trim();
 
-		System.out.print("password : ");
-		String password = sc.next().trim();
+		String id = inputString("id");
+		String password = inputString("password");
 
 		return new LoginInfo(id, password);
 	}
 
 	@Override
 	public String userUI() {
-		String[] commands = {"Change Info", "My Info", "In-Out", "History", "Charge", "Log Out"};
+		String[] commands = {"Edit Profile", "My Info", "In-Out", "History", "Charge", "Log Out"};
 		return inputUserChoice("User Menu", commands);
 	}
 	
 	/*회원정보*/
 	@Override
-	public String userUpdateUI() {
+	public String changeInfoMenu() {
 		String[] commands = {"Change Info", "Leave"};
-		return inputUserChoice("User Information", commands);
+		return inputUserChoice("Edit Profile Menu", commands);
 	}
 
 	@Override
-	public String userRudUI() {
+	public String selectInformationToChange() {
 		String[] commands = {"Password", "Name", "Phone", "Email"};
 		return inputUserChoice("Change Information", commands);
 	}
 
 	@Override
-	public String updateObjectUI(String select) {
-		System.out.print("수정하실 " + select + "의 내용을 입력 해 주세요 :");
-		return sc.next().trim();
+	public String inputSelectedInformation(String select) throws Exception {
+		return inputString(select);
 	}
 	
 	@Override
-	public String userOutUI() {
+	public String userOutUI() throws ExitException {
 		printHead("Sign Out");
-		
-		System.out.print("확인을 위해 비밀번호를 입력하세요 : ");
 
-		return sc.next().trim();
+		return inputString("password");
 	}
 	
 
 	@Override
-	public int chargeMoneyUI() {
+	public int chargeMoneyUI() throws Exception {
 		printHead("Charge Cash");
 
-		System.out.print("충전하실 금액을 입력해 주세요 : ");
-
-		return sc.nextInt();
+		int updateMoney = Integer.parseInt(inputString("충전하실 금액"));
+		if (updateMoney <= 0) {
+			throw new IllegalStateException("올바르지 않은 금액입니다.");
+		}
+		return updateMoney;
 	}
 	
 	

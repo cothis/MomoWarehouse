@@ -18,7 +18,7 @@ public interface MomoInfoView {
 
     Optional<Member> selectUser(List<Member> list);
 
-    Optional<Item> selectItem(List<Item> read);
+    Optional<Item> selectItem(List<Item> read) throws Exception;
 
     Optional<MomoInfo> selectOutItem(List<MomoInfo> inItems);
 }

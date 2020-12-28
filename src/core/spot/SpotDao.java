@@ -1,5 +1,7 @@
 package core.spot;
 
+import core.common.CommonView;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,25 +23,21 @@ public class SpotDao {
             pstmt.setString(2, spot.getLocation());
             execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            CommonView.noticeError(new Exception("생성에 실패했습니다."));
         } finally {
             close();
         }
     }
 
-    private List<Spot> parseSpotList(ResultSet rs) {
+    private List<Spot> parseSpotList(ResultSet rs) throws SQLException {
         List<Spot> list = new ArrayList<>();
 
-        try {
-            while (rs.next()) {
-                int id = rs.getInt("SPOT_ID");
-                String name = rs.getString("SPOT_NAME");
-                String location = rs.getString("SPOT_LOCATION");
-                Spot spot = new Spot(id, name, location);
-                list.add(spot);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            int id = rs.getInt("SPOT_ID");
+            String name = rs.getString("SPOT_NAME");
+            String location = rs.getString("SPOT_LOCATION");
+            Spot spot = new Spot(id, name, location);
+            list.add(spot);
         }
         return list;
     }
@@ -62,7 +60,7 @@ public class SpotDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            CommonView.noticeError(new Exception("검색에 실패했습니다."));
         } finally {
             close();
         }
@@ -84,7 +82,7 @@ public class SpotDao {
             result = parseSpotList(rs);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            CommonView.noticeError(new Exception("검색에 실패했습니다."));
         } finally {
             close();
         }
@@ -103,7 +101,7 @@ public class SpotDao {
 
             execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            CommonView.noticeError(new Exception("삭제에 실패했습니다."));
         } finally {
             close();
         }
@@ -123,7 +121,7 @@ public class SpotDao {
 
             execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            CommonView.noticeError(new Exception("변경에 실패했습니다."));
         } finally {
             close();
         }
