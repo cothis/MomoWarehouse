@@ -85,7 +85,7 @@ public class MemberViewImpl implements MemberView {
 	public String userUI() {
 		printSubject("User Menu");
 
-		return inputUserChoice("회원정보수정", "입출고", "입출고내역", "충전", "로그아웃");
+		return inputUserChoice("회원정보수정", "나의정보", "입출고", "입출고내역", "충전", "로그아웃");
 	}
 	
 	/*회원정보*/
@@ -108,7 +108,7 @@ public class MemberViewImpl implements MemberView {
 	}
 	
 	@Override
-	public String userOutUI(String id) {
+	public String userOutUI() {
 		printSubject("Sign Out");
 		
 		System.out.print("확인을 위해 비밀번호를 입력하세요 : ");
@@ -134,7 +134,7 @@ public class MemberViewImpl implements MemberView {
 		System.out.println("관리자님 안녕하세요!");
 		printSubject("ADMIN Menu");
 
-		return inputUserChoice("물건관리", "SPOT관리", "회원로그", "입출고내역", "로그아웃");
+		return inputUserChoice("물건관리", "SPOT관리", "회원로그", "회원목록" , "입출고내역", "로그아웃");
 	}
 
 	@Override

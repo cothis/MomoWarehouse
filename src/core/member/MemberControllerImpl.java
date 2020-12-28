@@ -2,14 +2,18 @@ package core.member;
 
 import static core.ApplicationConfig.*;
 
+import java.util.List;
+
+import core.ApplicationConfig;
+
 public class MemberControllerImpl implements MemberController{
 	
 	private final MemberView view;
 	private final MemberDao dao;
 	private Member session;
+	private LoginInfo loginInfo;
 
-	public MemberControllerImpl(MemberView view,
-								MemberDao dao) {
+	public MemberControllerImpl(MemberView view, MemberDao dao) {
 		this.view = view;
 		this.dao = dao;
 	}
@@ -45,7 +49,7 @@ public class MemberControllerImpl implements MemberController{
 
 	@Override
 	public void login() {
-		LoginInfo loginInfo = view.loginUI();//로그인해서 ID,PW 배열에 받음
+		loginInfo = view.loginUI();//로그인해서 ID,PW 배열에 받음
 		session = dao.select(loginInfo); //다오 셀렉 유저I,P 넣어 찾아서 멤버객체로 받음
 		if (session == null) {
 			return;
@@ -72,6 +76,9 @@ public class MemberControllerImpl implements MemberController{
 			switch (select) {
 				case "회원정보수정":
 					exit = userUpdating(session);
+					break;
+				case "나의정보":
+					myInfo(loginInfo);
 					break;
 				case "입출고":
 					getMomoInfoController().inOutMenu(session);
@@ -112,16 +119,24 @@ public class MemberControllerImpl implements MemberController{
 			}
 			
 		}else if(userMenuSelect.equals("탈퇴")) {
-			String pw = view.userOutUI(id);
+			String pw = view.userOutUI();
 			if(pw.equals(member.getPw())) {
-				dao.delete(id);
-				view.print("탈퇴완료. 안녕히가십시오...");
-				signOut = true;
+				result = dao.delete(session);
+				if(result > 0) {
+					view.print("탈퇴완료. 안녕히가십시오...");
+					signOut = true;
+				}
 			}else {
 				view.print("비밀번호가 일치하지 않습니다.");
 			}
 		}
 		return signOut;
+	}
+	
+	//나의정보
+	public void myInfo(LoginInfo loginInfo) {
+		session = dao.select(loginInfo);
+		view.print(session.toString());
 	}
 
 	//정보수정 -> 값 입력 -> dao에서 수정처리
@@ -134,6 +149,7 @@ public class MemberControllerImpl implements MemberController{
 		switch (userRudSelect) {
 			case "비밀번호":
 				session.setPw(userInfoUp);
+				loginInfo.setPw(userInfoUp); //비밀번호 요기서 수정하고 로그아웃 하지않고 loginInfo에 업데이트가 안되면 나의정보 출력할때 null로 오류발생시킴
 				result = dao.update(session, "PW");
 				break;
 			case "이름":
@@ -187,6 +203,11 @@ public class MemberControllerImpl implements MemberController{
 					break;
 				}
 				case "회원로그": {
+					getMemberLogController().logMenu();
+					break;
+				}
+				case "회원목록": {
+					dao.findAll();
 					break;
 				}
 				case "입출고내역": {

@@ -1,14 +1,19 @@
 package core.memberlog;
 
+import java.sql.Date;
+
 import core.member.Member;
 
 public class MemberLog {
 	private int logId;
 	private Member member;
-	private String logDate;
+	private Date logDate;
 	private String logMode;
 	
-	public MemberLog(int logId, Member member, String logDate, String logMode) {
+	public MemberLog() {
+	}
+	
+	public MemberLog(int logId, Member member, Date logDate, String logMode) {
 		this.logId = logId;
 		this.member = member;
 		this.logDate = logDate;
@@ -23,20 +28,25 @@ public class MemberLog {
 		return member;
 	}
 
-	public String getLogDate() {
+	public Date getLogDate() {
 		return logDate;
 	}
 
 	public String getLogMode() {
 		return logMode;
 	}
+	
+	
+	public void setLogId(int logId) {
+		this.logId = logId;
+	}
 
 	public void setMember(Member member) {
 		this.member = member;
 	}
 
-	public void setLogDate(String logDate) {
-		this.logDate = logDate;
+	public void setLogDate(Date date) {
+		this.logDate = date;
 	}
 
 	public void setLogMode(String logMode) {

@@ -5,6 +5,10 @@ import static core.common.CommonJdbc.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import core.common.CommonView;
 
 public class MemberDao {
 	//멤버다오의 회원정보를 멤버db에 저장
@@ -37,7 +41,45 @@ public class MemberDao {
 		return result;
 	}
 
+	//Select - 전체 출력
+	public void findAll() {
+		List<Member> list= new ArrayList<Member>();
 
+		try {
+			connect();
+
+			String sql = "SELECT * FROM MEMBER "
+							+ "  ORDER BY MEMBER_ID";
+			
+			PreparedStatement pstmt = getPreparedStatement(sql);
+			
+			ResultSet rs = executeQuery();
+			
+			while(rs.next()) {
+				Member member = new Member();
+				member.setMemberId(rs.getString("MEMBER_ID"));
+				member.setPw(rs.getString("PW"));
+				member.setName(rs.getString("NAME"));
+				member.setPhone(rs.getString("PHONE"));
+				member.setEmail(rs.getString("EMAIL"));
+				member.setSpot_id(rs.getInt("SPOT_ID"));
+				member.setGrade(rs.getString("GRADE"));
+				member.setCash(rs.getInt("CASH"));
+				list.add(member);
+			}
+			
+			for (Member mem : list) {
+				System.out.println(mem);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+	}
+	
 	//Select - ID, PW
 	public Member select(LoginInfo loginInfo) {
 		Member member = null;
@@ -112,7 +154,12 @@ public class MemberDao {
 			PreparedStatement pstmt = getPreparedStatement(sql);
 
 			if(userInfoUpTxt.trim().equals("PW")) {
-				pstmt.setString(1, member.getPw());
+				if(member.getPw().length() < 4) {
+					System.out.println("비밀번호는 4자리 이상 입니다.");
+					return 0;
+				}else {
+					pstmt.setString(1, member.getPw());
+				}
 			}else if(userInfoUpTxt.trim().equals("NAME")) {
 				pstmt.setString(1, member.getName());
 			}else if(userInfoUpTxt.trim().equals("PHONE")) {
@@ -163,7 +210,7 @@ public class MemberDao {
 	}
 
 	//Delete
-	public int delete(String id) {
+	public int delete(Member member) {
 		int result = 0;
 
 		try {
@@ -173,13 +220,13 @@ public class MemberDao {
 
 			PreparedStatement pstmt = getPreparedStatement(sql);
 
-			pstmt.setString(1, id);
+			pstmt.setString(1, member.getMemberId());
 
 			result = executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			CommonView.printMessage("입고된 물품이 있습니다. 출고 후 다시 시도해 주세요."); 
+			//e.printStackTrace();
 		}finally {
 			close();
 		}

@@ -40,7 +40,12 @@ create index MEMBER_NAME_IDX ON MEMBER (NAME);
 alter table MEMBER
 add (CASH NUMBER(8) default 1000);
 */
-
+/*
+alter table MEMBER
+modify (GRADE default 'USER');
+delete from member where GRADE = 'WHADMIN';
+commit;
+*/
 -- ITEM_LIST 테이블
 create table MomoInfo
 (

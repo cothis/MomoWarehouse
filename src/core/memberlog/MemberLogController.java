@@ -1,5 +1,11 @@
 package core.memberlog;
 
+import java.util.List;
+
+import core.member.Member;
+
 public interface MemberLogController {
-	public void logMenu();
+	void logMenu();
+	void delete();
+	void read();
 }
