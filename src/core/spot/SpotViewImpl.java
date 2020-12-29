@@ -1,17 +1,11 @@
 package core.spot;
 
-import core.common.CommonView;
-import core.common.InputValidator;
-
 import java.util.List;
-import java.util.Scanner;
 
 import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
 
 public class SpotViewImpl implements SpotView {
-    private final Scanner sc = new Scanner(System.in);
-
     @Override
     public String spotIndex() {
         String[] commands = {"Add", "Delete", "View", "Change"};

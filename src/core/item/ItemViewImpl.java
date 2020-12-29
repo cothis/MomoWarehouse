@@ -10,8 +10,6 @@ import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
 
 public class ItemViewImpl implements ItemView {
-    private final Scanner sc = new Scanner(System.in);
-
     @Override
     public String itemIndex() {
         String[] commands = {"Add", "Delete", "View", "Change"};
@@ -50,7 +48,7 @@ public class ItemViewImpl implements ItemView {
     }
 
     @Override
-    public Item deleteUI(List<Item> list) {
+    public Item deleteUI(List<Item> list) throws ExitException {
         printHead("Delete Item Menu");
 
         return selectOneItem(list, "삭제");
@@ -81,7 +79,7 @@ public class ItemViewImpl implements ItemView {
         return item;
     }
 
-    private Item selectOneItem(List<Item> list, String jobType) {
+    private Item selectOneItem(List<Item> list, String jobType) throws ExitException {
         Item item = null;
 
         if(list == null || list.size() ==0) {
@@ -91,12 +89,7 @@ public class ItemViewImpl implements ItemView {
         printList(list);
 
         while (true) {
-            System.out.print(jobType + "할 항목 id를 입력해주세요(취소 : exit) : ");
-            String select = sc.nextLine();
-            if ("exit".equals(select)) {
-                break;
-            }
-
+            String select = inputString(jobType + "할 항목 id");
             try {
                 int id = Integer.parseInt(select);
                 for (Item selected : list) {

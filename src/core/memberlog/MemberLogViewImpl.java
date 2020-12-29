@@ -4,15 +4,10 @@ import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
 
 import java.util.List;
-import java.util.Scanner;
-
-import core.common.CommonView;
-import core.common.InputValidator;
 import core.common.exception.ExitException;
 
 public class MemberLogViewImpl implements MemberLogView {
-	private final Scanner sc = new Scanner(System.in);
-	
+
 	@Override
 	public String logIndex() {
 		String[] commands = {"Delete Log" , "Member List"};

@@ -1,5 +1,7 @@
 package core.item;
 
+import core.common.exception.ExitException;
+
 import java.util.List;
 
 import static core.common.CommonView.*;
@@ -42,9 +44,8 @@ public class ItemControllerImpl implements ItemController {
 
     @Override
     public void create() {
-        Item item = null;
         try {
-            item = view.addUI();
+            Item item = view.addUI();
             dao.addItem(item);
         } catch (Exception e) {
             noticeError(e);
@@ -54,9 +55,12 @@ public class ItemControllerImpl implements ItemController {
     @Override
     public void delete() {
         List<Item> items = dao.selectAll();
-        Item item = view.deleteUI(items);
-        dao.delete(item);
-
+        try {
+            Item item = view.deleteUI(items);
+            dao.delete(item);
+        } catch (ExitException e) {
+            noticeError(e);
+        }
     }
 
     @Override

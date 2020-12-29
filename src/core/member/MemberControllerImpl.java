@@ -196,9 +196,10 @@ public class MemberControllerImpl implements MemberController {
 
     @Override
     public void chargeMoney() {
-        int originCash = session.getCash(); //기존 금액
-        int updatingCash = 0; //충전금액
         try {
+            int originCash = session.getCash(); //기존 금액
+            int updatingCash; //충전금액
+
             updatingCash = view.chargeMoneyUI();
             int newCash = originCash + updatingCash;
             if (dao.updatingCash(session, newCash)) {

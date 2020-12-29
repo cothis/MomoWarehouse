@@ -1,18 +1,14 @@
 package core.member;
 
 import java.util.List;
-import java.util.Scanner;
 
 import core.common.exception.ExitException;
-import core.memberlog.MemberLog;
 import core.spot.Spot;
 
 import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
 
 public class MemberViewImpl implements MemberView {
-	private final Scanner sc = new Scanner(System.in);
-
 	@Override
 	public String index() {
 		String[] commands = {"Join", "Log In"};

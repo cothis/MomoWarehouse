@@ -9,7 +9,6 @@ import core.momoinfo.statistcs.TotalPayment;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
@@ -17,8 +16,6 @@ import static core.momoinfo.option.HistoryOption.*;
 import static core.momoinfo.option.InOutOption.*;
 
 public class MomoInfoViewImpl implements MomoInfoView {
-
-    private final Scanner sc = new Scanner(System.in);
 
     @Override
     public InOutOption inOut() {
@@ -86,11 +83,10 @@ public class MomoInfoViewImpl implements MomoInfoView {
             System.out.println(item);
         }
         while (true) {
-            Optional<Item> any = Optional.empty();
             try {
                 String select = inputString("아이템 ID");
 
-                any = read.stream()
+                Optional<Item> any = read.stream()
                         .filter(item -> item.getItemId() == Integer.parseInt(select))
                         .findAny();
                 if (!any.isPresent()) {

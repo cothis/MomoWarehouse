@@ -7,7 +7,7 @@ import java.util.List;
 public interface ItemView {
     String itemIndex();
     Item addUI() throws ExitException;
-    Item deleteUI(List<Item> list);
+    Item deleteUI(List<Item> list) throws ExitException;
     void printList(List<Item> list);
     Item updateUI(List<Item> list) throws ExitException;
 }

@@ -2,9 +2,7 @@ package core.memberlog;
 
 import java.util.List;
 
-import core.common.CommonView;
 import core.common.exception.ExitException;
-import core.member.Member;
 
 import static core.common.CommonView.*;
 import static core.common.CommonView.printMessage;
@@ -12,8 +10,7 @@ import static core.common.CommonView.printMessage;
 public class MemberLogControllerImpl implements MemberLogController {
 	MemberLogDao dao;
 	MemberLogView view;
-	Member session;
-	
+
 	public MemberLogControllerImpl(MemberLogDao dao, MemberLogView view) {
 		this.dao = dao;
 		this.view = view;
