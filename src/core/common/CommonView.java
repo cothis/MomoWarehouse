@@ -89,18 +89,26 @@ public class CommonView {
     }
 
     public static void noticeError(Exception e) {
-        e.printStackTrace();
+//        e.printStackTrace();
         System.out.println(ANSI_YELLOW + e.getMessage() + ANSI_RESET);
     }
 
     public static void logo() {
-        System.out.println(ANSI_YELLOW + "___  ___       ___  ___        _    _                     _   _                          \n" +
+        String str = "___  ___       ___  ___        _    _                     _   _                          \n" +
                 "|  \\/  |       |  \\/  |       | |  | |                   | | | |                         \n" +
                 "| .  . |  ___  | .  . |  ___  | |  | |  __ _  _ __   ___ | |_| |  ___   _   _  ___   ___ \n" +
                 "| |\\/| | / _ \\ | |\\/| | / _ \\ | |/\\| | / _` || '__| / _ \\|  _  | / _ \\ | | | |/ __| / _ \\\n" +
                 "| |  | || (_) || |  | || (_) |\\  /\\  /| (_| || |   |  __/| | | || (_) || |_| |\\__ \\|  __/\n" +
                 "\\_|  |_/ \\___/ \\_|  |_/ \\___/  \\/  \\/  \\__,_||_|    \\___|\\_| |_/ \\___/  \\__,_||___/ \\___|\n" +
                 "                                                                                         \n" +
-                "                                                                                         " + ANSI_RESET);
+                "                                                                                         ";
+        str.chars().forEach((ch) -> {
+            System.out.print((char) ch);
+            try {
+                Thread.sleep(1, 500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

@@ -11,17 +11,22 @@ public class InputValidator {
 
     public static String inputString(String valueName) throws ExitException {
         System.out.println(valueName + "을 입력해주세요. 취소(exit)");
-        System.out.print(valueName + " : ");
 
-        String str = sc.nextLine();
-        if (str.equalsIgnoreCase("exit")) {
-            throw new ExitException();
+        String str = null;
+        boolean exit = false;
+        while (!exit) {
+            System.out.print(valueName + " : ");
+
+            str = sc.nextLine();
+            if (str.equalsIgnoreCase("exit")) {
+                throw new ExitException();
+            }
+            if (!str.trim().equals("")) exit = true;
         }
         return str.trim();
     }
 
     public static String inputUserChoice(String subject, String... commands) {
-
         String result = null;
         boolean exit = false;
 
@@ -32,20 +37,26 @@ public class InputValidator {
             list.add("EXIT");
         }
 
+        boolean onlyEnter = false;
         while (!exit) {
-            printSubject(subject);
-            StringBuilder content = new StringBuilder();
 
-            for (int i = 0; i < list.size(); i++) {
-                content.append(String.format("%d.%s ", i + 1, list.get(i)));
+            if (!onlyEnter) {
+                printSubject(subject);
+                StringBuilder content = new StringBuilder();
+
+                for (int i = 0; i < list.size(); i++) {
+                    content.append(String.format("%d.%s ", i + 1, list.get(i)));
+                }
+                String format = "| %-" + (length() -3) + "s|\n";
+                System.out.printf(format, content.toString());
+
+                printBottom();
             }
-            String format = "| %-" + (length() -3) + "s|\n";
-            System.out.printf(format, content.toString());
-
-            printBottom();
 
             System.out.print(" >> ");
             result = sc.nextLine();
+            onlyEnter = result.trim().equals("");
+            if (onlyEnter) continue;
 
             // 숫자도 입력받을 수 있게
             for (int i = 0; i < list.size(); i++) {
