@@ -153,4 +153,10 @@ public class MomoInfoViewImpl implements MomoInfoView {
         }
         printBottom();
     }
+
+    @Override
+    public String staticMenu() {
+        String[] commands = {"Total", "Monthly"};
+        return inputUserChoice("Static Sticks Menu", commands);
+    }
 }

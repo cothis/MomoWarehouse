@@ -124,7 +124,8 @@ public class MemberViewImpl implements MemberView {
 	/*관리자 메뉴*/
 	@Override
 	public String adminUI() {
-		String[] commands = {"Manage Item", "Manage Spot", "Member Log", "Member List", "In-Out History", "Log Out"};
+		setTempLength(103);
+		String[] commands = {"Manage Item", "Manage Spot", "Member Log", "Member List", "In-Out History", "Statistics", "Log Out"};
 		return inputUserChoice("Admin Menu", commands);
 	}
 

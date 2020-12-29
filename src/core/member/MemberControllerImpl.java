@@ -1,6 +1,7 @@
 package core.member;
 
 import core.common.exception.ChargeMoneyException;
+import core.common.exception.EmptyListException;
 import core.common.exception.ExitException;
 
 import java.util.List;
@@ -237,12 +238,16 @@ public class MemberControllerImpl implements MemberController {
                         getMomoInfoController().inOutHistory(session);
                         break;
                     }
+                    case "STATISTICS": {
+                        getMomoInfoController().statistics(session);
+                        break;
+                    }
                     case "LOG OUT": {
                         exit = true;
                         break;
                     }
                 }
-            } catch (ExitException e) {
+            } catch (ExitException | EmptyListException e) {
                 noticeError(e);
             }
         }

@@ -132,6 +132,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                     }
                     break;
                 }
+
                 case MONTHLY_PAYMENT: {
                     try {
                         List<TotalPayment> list = dao.findMonthlyPaymentByUser();
@@ -141,6 +142,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                     }
                     break;
                 }
+
                 case EXIT_HISTORY:
                     exit = true;
                     break;
@@ -151,5 +153,33 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     @Override
     public void checkHasIncomingByUser(Member session) throws HasIncomingException {
         dao.checkHasIncomingByUser(session);
+    }
+
+    @Override
+    public void statistics(Member member) throws EmptyListException, ExitException {
+        session = member;
+        selectUser();
+
+        boolean exit = false;
+        while(!exit){
+            String select = view.staticMenu();
+
+            switch (select){
+                case "TOTAL" : {
+                    List<TotalPayment> list = dao.findTotalPaymentByUser();
+                    view.printTotalPaymentStatistics(list);
+                    break;
+                }
+                case "MONTHLY" : {
+                    List<TotalPayment> list = dao.findMonthlyPaymentByUser();
+                    view.printMonthlyPaymentStatistics(list, session);
+                    break;
+                }
+                case "EXIT": {
+                    exit = true;
+                    break;
+                }
+            }
+        }
     }
 }
