@@ -98,6 +98,9 @@ public class MemberControllerImpl implements MemberController {
                     case "CHARGE":
                         chargeMoney();
                         break;
+                    case "STATISTICS":
+                        getMomoInfoController().statistics(session);
+                        break;
                     case "LOG OUT":
                         exit = true;
                         break;

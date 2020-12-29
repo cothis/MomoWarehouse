@@ -33,8 +33,6 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 IN_HISTORY.toString(),
                 OUT_HISTORY.toString(),
                 ALL_HISTORY.toString(),
-                TOTAL_PAYMENT.toString(),
-                MONTHLY_PAYMENT.toString(),
                 EXIT_HISTORY.toString());
 
         return parseHistoryOption(select);
@@ -157,6 +155,6 @@ public class MomoInfoViewImpl implements MomoInfoView {
     @Override
     public String staticMenu() {
         String[] commands = {"Total", "Monthly"};
-        return inputUserChoice("Static Sticks Menu", commands);
+        return inputUserChoice("Statistics Menu", commands);
     }
 }

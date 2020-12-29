@@ -78,7 +78,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public String userUI() {
-		String[] commands = {"Edit Profile", "My Info", "In-Out", "History", "Charge", "Log Out"};
+		String[] commands = {"Edit Profile", "My Info", "Charge", "In-Out", "History", "Statistics", "Log Out"};
 		return inputUserChoice("User Menu", commands);
 	}
 	

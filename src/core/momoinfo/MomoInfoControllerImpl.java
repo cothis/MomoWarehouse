@@ -123,26 +123,6 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                     view.printList(list, "In out History");
                     break;
                 }
-                case TOTAL_PAYMENT: {
-                    try {
-                        List<TotalPayment> list = dao.findTotalPaymentByUser();
-                        view.printTotalPaymentStatistics(list);
-                    } catch (EmptyListException e) {
-                        noticeError(e);
-                    }
-                    break;
-                }
-
-                case MONTHLY_PAYMENT: {
-                    try {
-                        List<TotalPayment> list = dao.findMonthlyPaymentByUser();
-                        view.printMonthlyPaymentStatistics(list, session);
-                    } catch (EmptyListException e) {
-                        noticeError(e);
-                    }
-                    break;
-                }
-
                 case EXIT_HISTORY:
                     exit = true;
                     break;
