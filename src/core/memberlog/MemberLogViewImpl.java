@@ -33,12 +33,12 @@ public class MemberLogViewImpl implements MemberLogView {
 
 	@Override
 	public void printAll(List<MemberLog> list) {
-		setTempLength(110);
+		setTempLength(155);
 		printSubList("Member Log");
-		printContent(MemberLog.getHeader(), 4);
+		printContent(MemberLog.getHeader(), 3);
 		printDivider();
 		for (MemberLog memberLog : list) {
-			printContent(memberLog, 8);
+			printContent(memberLog, 7);
 		}
 		printBottom();
 	}

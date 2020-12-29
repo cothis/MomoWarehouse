@@ -1,5 +1,6 @@
 package core.item;
 
+import core.common.Color;
 import core.common.CommonView;
 
 public class Item {
@@ -79,10 +80,10 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return String.format("     %-4s    |    %-25s\t%-20s\t", itemId + "", name, priceByHour + "");
+		return String.format("    %-4s    |    %-25s\t        %-20s    ", itemId + "", name, priceByHour + "");
 	}
 
 	public static String getHeader() {
-		return String.format("     %-4s    |    %-25s    %s    ", "ID", "Item Name", "Price by hour");
+		return String.format("    %-4s    |    %-25s\t            %-20s    ", "ID", "Item Name", "Price by hour");
 	}
 }

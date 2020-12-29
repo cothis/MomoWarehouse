@@ -62,7 +62,7 @@ public class ItemViewImpl implements ItemView {
         printContent(Item.getHeader(),0);
         printDivider();
         for (Item item : list) {
-            printContent(item,6);
+            printContent(item,4);
         }
         printBottom();
     }

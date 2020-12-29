@@ -55,13 +55,13 @@ public class MemberLog {
 
 	@Override
 	public String toString() {
-		return String.format("\t%-8s | %-10s %-10s %-15s %-20s %-20s %-6s\t", logId, member.getMemberId(),
+		return String.format("\t%-8s | %-10s %-20s %-30s %-40s %-20s %-6s\t", logId, member.getMemberId(),
 				member.getName(), member.getPhone(), member.getEmail(),
 				logDate.toString(), logMode);
 	}
 
 	public static String getHeader() {
-		return String.format("\t%-8s | %-10s %-10s %-15s %-20s %-20s %-6s\t", "Log ID", "User ID", "Name",
+		return String.format("\t%-8s | %-10s %-20s %-30s %-40s %-20s %-6s\t", "Log ID", "User ID", "Name",
 				"Phone", "Email", "Log Date", "Mode");
 	}
 	

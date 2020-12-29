@@ -1,6 +1,7 @@
 package core.member;
 
 import core.common.exception.ChargeMoneyException;
+import core.common.exception.ExitException;
 
 import java.util.List;
 
@@ -59,7 +60,6 @@ public class MemberControllerImpl implements MemberController {
             session = dao.select(loginInfo); //다오 셀렉 유저I,P 넣어 찾아서 멤버객체로 받음
 
             String grade = session.getGrade();
-            printMessage("로그인 완료! " + session.userInfoPrint());
             if (grade.equals("USER")) {
                 userMenu();
             } else if (grade.equals("ADMIN")) {
@@ -74,6 +74,8 @@ public class MemberControllerImpl implements MemberController {
     @Override
     public void userMenu() {
         //"회원정보 수정", "입출고", "입출고내역", "충전", "로그아웃"
+        printMessage("로그인 완료! ");
+        printMessage(session.userInfoPrint());
 
         boolean exit = false;
         while (!exit) {
@@ -145,7 +147,7 @@ public class MemberControllerImpl implements MemberController {
     //나의정보
     public void myInfo(LoginInfo loginInfo) {
         session = dao.select(loginInfo);
-        printMessage(session.toString());
+        printMessage(session.userInfoPrint());
     }
 
     //정보수정 -> 값 입력 -> dao에서 수정처리
@@ -200,32 +202,37 @@ public class MemberControllerImpl implements MemberController {
         printMessage("관리자님 안녕하세요!");
 
         while (!exit) {
-            String select = view.adminUI();
-            switch (select) {
-                case "MANAGE ITEM": {
-                    getItemController().itemMenu();
-                    break;
+
+            try {
+                String select = view.adminUI();
+                switch (select) {
+                    case "MANAGE ITEM": {
+                        getItemController().itemMenu();
+                        break;
+                    }
+                    case "MANAGE SPOT": {
+                        getSpotController().spotMenu();
+                        break;
+                    }
+                    case "MEMBER LOG": {
+                        getMemberLogController().logMenu();
+                        break;
+                    }
+                    case "MEMBER LIST": {
+                        read();
+                        break;
+                    }
+                    case "IN-OUT HISTORY": {
+                        getMomoInfoController().inOutHistory(session);
+                        break;
+                    }
+                    case "LOG OUT": {
+                        exit = true;
+                        break;
+                    }
                 }
-                case "MANAGE SPOT": {
-                    getSpotController().spotMenu();
-                    break;
-                }
-                case "MEMBER LOG": {
-                    getMemberLogController().logMenu();
-                    break;
-                }
-                case "MEMBER LIST": {
-                    read();
-                    break;
-                }
-                case "IN-OUT HISTORY": {
-                    getMomoInfoController().inOutHistory(session);
-                    break;
-                }
-                case "LOG OUT": {
-                    exit = true;
-                    break;
-                }
+            } catch (ExitException e) {
+                noticeError(e);
             }
         }
     }

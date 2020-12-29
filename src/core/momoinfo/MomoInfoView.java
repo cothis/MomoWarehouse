@@ -1,5 +1,6 @@
 package core.momoinfo;
 
+import core.common.exception.ExitException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
@@ -16,7 +17,7 @@ public interface MomoInfoView {
 
     void printList(List<MomoInfo> list);
 
-    Optional<Member> selectUser(List<Member> list);
+    Optional<Member> selectUser(List<Member> list) throws ExitException;
 
     Optional<Item> selectItem(List<Item> read) throws Exception;
 

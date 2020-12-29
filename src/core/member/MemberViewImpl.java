@@ -50,10 +50,13 @@ public class MemberViewImpl implements MemberView {
 				phone = inputString("PHONE");
 				email = inputString("EMAIL");
 
-				System.out.println("원하시는 보관소 id 번호를 입력하세요.");
+				printSubList("SELECT SPOT");
+				printContent(Spot.getHeader(), 0);
+				printDivider();
 				for (Spot spot : list) {
-					System.out.println(spot);
+					printContent(spot,6);
 				}
+				printBottom();
 				spot_id = Integer.parseInt(inputString("보관소 id"));
 				break;
 			} catch (IllegalStateException e) {

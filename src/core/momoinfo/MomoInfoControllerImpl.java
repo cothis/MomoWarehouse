@@ -1,6 +1,7 @@
 package core.momoinfo;
 
 import core.common.exception.ChargeMoneyException;
+import core.common.exception.ExitException;
 import core.common.exception.HasIncomingException;
 import core.item.Item;
 import core.member.Member;
@@ -26,7 +27,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
         this.view = view;
     }
 
-    private void selectUser() {
+    private void selectUser() throws ExitException {
         Member selectedUser;
         if (session.getGrade().equals("USER")) {
             selectedUser = session;
@@ -97,7 +98,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     }
 
     @Override
-    public void inOutHistory(Member member) {
+    public void inOutHistory(Member member) throws ExitException {
         session = member;
         selectUser();
 

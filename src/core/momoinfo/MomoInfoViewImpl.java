@@ -1,5 +1,6 @@
 package core.momoinfo;
 
+import core.common.exception.ExitException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
@@ -38,18 +39,18 @@ public class MomoInfoViewImpl implements MomoInfoView {
 
     @Override
     public void printList(List<MomoInfo> list) {
-        setTempLength(150);
+        setTempLength(130);
         printSubList("In out History");
-        printContent(MomoInfo.getHeader(), 0);
+        printContent(MomoInfo.getHeader(), 3);
         printDivider();
         for (MomoInfo momoInfo : list) {
-            printContent(momoInfo, 0);
+            printContent(momoInfo, 4);
         }
         printBottom();
     }
 
     @Override
-    public Optional<Member> selectUser(List<Member> list) {
+    public Optional<Member> selectUser(List<Member> list) throws ExitException {
         if (list == null || list.size() == 0) {
             System.out.println("저장된 유저가 없습니다.");
             return Optional.empty();
@@ -63,17 +64,17 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 i++;
             }
             System.out.printf("%d. 전체보기%n", i);
-            System.out.print(">>");
+            String select = inputString("확인할 유저의 행 번호");
 
             try {
-                int rowNum = Integer.parseInt(sc.nextLine());
+                int rowNum = Integer.parseInt(select);
                 if(rowNum == i) {
                     return Optional.empty();
                 } else {
                     return Optional.of(list.get(rowNum - 1));
                 }
             } catch (Exception e) {
-                System.out.println("잘못 입력하셨습니다.");
+                System.out.println("잘못 입력하셨습니다.\n");
             }
         }
     }
