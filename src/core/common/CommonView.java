@@ -55,20 +55,20 @@ public class CommonView {
     }
 
     public static void printHead(String head) {
-        String headLine = Pad(head, '-', false, ANSI_YELLOW_BACKGROUND, ANSI_BLACK);
+        String headLine = Pad(head, '─', false, ANSI_YELLOW_BACKGROUND, ANSI_BLACK);
         System.out.println("\n" + headLine);
     }
 
     public static void printBottom() {
         String formatEnd = "└%-" + (length -2) + "s┘\n";
-        String replace = String.format(formatEnd, "").replace(' ', '-');
+        String replace = String.format(formatEnd, "").replace(' ', '─');
         System.out.print(replace);
         tempLength = 0;
     }
 
     public static void printDivider() {
         String formatEnd = "|%-" + (length -2) + "s|\n";
-        String replace = String.format(formatEnd, "").replace(' ', '-');
+        String replace = String.format(formatEnd, "").replace(' ', '─');
         System.out.print(replace);
     }
 

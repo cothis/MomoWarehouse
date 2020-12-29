@@ -59,7 +59,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                 case OUT_SPOT: {
                     try {
                         List<MomoInfo> inItems = dao.find(HistoryOption.IN_HISTORY);
-                        if (inItems.size() == 0) break;
+                        if (inItems.size() == 0) throw new NoIncomingException();
 
                         Optional<MomoInfo> momoInfo = view.selectOutItem(inItems);
                         if (!momoInfo.isPresent()) break;
@@ -73,8 +73,9 @@ public class MomoInfoControllerImpl implements MomoInfoController {
 
                         getMemberController().updateCash(newMoney);
                         dao.update(momoItem, payPrice);
+                        printMessage("결제금액 : " + payPrice + ", 현재잔액 : " + session.getCash());
                         printMessage("출고가 정상적으로 완료되었습니다.");
-                    } catch (LessMoneyException | ExitException e) {
+                    } catch (LessMoneyException | ExitException | NoIncomingException e) {
                         noticeError(e);
                     }
 

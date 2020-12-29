@@ -99,8 +99,8 @@ create table MEMBER_LOG
     MEMBER_ID VARCHAR2(60)         not null,
     PW        VARCHAR2(60)         not null,
     NAME      VARCHAR2(60)         not null,
-    PHONE     VARCHAR2(60)         not null,
-    EMAIL     VARCHAR2(60),
+    PHONE     VARCHAR2(120)         not null,
+    EMAIL     VARCHAR2(120),
     LOG_DATE  DATE default SYSDATE not null,
     LOG_MODE  VARCHAR2(30)         not null,
     constraint LOG_ID_PK primary key (LOG_ID)
@@ -110,6 +110,12 @@ create index LOG_DATE_IDX on MEMBER_LOG (LOG_DATE);
 create index LOG_MODE_IDX on MEMBER_LOG (LOG_MODE);
 create index LOG_MEMBER_ID_IDX on MEMBER_LOG (MEMBER_ID);
 create index LOG_MEMBER_NAME_IDX on MEMBER_LOG (NAME);
+
+/* phone, email 컬럼 사이즈 변경
+alter table MEMBER_LOG
+modify (PHONE VARCHAR2(120),
+    EMAIL varchar2(120));
+*/
 
 /*
 -- 시퀀스 삭제
