@@ -1,12 +1,11 @@
 package core.momoinfo;
 
-import core.common.exception.ChargeMoneyException;
-import core.common.exception.ExitException;
-import core.common.exception.HasIncomingException;
+import core.common.exception.*;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
 import core.momoinfo.option.InOutOption;
+import core.momoinfo.statistcs.TotalPayment;
 
 import java.sql.Date;
 import java.util.List;
@@ -34,7 +33,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
         } else {
             List<Member> list = dao.findUser();
             Optional<Member> member = view.selectUser(list);
-            selectedUser = member.orElseGet(() -> session);
+            selectedUser = member.orElse(session);
         }
         dao.setSelectedUser(selectedUser);
     }
@@ -58,25 +57,27 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                     break;
                 }
                 case OUT_SPOT: {
-                    List<MomoInfo> inItems = dao.find(HistoryOption.IN_HISTORY);
-                    if (inItems.size() == 0) break;
+                    try {
+                        List<MomoInfo> inItems = dao.find(HistoryOption.IN_HISTORY);
+                        if (inItems.size() == 0) break;
 
-                    Optional<MomoInfo> momoInfo = view.selectOutItem(inItems);
-                    if (!momoInfo.isPresent()) break;
+                        Optional<MomoInfo> momoInfo = view.selectOutItem(inItems);
+                        if (!momoInfo.isPresent()) break;
 
-                    MomoInfo momoItem = momoInfo.get();
-                    int payPrice = calculateStoragePrice(momoItem);
-                    System.out.println("payPrice = " + payPrice);
-                    int newMoney = session.getCash() - payPrice;
-                    System.out.println("newMoney = " + newMoney);
-                    if (newMoney >= 0) {
-                        try {
-                            getMemberController().updateCash(newMoney);
-                            dao.update(momoItem);
-                        } catch (ChargeMoneyException e) {
-                            noticeError(e);
+                        MomoInfo momoItem = momoInfo.get();
+                        int payPrice = calculateStoragePrice(momoItem);
+                        int newMoney = session.getCash() - payPrice;
+                        if (newMoney < 0) {
+                            throw new LessMoneyException(payPrice, session.getCash());
                         }
+
+                        getMemberController().updateCash(newMoney);
+                        dao.update(momoItem, payPrice);
+                        printMessage("출고가 정상적으로 완료되었습니다.");
+                    } catch (LessMoneyException | ExitException e) {
+                        noticeError(e);
                     }
+
                     break;
                 }
                 case EXIT_SPOT: {
@@ -109,17 +110,26 @@ public class MomoInfoControllerImpl implements MomoInfoController {
             switch (select) {
                 case IN_HISTORY: {
                     List<MomoInfo> list = dao.find(HistoryOption.IN_HISTORY);
-                    view.printList(list);
+                    view.printList(list, "Incoming History");
                     break;
                 }
                 case OUT_HISTORY: {
                     List<MomoInfo> list = dao.find(HistoryOption.OUT_HISTORY);
-                    view.printList(list);
+                    view.printList(list, "Outgoing History");
                     break;
                 }
                 case ALL_HISTORY: {
                     List<MomoInfo> list = dao.find(HistoryOption.ALL_HISTORY);
-                    view.printList(list);
+                    view.printList(list, "In out History");
+                    break;
+                }
+                case TOTAL_PAYMENT: {
+                    try {
+                        List<TotalPayment> list = dao.findTotalPaymentByUser();
+                        view.printTotalPaymentStatistics(list);
+                    } catch (EmptyListException e) {
+                        noticeError(e);
+                    }
                     break;
                 }
                 case EXIT_HISTORY:

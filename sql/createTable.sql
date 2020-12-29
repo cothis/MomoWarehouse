@@ -56,6 +56,7 @@ create table MomoInfo
     IN_TIME       DATE         default SYSDATE,
     OUT_TIME      DATE,
     PRICE_BY_HOUR NUMBER(8)                 not null,
+    PAYMENT       NUMBER(8)    default 0    not null,
     STATUS        VARCHAR2(20) default '입고' not null,
     constraint MOMO_ID_PK primary key (MOMO_ID),
     constraint MOMO_SPOT_FK foreign key (SPOT_ID) references SPOT (SPOT_ID),
@@ -66,6 +67,22 @@ create table MomoInfo
 create sequence MOMO_ID_SEQ start with 3001 increment by 1 nocache;
 create index MOMO_IN_TIME_IDX on MomoInfo (IN_TIME);
 create index MOMO_STATUS_IDX on MomoInfo (STATUS);
+
+-- payment 컬럼 추가
+/*
+alter table MOMOINFO
+add (PAYMENT NUMBER(8) default 0);
+*/
+
+/* payment column not null 추가
+update MOMOINFO
+set PAYMENT = 0
+where PAYMENT is null;
+commit;
+
+alter table MOMOINFO
+    modify (PAYMENT NUMBER(8) default 0 NOT NULL);
+*/
 
 -- on delete cascade 추가
 /*

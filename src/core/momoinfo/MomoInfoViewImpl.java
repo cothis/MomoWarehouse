@@ -5,6 +5,7 @@ import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
 import core.momoinfo.option.InOutOption;
+import core.momoinfo.statistcs.TotalPayment;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,19 +33,20 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 IN_HISTORY.toString(),
                 OUT_HISTORY.toString(),
                 ALL_HISTORY.toString(),
+                TOTAL_PAYMENT.toString(),
                 EXIT_HISTORY.toString());
 
         return parseHistoryOption(select);
     }
 
     @Override
-    public void printList(List<MomoInfo> list) {
-        setTempLength(130);
-        printSubList("In out History");
-        printContent(MomoInfo.getHeader(), 3);
+    public void printList(List<MomoInfo> list, String header) {
+        setTempLength(150);
+        printSubList(header);
+        printContent(MomoInfo.getHeader(), 0);
         printDivider();
         for (MomoInfo momoInfo : list) {
-            printContent(momoInfo, 4);
+            printContent(momoInfo, 5);
         }
         printBottom();
     }
@@ -103,18 +105,13 @@ public class MomoInfoViewImpl implements MomoInfoView {
     }
 
     @Override
-    public Optional<MomoInfo> selectOutItem(List<MomoInfo> inItems) {
-        for (MomoInfo inItem : inItems) {
-            System.out.println(inItem);
-        }
+    public Optional<MomoInfo> selectOutItem(List<MomoInfo> inItems) throws ExitException {
+        printList(inItems, "Incoming Items");
+
         while(true) {
             try {
-                System.out.println("출고할 MOMO ID를 입력해주세요");
-                System.out.print(">> ");
-                String select = sc.nextLine();
-                if (select.equals("exit")) {
-                    return Optional.empty();
-                }
+                String select = inputString("출고할 MOMO ID");
+
                 Optional<MomoInfo> any = inItems.stream()
                         .filter(momoInfo -> momoInfo.getMomoId() == Integer.parseInt(select))
                         .findAny();
@@ -122,9 +119,20 @@ public class MomoInfoViewImpl implements MomoInfoView {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
                 }
                 return any;
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println("잘못 입력하셨습니다.");
             }
         }
+    }
+
+    @Override
+    public void printTotalPaymentStatistics(List<TotalPayment> list) {
+        printSubList("Total Payment Statistics");
+        printContent(TotalPayment.getHeader(), 0);
+        printDivider();
+        for (TotalPayment totalPayment : list) {
+            printContent(totalPayment,0);
+        }
+        printBottom();
     }
 }

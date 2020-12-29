@@ -96,7 +96,7 @@ public class MemberViewImpl implements MemberView {
 	}
 
 	@Override
-	public String inputSelectedInformation(String select) throws Exception {
+	public String inputSelectedInformation(String select) throws ExitException {
 		return inputString(select);
 	}
 	

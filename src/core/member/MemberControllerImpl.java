@@ -112,35 +112,46 @@ public class MemberControllerImpl implements MemberController {
     @Override
     public boolean userUpdating(Member member) {
         boolean signOut = false;
-        int result = 0;
-        String id = member.getMemberId();
 
-        String userMenuSelect = view.changeInfoMenu();
+        String select = view.changeInfoMenu();
 
-        if (userMenuSelect.equalsIgnoreCase("CHANGE INFO")) {
-            //정보수정 메뉴 뜨고 입력값 받음
-            String targetInformation = view.selectInformationToChange();
-            try {
-                userUpdatingInput(targetInformation);
-                printMessage("변경되었습니다.");
-            } catch (Exception e) {
-                noticeError(e);
-            }
-        } else if (userMenuSelect.equalsIgnoreCase("LEAVE")) {
-            try {
-                String pw = view.userOutUI();
-                if (pw.equals(member.getPw())) {
-                    getMomoInfoController().checkHasIncomingByUser(session);
-                    dao.delete(session);
-                    printMessage("탈퇴완료. 안녕히가십시오...");
-                    signOut = true;
-                } else {
-                    throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        switch (select) {
+            case "CHANGE INFO": {
+                try {
+                //정보수정 메뉴 뜨고 입력값 받음
+                    String targetInformation = view.selectInformationToChange();
+                    if("EXIT".equals(targetInformation)) {
+                        break;
+                    }
+
+                    userUpdatingInput(targetInformation);
+                    printMessage("변경되었습니다.");
+                } catch (ExitException e) {
+                    noticeError(e);
                 }
-            } catch (Exception exception) {
-                noticeError(exception);
+                break;
+            }
+            case "LEAVE": {
+                try {
+                    String pw = view.userOutUI();
+                    if (pw.equals(member.getPw())) {
+                        getMomoInfoController().checkHasIncomingByUser(session);
+                        dao.delete(session);
+                        printMessage("탈퇴완료. 안녕히가십시오...");
+                        signOut = true;
+                    } else {
+                        throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+                    }
+                } catch (Exception exception) {
+                    noticeError(exception);
+                }
+                break;
+            }
+            case "EXIT": {
+                break;
             }
         }
+
         return signOut;
     }
 
@@ -152,7 +163,7 @@ public class MemberControllerImpl implements MemberController {
 
     //정보수정 -> 값 입력 -> dao에서 수정처리
     @Override
-    public void userUpdatingInput(String selectInformationToChange) throws Exception {
+    public void userUpdatingInput(String selectInformationToChange) throws ExitException {
         //입력값의 수정내용을 받음
         String selectedInfo = view.inputSelectedInformation(selectInformationToChange);
         Member member = new Member(session);

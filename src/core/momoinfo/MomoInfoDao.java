@@ -1,9 +1,11 @@
 package core.momoinfo;
 
+import core.common.exception.EmptyListException;
 import core.common.exception.HasIncomingException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
+import core.momoinfo.statistcs.TotalPayment;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -32,9 +34,10 @@ public class MomoInfoDao {
         Date inTime = rs.getDate("IN_TIME");
         Date outTime = rs.getDate("OUT_TIME");
         int priceByHour = rs.getInt("PRICE_BY_HOUR");
+        int payment = rs.getInt("PAYMENT");
         String status = rs.getString("STATUS");
 
-        return new MomoInfo(momoId, spotId, itemId, memberId, inTime, outTime, priceByHour, status);
+        return new MomoInfo(momoId, spotId, itemId, memberId, inTime, outTime, priceByHour, payment, status);
     }
 
     public List<MomoInfo> find(HistoryOption option) {
@@ -42,7 +45,7 @@ public class MomoInfoDao {
 
         try {
             connect();
-            String sql = "select MOMO_ID, SPOT_ID, ITEM_ID, MEMBER_ID, IN_TIME, OUT_TIME, PRICE_BY_HOUR, STATUS" +
+            String sql = "select MOMO_ID, SPOT_ID, ITEM_ID, MEMBER_ID, IN_TIME, OUT_TIME, PRICE_BY_HOUR, PAYMENT, STATUS" +
                     " from MOMOINFO";
             if (selectedUser.getGrade().equals("ADMIN")) {
                 sql = sql + " where 1 = 1";
@@ -124,16 +127,17 @@ public class MomoInfoDao {
         }
     }
 
-    public void update(MomoInfo momoInfo) {
+    public void update(MomoInfo momoInfo, int payPrice) {
         try {
             connect();
 
             String sql = "update MOMOINFO" +
-                    " set OUT_TIME = ?, STATUS = '출고'" +
+                    " set OUT_TIME = ?, STATUS = '출고', PAYMENT = ?" +
                     " where MOMO_ID = ?";
             PreparedStatement pstmt = getPreparedStatement(sql);
             pstmt.setDate(1, new Date(System.currentTimeMillis()));
-            pstmt.setInt(2, momoInfo.getMomoId());
+            pstmt.setInt(2, payPrice);
+            pstmt.setInt(3, momoInfo.getMomoId());
 
             execute();
         } catch (SQLException e) {
@@ -160,5 +164,46 @@ public class MomoInfoDao {
         } finally {
             close();
         }
+    }
+
+    public List<TotalPayment> findTotalPaymentByUser() throws EmptyListException {
+        List<TotalPayment> list = new ArrayList<>();
+
+        String condition = "";
+
+        boolean isUser = selectedUser.getGrade().equalsIgnoreCase("USER");
+        if (isUser) {
+            condition = " where MEMBER_ID = ?";
+        }
+
+        try {
+            connect();
+
+            String sql = "SELECT MEMBER_ID, SUM(PAYMENT) as TOTAL_PAYMENT FROM MOMOINFO " +
+                         " GROUP BY MEMBER_ID " +
+                         " ORDER BY TOTAL_PAYMENT DESC";
+
+            PreparedStatement pstmt = getPreparedStatement(sql);
+            if (isUser) {
+                pstmt.setString(1, selectedUser.getMemberId());
+            }
+
+            ResultSet rs = executeQuery();
+
+            while (rs.next()) {
+                String memberId = rs.getString("MEMBER_ID");
+                int totalPayment = rs.getInt("TOTAL_PAYMENT");
+                list.add(new TotalPayment(memberId, totalPayment));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (list.isEmpty()) {
+            throw new EmptyListException();
+        }
+
+        return list;
     }
 }

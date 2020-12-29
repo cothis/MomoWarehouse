@@ -1,6 +1,7 @@
 package core.momoinfo;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
 
 public class MomoInfo {
 	private int momoId;
@@ -10,10 +11,11 @@ public class MomoInfo {
 	private Date inTime;
 	private Date outTime;
 	private int priceByHour;
+	private int payment;
 	private String status;
 	
 	public MomoInfo(int momoId, int spotId, int itemId, String memberId, Date inTime, Date outTime, int priceByHour,
-			String status) {
+			int payment, String status) {
 		super();
 		this.momoId = momoId;
 		this.spotId = spotId;
@@ -22,6 +24,7 @@ public class MomoInfo {
 		this.inTime = inTime;
 		this.outTime = outTime;
 		this.priceByHour = priceByHour;
+		this.payment = payment;
 		this.status = status;
 	}
 
@@ -89,6 +92,14 @@ public class MomoInfo {
 		this.status = status;
 	}
 
+	public int getPayment() {
+		return payment;
+	}
+
+	public void setPayment(int payment) {
+		this.payment = payment;
+	}
+
 	@Override
 	public String toString() {
 		String outTimeString;
@@ -98,15 +109,16 @@ public class MomoInfo {
 			outTimeString = outTime.toString();
 		}
 
+		DecimalFormat formatter = new DecimalFormat("###,###");
 
-		return String.format("     %-8s    |    %-8s    %-8s    %-10s    %-15s    %-15s    %-15s    %-5s\t",
+		return String.format("     %-8s    |    %-8s    %-8s    %-10s    %-15s    %-15s    %-15s    %-15s    %-5s\t",
 				momoId + "", spotId + "", itemId + "", memberId + "",
-				inTime.toString(), outTimeString, priceByHour + "", status);
+				inTime.toString(), outTimeString, formatter.format(priceByHour), formatter.format(payment), status);
 	}
 
 	public static String getHeader() {
-		return String.format("     %-8s    |    %-8s    %-8s    %-10s    %-15s    %-15s    %-15s    %-5s\t",
-				"Momo ID", "Spot ID", "Item ID", "User ID", "In Time", "Out Time", "Price by hour", "Status");
+		return String.format("     %-8s    |    %-8s    %-8s    %-10s    %-15s    %-15s    %-15s    %-15s    %-5s\t",
+				"Momo ID", "Spot ID", "Item ID", "User ID", "In Time", "Out Time", "Price by hour", "Payment", "Status");
 	}
 
 

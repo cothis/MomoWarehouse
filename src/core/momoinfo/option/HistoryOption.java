@@ -6,6 +6,7 @@ public enum HistoryOption {
     IN_HISTORY("In"),
     OUT_HISTORY("Out"),
     ALL_HISTORY("All"),
+    TOTAL_PAYMENT("Total Payment"),
     EXIT_HISTORY("EXIT");
 
     private final String select;
