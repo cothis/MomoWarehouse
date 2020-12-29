@@ -60,13 +60,20 @@ create table MomoInfo
     constraint MOMO_ID_PK primary key (MOMO_ID),
     constraint MOMO_SPOT_FK foreign key (SPOT_ID) references SPOT (SPOT_ID),
     constraint MOMO_ITEM_FK foreign key (ITEM_ID) references ITEM (ITEM_ID),
-    constraint MOMO_MEMBER_FK foreign key (MEMBER_ID) references MEMBER (MEMBER_ID),
+    constraint MOMO_MEMBER_FK foreign key (MEMBER_ID) references MEMBER (MEMBER_ID) on delete cascade,
     constraint MOMO_TIME_CHK check ( OUT_TIME >= IN_TIME )
 );
 create sequence MOMO_ID_SEQ start with 3001 increment by 1 nocache;
 create index MOMO_IN_TIME_IDX on MomoInfo (IN_TIME);
 create index MOMO_STATUS_IDX on MomoInfo (STATUS);
 
+-- on delete cascade 추가
+/*
+alter table MomoInfo
+drop constraint MOMO_MEMBER_FK;
+alter table MomoInfo
+add constraint MOMO_MEMBER_FK foreign key (MEMBER_ID) references MEMBER (MEMBER_ID) on delete cascade;
+*/
 
 -- 회원정보 변경 로그 테이블
 create table MEMBER_LOG

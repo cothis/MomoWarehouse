@@ -1,7 +1,7 @@
 package core.momoinfo;
 
-import core.common.CommonView;
 import core.common.exception.ChargeMoneyException;
+import core.common.exception.HasIncomingException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
@@ -27,7 +27,6 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     }
 
     private void selectUser() {
-        System.out.println("session = " + session);
         Member selectedUser;
         if (session.getGrade().equals("USER")) {
             selectedUser = session;
@@ -36,7 +35,6 @@ public class MomoInfoControllerImpl implements MomoInfoController {
             Optional<Member> member = view.selectUser(list);
             selectedUser = member.orElseGet(() -> session);
         }
-        System.out.println("selectedUser = " + selectedUser);
         dao.setSelectedUser(selectedUser);
     }
 
@@ -130,4 +128,8 @@ public class MomoInfoControllerImpl implements MomoInfoController {
         }
     }
 
+    @Override
+    public void checkHasIncomingByUser(Member session) throws HasIncomingException {
+        dao.checkHasIncomingByUser(session);
+    }
 }

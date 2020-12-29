@@ -1,5 +1,6 @@
 package core.momoinfo;
 
+import core.common.exception.HasIncomingException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.HistoryOption;
@@ -135,6 +136,25 @@ public class MomoInfoDao {
             pstmt.setInt(2, momoInfo.getMomoId());
 
             execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    }
+
+    public void checkHasIncomingByUser(Member session) throws HasIncomingException {
+        try {
+            connect();
+
+            String sql = "select 1 from MOMOINFO" +
+                    " where MEMBER_ID = ? and STATUS = '입고'";
+            getPreparedStatement(sql).setString(1, session.getMemberId());
+
+            if (executeQuery().next()) {
+                throw new HasIncomingException();
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

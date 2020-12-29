@@ -2,7 +2,6 @@ package core.member;
 
 import core.common.exception.ChargeMoneyException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static core.ApplicationConfig.*;
@@ -129,6 +128,7 @@ public class MemberControllerImpl implements MemberController {
             try {
                 String pw = view.userOutUI();
                 if (pw.equals(member.getPw())) {
+                    getMomoInfoController().checkHasIncomingByUser(session);
                     dao.delete(session);
                     printMessage("탈퇴완료. 안녕히가십시오...");
                     signOut = true;

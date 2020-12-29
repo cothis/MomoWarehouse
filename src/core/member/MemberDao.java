@@ -208,7 +208,9 @@ public class MemberDao {
 	}
 
 	//Delete
-	public void delete(Member member) throws IllegalStateException {
+	public void delete(Member member) {
+		// 1. 입고된 물건이 있는지 확인한다.
+		// 2. 물건이 없으면 삭제한다.
 		try {
 			connect();
 
@@ -221,7 +223,7 @@ public class MemberDao {
 			executeUpdate();
 
 		} catch (SQLException e) {
-			throw new IllegalStateException("입고된 물품이 있습니다. 출고 후 다시 시도해 주세요.");
+			e.printStackTrace();
 		}finally {
 			close();
 		}
