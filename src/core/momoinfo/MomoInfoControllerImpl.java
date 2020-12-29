@@ -54,6 +54,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                         Optional<Item> item = view.selectItem(read);
                         item.ifPresent(dao::create);
                     }
+                    printMessage("입고가 정상적으로 완료되었습니다.");
                     break;
                 }
                 case OUT_SPOT: {

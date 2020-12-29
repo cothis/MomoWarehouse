@@ -1,5 +1,7 @@
 package core.momoinfo.statistcs;
 
+import core.common.CommonView;
+
 import java.text.DecimalFormat;
 
 public class TotalPayment {
@@ -29,7 +31,7 @@ public class TotalPayment {
     @Override
     public String toString() {
         DecimalFormat formatter = new DecimalFormat("###,###");
-        return String.format("    %-10s    |    %-20s", memberId, formatter.format(totalPayment));
+        return String.format("    %-10s    |    %-20s", CommonView.checkLength(memberId), formatter.format(totalPayment));
     }
 
     public void sum(TotalPayment userPayment) {
@@ -56,7 +58,7 @@ public class TotalPayment {
             monthly.append(String.format("%-10s    ", formatter.format(monthlyPayment[i])));
         }
 
-        return String.format("    %-10s    |    %s    |    %-20s", memberId, monthly, formatter.format(totalPayment));
+        return String.format("    %-10s    |    %s    |    %-20s", CommonView.checkLength(memberId), monthly, formatter.format(totalPayment));
     }
 
 }

@@ -93,6 +93,13 @@ public class CommonView {
         System.out.println(ANSI_YELLOW + e.getMessage() + ANSI_RESET);
     }
 
+    public static String checkLength(String str) {
+        if(str.length()>=11) {
+            str = str.substring(0,7) + "...";
+        }
+        return str;
+    }
+
     public static void logo() {
         String str = "___  ___       ___  ___        _    _                     _   _                          \n" +
                 "|  \\/  |       |  \\/  |       | |  | |                   | | | |                         \n" +

@@ -1,5 +1,7 @@
 package core.momoinfo;
 
+import core.common.CommonView;
+
 import java.sql.Date;
 import java.text.DecimalFormat;
 
@@ -112,7 +114,7 @@ public class MomoInfo {
 		DecimalFormat formatter = new DecimalFormat("###,###");
 
 		return String.format("     %-8s    |    %-8s    %-8s    %-10s    %-15s    %-15s    %-15s    %-15s    %-5s\t",
-				momoId + "", spotId + "", itemId + "", memberId + "",
+				momoId + "", spotId + "", itemId + "", CommonView.checkLength(memberId),
 				inTime.toString(), outTimeString, formatter.format(priceByHour), formatter.format(payment), status);
 	}
 

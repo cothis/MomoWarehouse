@@ -2,6 +2,7 @@ package core.memberlog;
 
 import java.sql.Date;
 
+import core.common.CommonView;
 import core.member.Member;
 
 public class MemberLog {
@@ -55,7 +56,7 @@ public class MemberLog {
 
 	@Override
 	public String toString() {
-		return String.format("\t%-8s | %-10s %-25s \t %-30s %-40s %-20s %-6s\t", logId, member.getMemberId(),
+		return String.format("\t%-8s | %-10s %-25s \t %-30s %-40s %-20s %-6s\t", logId, CommonView.checkLength(member.getMemberId()),
 				member.getName(), member.getPhone(), member.getEmail(),
 				logDate.toString(), logMode);
 	}
