@@ -180,6 +180,7 @@ public class MomoInfoDao {
             connect();
 
             String sql = "SELECT MEMBER_ID, SUM(PAYMENT) as TOTAL_PAYMENT FROM MOMOINFO " +
+                         condition +
                          " GROUP BY MEMBER_ID " +
                          " ORDER BY TOTAL_PAYMENT DESC";
 
@@ -205,5 +206,83 @@ public class MomoInfoDao {
         }
 
         return list;
+    }
+
+    public List<TotalPayment> findMonthlyPaymentByUser() throws EmptyListException {
+
+        List<TotalPayment> list = new ArrayList<>();
+
+        String condition = "";
+
+        boolean isUser = selectedUser.getGrade().equalsIgnoreCase("USER");
+        if (isUser) {
+            condition = " where MEMBER_ID = ?";
+        }
+
+        String sql = "SELECT\n" +
+                "    MEMBER_ID, SUM(\"01\") AS \"1M\", SUM(\"02\") AS \"2M\", SUM(\"03\") AS \"3M\", SUM(\"04\") AS \"4M\", SUM(\"05\") AS \"5M\", SUM(\"06\") AS \"6M\",\n" +
+                "    SUM(\"07\") AS \"7M\", SUM(\"08\") AS \"8M\", SUM(\"09\") AS \"9M\", SUM(\"10\") AS \"10M\", SUM(\"11\") AS \"11M\", SUM(\"12\") AS \"12M\",\n" +
+                "    SUM(PAYMENT) AS \"USER_TOTAL_PAYMENT\"\n" +
+                "FROM(\n" +
+                "        SELECT MEMBER_ID, TO_CHAR(IN_TIME,'YYYY') AS YYYY, TO_CHAR(IN_TIME,'MM') AS MM, TO_CHAR(IN_TIME,'DD') AS DD, PAYMENT\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '01', PAYMENT, 0) AS \"01\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '02', PAYMENT, 0) AS \"02\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '03', PAYMENT, 0) AS \"03\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '04', PAYMENT, 0) AS \"04\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '05', PAYMENT, 0) AS \"05\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '06', PAYMENT, 0) AS \"06\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '07', PAYMENT, 0) AS \"07\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '08', PAYMENT, 0) AS \"08\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '09', PAYMENT, 0) AS \"09\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '10', PAYMENT, 0) AS \"10\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '11', PAYMENT, 0) AS \"11\"\n" +
+                "        , DECODE(TO_CHAR(IN_TIME,'MM'), '12', PAYMENT, 0) AS \"12\"\n" +
+                "        FROM MOMOINFO\n" +
+                "        WHERE TO_CHAR(IN_TIME,'YYYY') = 2020\n" +
+                ")" +
+                condition +
+                " GROUP BY MEMBER_ID, YYYY\n" +
+                "ORDER BY MEMBER_ID ASC, YYYY ASC";
+        try {
+            connect();
+
+            PreparedStatement pstmt = getPreparedStatement(sql);
+            if (isUser) {
+                pstmt.setString(1, selectedUser.getMemberId());
+            }
+
+            ResultSet rs = executeQuery();
+
+            TotalPayment sumPayment = new TotalPayment();
+
+            while (rs.next()) {
+                TotalPayment userPayment = parseTotalPayment(rs);
+                list.add(userPayment);
+                sumPayment.sum(userPayment);
+            }
+            list.add(sumPayment);
+
+            if (list.isEmpty()) {
+                throw new EmptyListException();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+
+        return list;
+    }
+
+    private TotalPayment parseTotalPayment(ResultSet rs) throws SQLException {
+        int[] monthly = new int[12];
+
+        String member_id = rs.getString("MEMBER_ID");
+        for(int i = 0; i < monthly.length; i++) {
+            monthly[i] = rs.getInt(String.format("%dM", i+1));
+        }
+        int userTotalPayment = rs.getInt("USER_TOTAL_PAYMENT");
+
+        return new TotalPayment(member_id, monthly, userTotalPayment);
     }
 }

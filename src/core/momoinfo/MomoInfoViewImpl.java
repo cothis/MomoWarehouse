@@ -34,6 +34,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 OUT_HISTORY.toString(),
                 ALL_HISTORY.toString(),
                 TOTAL_PAYMENT.toString(),
+                MONTHLY_PAYMENT.toString(),
                 EXIT_HISTORY.toString());
 
         return parseHistoryOption(select);
@@ -132,6 +133,23 @@ public class MomoInfoViewImpl implements MomoInfoView {
         printDivider();
         for (TotalPayment totalPayment : list) {
             printContent(totalPayment,0);
+        }
+        printBottom();
+    }
+
+    @Override
+    public void printMonthlyPaymentStatistics(List<TotalPayment> list, Member session) {
+        setTempLength(220);
+        printSubList("Monthly Payment Statistics");
+        printContent(TotalPayment.getMonthlyHeader(), 0);
+        printDivider();
+        for (int i = 0; i < list.size() - 1; i++) {
+            TotalPayment totalPayment = list.get(i);
+            printContent(totalPayment.getMonthlyDataString(), 0);
+        }
+        if (session.getGrade().equalsIgnoreCase("ADMIN")) {
+            printDivider();
+            printContent(list.get(list.size()-1).getMonthlyDataString(), 0);
         }
         printBottom();
     }

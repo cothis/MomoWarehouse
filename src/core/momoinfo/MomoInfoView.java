@@ -25,4 +25,5 @@ public interface MomoInfoView {
     Optional<MomoInfo> selectOutItem(List<MomoInfo> inItems) throws ExitException;
 
     void printTotalPaymentStatistics(List<TotalPayment> list);
+    void printMonthlyPaymentStatistics(List<TotalPayment> list, Member session);
 }

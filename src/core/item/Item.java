@@ -1,7 +1,6 @@
 package core.item;
 
-import core.common.Color;
-import core.common.CommonView;
+import java.text.DecimalFormat;
 
 public class Item {
 	private int itemId;
@@ -73,14 +72,15 @@ public class Item {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (priceByHour != other.priceByHour)
-			return false;
-		return true;
+		return priceByHour == other.priceByHour;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("    %-4s    |    %-25s\t        %-20s    ", itemId + "", name, priceByHour + "");
+		DecimalFormat formatter = new DecimalFormat("###,###");
+
+		return String.format("    %-4s    |    %-25s\t        %-20s    ",
+				itemId + "", name, formatter.format(priceByHour));
 	}
 
 	public static String getHeader() {

@@ -132,6 +132,15 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                     }
                     break;
                 }
+                case MONTHLY_PAYMENT: {
+                    try {
+                        List<TotalPayment> list = dao.findMonthlyPaymentByUser();
+                        view.printMonthlyPaymentStatistics(list, session);
+                    } catch (EmptyListException e) {
+                        noticeError(e);
+                    }
+                    break;
+                }
                 case EXIT_HISTORY:
                     exit = true;
                     break;
