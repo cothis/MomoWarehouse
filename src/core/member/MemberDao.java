@@ -188,7 +188,7 @@ public class MemberDao {
 	}
 
 	//Update - 충전금액 변경
-	public void updatingCash(Member session, int newCash) throws ChargeMoneyException {
+	public void updateCash(Member session, int newCash) throws ChargeMoneyException {
 		try {
 			connect();
 

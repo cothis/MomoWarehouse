@@ -1,10 +1,9 @@
 package core.item;
 
-import core.common.CommonView;
+import core.common.exception.EmptyListException;
 import core.common.exception.ExitException;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
@@ -14,10 +13,6 @@ public class ItemViewImpl implements ItemView {
     public String itemIndex() {
         String[] commands = {"Add", "Delete", "View", "Change"};
         return inputUserChoice("Item Menu", commands);
-    }
-
-    private String inputName() throws ExitException {
-        return inputString("이름");
     }
 
     private int inputPriceByHour() throws ExitException {
@@ -38,17 +33,15 @@ public class ItemViewImpl implements ItemView {
     @Override
     public Item addUI() throws ExitException {
         printHead("Add Item Menu");
-        String name;
-        int priceByHour;
 
-        name = inputName();
-        priceByHour = inputPriceByHour();
+        String name = inputString("이름");
+        int priceByHour = inputPriceByHour();
 
         return new Item(name, priceByHour);
     }
 
     @Override
-    public Item deleteUI(List<Item> list) throws ExitException {
+    public Item deleteUI(List<Item> list) throws ExitException, EmptyListException {
         printHead("Delete Item Menu");
 
         return selectOneItem(list, "삭제");
@@ -66,25 +59,21 @@ public class ItemViewImpl implements ItemView {
     }
 
     @Override
-    public Item updateUI(List<Item> list) throws ExitException {
+    public Item updateUI(List<Item> list) throws ExitException, EmptyListException {
         printHead("Change Item Menu");
 
         Item item = selectOneItem(list, "변경");
-        if(item == null) {
-            return null;
-        }
-        item.setName(inputName());
+        item.setName(inputString("이름"));
         item.setPriceByHour(inputPriceByHour());
 
         return item;
     }
 
-    private Item selectOneItem(List<Item> list, String jobType) throws ExitException {
+    private Item selectOneItem(List<Item> list, String jobType) throws ExitException, EmptyListException {
         Item item = null;
 
         if(list == null || list.size() ==0) {
-            CommonView.printMessage("항목이 없습니다.");
-            return null;
+            throw new EmptyListException();
         }
         printList(list);
 

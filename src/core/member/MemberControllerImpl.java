@@ -164,7 +164,7 @@ public class MemberControllerImpl implements MemberController {
         updatingCash = view.chargeMoneyUI();
         int newCash = originCash + updatingCash;
 
-        dao.updatingCash(session, newCash);
+        dao.updateCash(session, newCash);
         printMessage(updatingCash + "원을 충전 완료하였습니다. 총 금액 : " + session.getCash());
     }
 
@@ -193,7 +193,8 @@ public class MemberControllerImpl implements MemberController {
                         break;
                     }
                     case "MEMBER LIST": {
-                        read();
+                        List<Member> list = dao.findAll();
+                        view.printAll(list);
                         break;
                     }
                     case "IN-OUT HISTORY": {
@@ -217,11 +218,6 @@ public class MemberControllerImpl implements MemberController {
 
     @Override
     public void updateCash(int newMoney) throws ChargeMoneyException {
-        dao.updatingCash(session, newMoney);
-    }
-
-    public void read(){
-        List<Member> list = dao.findAll();
-        view.printAll(list);
+        dao.updateCash(session, newMoney);
     }
 }

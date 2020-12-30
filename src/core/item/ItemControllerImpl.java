@@ -1,5 +1,6 @@
 package core.item;
 
+import core.common.exception.EmptyListException;
 import core.common.exception.ExitException;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class ItemControllerImpl implements ItemController {
         try {
             Item item = view.addUI();
             dao.addItem(item);
-        } catch (Exception e) {
+        } catch (ExitException e) {
             noticeError(e);
         }
     }
@@ -58,7 +59,7 @@ public class ItemControllerImpl implements ItemController {
         try {
             Item item = view.deleteUI(items);
             dao.delete(item);
-        } catch (ExitException e) {
+        } catch (ExitException | EmptyListException e) {
             noticeError(e);
         }
     }
@@ -74,8 +75,8 @@ public class ItemControllerImpl implements ItemController {
         try {
             Item item = view.updateUI(items);
             dao.update(item);
-        } catch (Exception exception) {
-            noticeError(exception);
+        } catch (ExitException | EmptyListException e) {
+            noticeError(e);
         }
     }
 }
