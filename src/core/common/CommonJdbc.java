@@ -8,7 +8,7 @@ public class CommonJdbc {
     private static ResultSet rs = null;
 
     private static final String driver = "oracle.jdbc.OracleDriver";
-    private static final String url = "jdbc:oracle:thin:@localhost:1521:xe";
+    private static final String url = "jdbc:oracle:thin:@192.168.0.136:1521:xe";
     private static final String userId = "whadmin";
     private static final String userPw = "whadmin";
 

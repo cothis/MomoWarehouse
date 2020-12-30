@@ -2,6 +2,8 @@ package core.member;
 
 import core.common.CommonView;
 
+import java.text.DecimalFormat;
+
 public class Member {
 	private String memberId;
 	private String pw;
@@ -123,14 +125,19 @@ public class Member {
 	}
 
 	public String userInfoPrint() {
+
+		DecimalFormat formatter = new DecimalFormat("###,###");
+
 		return memberId + " 회원님의 정보 | 이름 = " + name + ", 전화번호 = " + phone + ", 이메일 = "
-				+ email + ", 보관소ID = " + spot_id + ", 등급 = " + grade + ", 충전금액 = " + cash ;
+				+ email + ", 보관소ID = " + spot_id + ", 등급 = " + grade + ", 충전금액 = " + formatter.format(cash) ;
 	}
 
 	@Override
 	public String toString() {
+		DecimalFormat formatter = new DecimalFormat("###,###");
+
 		return String.format("\t%-15s | %-15s %-15s %-20s %-10s %-10s %-10s\t",
-				CommonView.checkLength(memberId), name, phone, email, spot_id, grade, cash);
+				CommonView.checkLength(memberId), name, phone, email, spot_id, grade, formatter.format(cash));
 	}
 
 	public static String getHeader() {

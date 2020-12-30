@@ -4,6 +4,7 @@ import core.common.exception.ExitException;
 
 import java.util.*;
 
+import static core.common.Color.*;
 import static core.common.CommonView.*;
 
 public class InputValidator {
@@ -45,10 +46,15 @@ public class InputValidator {
                 StringBuilder content = new StringBuilder();
 
                 for (int i = 0; i < list.size(); i++) {
-                    content.append(String.format("%d.%s ", i + 1, list.get(i)));
+                    String message = String.format("%d.%s  ", i + 1, list.get(i));
+                    if (i == list.size() - 1) {
+                        message = ANSI_RED + message + ANSI_RESET;
+                    }
+//                    content.append(String.format("%d.%s  ", i + 1, list.get(i)));
+                    content.append(message);
                 }
-                String format = "| %-" + (length() -3) + "s|\n";
-                System.out.printf(format, content.toString());
+                String format = String.format(" %-" + (length() -3) + "s", content.toString());
+                printContent(format,-9);
 
                 printBottom();
             }

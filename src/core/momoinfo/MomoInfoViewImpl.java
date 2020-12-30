@@ -1,5 +1,7 @@
 package core.momoinfo;
 
+import core.common.Color;
+import core.common.CommonView;
 import core.common.exception.ExitException;
 import core.item.Item;
 import core.member.Member;
@@ -50,23 +52,31 @@ public class MomoInfoViewImpl implements MomoInfoView {
     @Override
     public Optional<Member> selectUser(List<Member> list) throws ExitException {
         if (list == null || list.size() == 0) {
-            System.out.println("저장된 유저가 없습니다.");
+            noticeError(new Exception("저장된 유저가 없습니다."));
             return Optional.empty();
         }
         while (true) {
-            System.out.println("확인할 유저의 행 번호를 선택해주세요.");
-
+            setTempLength(80);
+            printSubList("User List");
+            String header = String.format("    %-4s        %-20s\t  %-20s    ", "No.", "Member ID", "Member Name");
+            printContent(header, 2);
+            printDivider();
             int i = 1;
             for (Member member : list) {
-                System.out.printf("%d. id: %s, name: %s%n", i, member.getMemberId(), member.getName());
+                String message = String.format("    %-4s        %-20s\t  %-20s    ", i + "", member.getMemberId(), member.getName());
+                printContent(message, 2);
                 i++;
             }
-            System.out.printf("%d. 전체보기%n", i);
+            printDivider();
+            String message = String.format(Color.ANSI_PURPLE + "    %-4s        %-20s\t  " + Color.ANSI_RESET, 0, "ALL");
+            printContent(message, -7);
+            printBottom();
+
             String select = inputString("확인할 유저의 행 번호");
 
             try {
                 int rowNum = Integer.parseInt(select);
-                if(rowNum == i) {
+                if(rowNum == 0) {
                     return Optional.empty();
                 } else {
                     return Optional.of(list.get(rowNum - 1));

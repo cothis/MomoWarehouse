@@ -3,7 +3,7 @@ package core.common;
 import static core.common.Color.*;
 
 public class CommonView {
-    private static final int presetLength = 90;
+    private static final int presetLength = 100;
     private static int tempLength = 0;
     private static int length = 0;
 
