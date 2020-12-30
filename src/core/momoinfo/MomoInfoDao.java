@@ -244,7 +244,7 @@ public class MomoInfoDao {
                 ")" +
                 condition +
                 " GROUP BY MEMBER_ID, YYYY\n" +
-                "ORDER BY MEMBER_ID ASC, YYYY ASC";
+                "ORDER BY USER_TOTAL_PAYMENT DESC";
         try {
             connect();
 

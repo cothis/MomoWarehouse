@@ -197,7 +197,7 @@ public class MemberControllerImpl implements MemberController {
                         view.printAll(list);
                         break;
                     }
-                    case "IN-OUT HISTORY": {
+                    case "DETAILS": {
                         getMomoInfoController().inOutDetails(session);
                         break;
                     }
