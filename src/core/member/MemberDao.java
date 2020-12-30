@@ -8,8 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import core.common.CommonView;
 import core.common.exception.ChargeMoneyException;
+import core.common.exception.ExitException;
+import core.common.exception.PasswordLengthException;
+import core.member.option.InfoItem;
 
 public class MemberDao {
 	//멤버다오의 회원정보를 멤버db에 저장
@@ -48,24 +50,14 @@ public class MemberDao {
 			String sql = "SELECT * FROM MEMBER "
 							+ "  ORDER BY MEMBER_ID";
 			
-			PreparedStatement pstmt = getPreparedStatement(sql);
+			getPreparedStatement(sql);
 			
 			ResultSet rs = executeQuery();
 			
 			while(rs.next()) {
-				Member member = new Member();
-				member.setMemberId(rs.getString("MEMBER_ID"));
-				member.setPw(rs.getString("PW"));
-				member.setName(rs.getString("NAME"));
-				member.setPhone(rs.getString("PHONE"));
-				member.setEmail(rs.getString("EMAIL"));
-				member.setSpot_id(rs.getInt("SPOT_ID"));
-				member.setGrade(rs.getString("GRADE"));
-				member.setCash(rs.getInt("CASH"));
+				Member member = parseMember(rs);
 				list.add(member);
 			}
-
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -73,6 +65,20 @@ public class MemberDao {
 		}
 
 		return list;
+	}
+
+	private Member parseMember(ResultSet rs) throws SQLException {
+		Member member = new Member();
+		member.setMemberId(rs.getString("MEMBER_ID"));
+		member.setPw(rs.getString("PW"));
+		member.setName(rs.getString("NAME"));
+		member.setPhone(rs.getString("PHONE"));
+		member.setEmail(rs.getString("EMAIL"));
+		member.setSpot_id(rs.getInt("SPOT_ID"));
+		member.setGrade(rs.getString("GRADE"));
+		member.setCash(rs.getInt("CASH"));
+
+		return member;
 	}
 	
 	//Select - ID, PW
@@ -91,15 +97,7 @@ public class MemberDao {
 			ResultSet rs = executeQuery();
 
 			if(rs.next()) {
-				member = new Member();
-				member.setMemberId(rs.getString("MEMBER_ID"));
-				member.setPw(rs.getString("PW"));
-				member.setName(rs.getString("NAME"));
-				member.setPhone(rs.getString("PHONE"));
-				member.setEmail(rs.getString("EMAIL"));
-				member.setSpot_id(rs.getInt("SPOT_ID"));
-				member.setGrade(rs.getString("GRADE"));
-				member.setCash(rs.getInt("CASH"));
+				member = parseMember(rs);
 			} else if(!rs.next()) {
 				throw new IllegalStateException("아이디가 존재하지 않거나 비밀번호가 틀렸습니다. 다시 입력 해 주세요.");
 			}
@@ -136,54 +134,61 @@ public class MemberDao {
 	}
 
 	//Update - 회원정보수정(CRUD)
-	public int update(Member member, String userInfoUpTxt) throws IllegalStateException {
-		int result = 0;
-
+	public void update(Member member, InfoItem infoItem, String infoItemValue) throws PasswordLengthException, ExitException, IllegalStateException {
 		try {
 			connect();
 
 			String sql = "UPDATE MEMBER " +
-					"  SET " + userInfoUpTxt + " = ? " +
+					"  SET " + infoItem.name() + " = ? " +
 					"  WHERE MEMBER_ID = ? ";
 
 			PreparedStatement pstmt = getPreparedStatement(sql);
 
-			if(userInfoUpTxt.trim().equals("PW")) {
-				if(member.getPw().length() < 4) {
-					System.out.println("비밀번호는 4자리 이상 입니다.");
-					return 0;
-				}else {
-					pstmt.setString(1, member.getPw());
+			switch (infoItem) {
+				case PASSWORD: {
+					if(member.getPw().length() < 4) {
+						throw new PasswordLengthException();
+					} else {
+						member.setPw(infoItemValue);
+						pstmt.setString(1, member.getPw());
+					}
+					break;
 				}
-			}else if(userInfoUpTxt.trim().equals("NAME")) {
-				pstmt.setString(1, member.getName());
-			}else if(userInfoUpTxt.trim().equals("PHONE")) {
-				pstmt.setString(1, member.getPhone());
-			}else if(userInfoUpTxt.trim().equals("EMAIL")) {
-				pstmt.setString(1, member.getEmail());
+				case NAME: {
+					member.setName(infoItemValue);
+					pstmt.setString(1, member.getName());
+					break;
+				}
+				case PHONE: {
+					member.setPhone(infoItemValue);
+					pstmt.setString(1, member.getPhone());
+					break;
+				}
+				case EMAIL: {
+					member.setEmail(infoItemValue);
+					pstmt.setString(1, member.getEmail());
+					break;
+				}
+				case EXIT: {
+					throw new ExitException();
+				}
 			}
 
 			pstmt.setString(2, member.getMemberId());
 
-			result = executeUpdate();
+			int result = executeUpdate();
 			if (result <= 0) {
 				throw new IllegalStateException("업데이트 실패");
 			}
-
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			close();
 		}
-
-		return result;
 	}
 
 	//Update - 충전금액 변경
-	public boolean updatingCash(Member session, int newCash) throws ChargeMoneyException {
-		boolean result = false;
-
+	public void updatingCash(Member session, int newCash) throws ChargeMoneyException {
 		try {
 			connect();
 
@@ -197,14 +202,11 @@ public class MemberDao {
 
 			execute();
 			session.setCash(newCash);
-			result = true;
 		} catch (SQLException e) {
 			throw new ChargeMoneyException();
 		} finally {
 			close();
 		}
-
-		return result;
 	}
 
 	//Delete
@@ -228,47 +230,4 @@ public class MemberDao {
 			close();
 		}
 	}
-
-	//클로즈 메서드
-	/*
-	public void close(Connection conn, PreparedStatement pstmt) {
-		try {
-			//null이 아닐때 닫아주는게 더 좋은 방법 (조건문 달아서..)
-			if(pstmt != null) pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			if(conn != null) conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	 */
-
-	/*
-	public void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
-		try {
-			if(rs != null) rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			//null이 아닐때 닫아주는게 더 좋은 방법 (조건문 달아서..)
-			if(pstmt != null) pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			if(conn != null) conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-	*/
 }

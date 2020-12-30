@@ -3,10 +3,13 @@ package core.member;
 import java.util.List;
 
 import core.common.exception.ExitException;
+import core.common.exception.PasswordFailException;
+import core.member.option.InfoItem;
 import core.spot.Spot;
 
 import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
+import static core.member.option.InfoItem.*;
 
 public class MemberViewImpl implements MemberView {
 	@Override
@@ -74,7 +77,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public String userUI() {
-		String[] commands = {"Edit Profile", "My Info", "Charge", "In-Out", "History", "Statistics", "Log Out"};
+		String[] commands = {"Edit Profile", "My Info", "Charge", "In-Out", "Details", "Statistics", "Log Out"};
 		return inputUserChoice("User Menu", commands);
 	}
 	
@@ -86,26 +89,30 @@ public class MemberViewImpl implements MemberView {
 	}
 
 	@Override
-	public String selectInformationToChange() {
-		String[] commands = {"Password", "Name", "Phone", "Email"};
-		return inputUserChoice("Change Information", commands);
+	public InfoItem selectInformationToChange() {
+		String[] commands = {PASSWORD.name(), NAME.name(), PHONE.name(), EMAIL.name(), EXIT.name()};
+		String selectedItem = inputUserChoice("Change Information", commands);
+		return InfoItem.valueOf(selectedItem);
 	}
 
 	@Override
-	public String inputSelectedInformation(String select) throws ExitException {
-		return inputString(select);
+	public String inputSelectedInformation(InfoItem infoItem) throws ExitException {
+		return inputString(infoItem.name());
 	}
 	
 	@Override
-	public String userOutUI() throws ExitException {
+	public void checkSingOutPassword(Member session) throws ExitException, PasswordFailException {
 		printHead("Sign Out");
+		String pass = inputString("password");
 
-		return inputString("password");
+		if (!pass.equals(session.getPw())) {
+			throw new PasswordFailException();
+		}
 	}
 	
 
 	@Override
-	public int chargeMoneyUI() throws Exception {
+	public int chargeMoneyUI() throws ExitException, IllegalStateException {
 		printHead("Charge Cash");
 
 		int updateMoney = Integer.parseInt(inputString("충전하실 금액"));
@@ -136,5 +143,10 @@ public class MemberViewImpl implements MemberView {
 			printContent(member, 2);
 		}
 		printBottom();
+	}
+
+	@Override
+	public void printMemberInfo(Member member) {
+		printMessage(member.getUserInfo());
 	}
 }

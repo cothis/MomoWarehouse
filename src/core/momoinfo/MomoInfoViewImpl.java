@@ -1,11 +1,10 @@
 package core.momoinfo;
 
 import core.common.Color;
-import core.common.CommonView;
 import core.common.exception.ExitException;
 import core.item.Item;
 import core.member.Member;
-import core.momoinfo.option.HistoryOption;
+import core.momoinfo.option.DetailsOption;
 import core.momoinfo.option.InOutOption;
 import core.momoinfo.statistcs.TotalPayment;
 
@@ -14,7 +13,7 @@ import java.util.Optional;
 
 import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
-import static core.momoinfo.option.HistoryOption.*;
+import static core.momoinfo.option.DetailsOption.*;
 import static core.momoinfo.option.InOutOption.*;
 
 public class MomoInfoViewImpl implements MomoInfoView {
@@ -27,12 +26,12 @@ public class MomoInfoViewImpl implements MomoInfoView {
     }
 
     @Override
-    public HistoryOption history() {
-        String select = inputUserChoice("InOut History",
-                IN_HISTORY.toString(),
-                OUT_HISTORY.toString(),
-                ALL_HISTORY.toString(),
-                EXIT_HISTORY.toString());
+    public DetailsOption details() {
+        String select = inputUserChoice("InOut Details",
+                IN_DETAILS.toString(),
+                OUT_DETAILS.toString(),
+                ALL_DETAILS.toString(),
+                EXIT_DETAILS.toString());
 
         return parseHistoryOption(select);
     }

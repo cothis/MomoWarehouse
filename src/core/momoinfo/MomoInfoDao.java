@@ -4,7 +4,7 @@ import core.common.exception.EmptyListException;
 import core.common.exception.HasIncomingException;
 import core.item.Item;
 import core.member.Member;
-import core.momoinfo.option.HistoryOption;
+import core.momoinfo.option.DetailsOption;
 import core.momoinfo.statistcs.TotalPayment;
 
 import java.sql.Date;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static core.common.CommonJdbc.*;
-import static core.momoinfo.option.HistoryOption.*;
+import static core.momoinfo.option.DetailsOption.*;
 
 public class MomoInfoDao {
 
@@ -40,7 +40,7 @@ public class MomoInfoDao {
         return new MomoInfo(momoId, spotId, itemId, memberId, inTime, outTime, priceByHour, payment, status);
     }
 
-    public List<MomoInfo> find(HistoryOption option) {
+    public List<MomoInfo> find(DetailsOption option) {
         List<MomoInfo> list = new ArrayList<>();
 
         try {
@@ -52,9 +52,9 @@ public class MomoInfoDao {
             } else {
                 sql = sql + " where MEMBER_ID = '" + selectedUser.getMemberId() + "'";
             }
-            if(option == IN_HISTORY) {
+            if(option == IN_DETAILS) {
                 sql = sql + " and STATUS = '입고'";
-            } else if (option == OUT_HISTORY) {
+            } else if (option == OUT_DETAILS) {
                 sql = sql + " and STATUS = '출고'";
             }
             sql = sql + " order by IN_TIME";

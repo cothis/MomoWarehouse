@@ -1,5 +1,6 @@
 package core;
 
+import core.common.CommonView;
 import core.item.*;
 import core.member.*;
 import core.memberlog.MemberLogController;
@@ -31,6 +32,8 @@ public class ApplicationConfig {
 	private static final MemberLogView memberLogView = new MemberLogViewImpl();
 	private static final MemberLogController memberLogController = new MemberLogControllerImpl(memberLogDao, memberLogView);
 
+	private ApplicationConfig() {}
+
 	public static MemberController getMemberController() {
 		return memberController;
 	}
@@ -51,7 +54,8 @@ public class ApplicationConfig {
 		return itemController;
 	}
 
-	public void start() {
+	public static void start() {
+		CommonView.logo();
 		memberController.indexMenu();
 	}
 }

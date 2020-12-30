@@ -124,7 +124,7 @@ public class Member {
 		this.cash = cash;
 	}
 
-	public String userInfoPrint() {
+	public String getUserInfo() {
 
 		DecimalFormat formatter = new DecimalFormat("###,###");
 

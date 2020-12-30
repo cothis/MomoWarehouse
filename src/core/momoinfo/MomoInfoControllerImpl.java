@@ -3,7 +3,7 @@ package core.momoinfo;
 import core.common.exception.*;
 import core.item.Item;
 import core.member.Member;
-import core.momoinfo.option.HistoryOption;
+import core.momoinfo.option.DetailsOption;
 import core.momoinfo.option.InOutOption;
 import core.momoinfo.statistcs.TotalPayment;
 
@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static core.ApplicationConfig.*;
 import static core.common.CommonView.*;
+import static core.momoinfo.option.DetailsOption.*;
 
 public class MomoInfoControllerImpl implements MomoInfoController {
 
@@ -59,7 +60,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                 }
                 case OUT_SPOT: {
                     try {
-                        List<MomoInfo> inItems = dao.find(HistoryOption.IN_HISTORY);
+                        List<MomoInfo> inItems = dao.find(IN_DETAILS);
                         if (inItems.size() == 0) throw new NoIncomingException();
 
                         Optional<MomoInfo> momoInfo = view.selectOutItem(inItems);
@@ -101,33 +102,34 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     }
 
     @Override
-    public void inOutHistory(Member member) throws ExitException {
+    public void inOutDetails(Member member) throws ExitException {
         session = member;
         selectUser();
 
         boolean exit = false;
         while(!exit) {
-            HistoryOption select = view.history();
+            DetailsOption select = view.details();
 
             switch (select) {
-                case IN_HISTORY: {
-                    List<MomoInfo> list = dao.find(HistoryOption.IN_HISTORY);
-                    view.printList(list, "Incoming History");
+                case IN_DETAILS: {
+                    List<MomoInfo> list = dao.find(IN_DETAILS);
+                    view.printList(list, "Incoming Details");
                     break;
                 }
-                case OUT_HISTORY: {
-                    List<MomoInfo> list = dao.find(HistoryOption.OUT_HISTORY);
-                    view.printList(list, "Outgoing History");
+                case OUT_DETAILS: {
+                    List<MomoInfo> list = dao.find(OUT_DETAILS);
+                    view.printList(list, "Outgoing Details");
                     break;
                 }
-                case ALL_HISTORY: {
-                    List<MomoInfo> list = dao.find(HistoryOption.ALL_HISTORY);
-                    view.printList(list, "In out History");
+                case ALL_DETAILS: {
+                    List<MomoInfo> list = dao.find(ALL_DETAILS);
+                    view.printList(list, "In Out Details");
                     break;
                 }
-                case EXIT_HISTORY:
+                case EXIT_DETAILS: {
                     exit = true;
                     break;
+                }
             }
         }
     }
