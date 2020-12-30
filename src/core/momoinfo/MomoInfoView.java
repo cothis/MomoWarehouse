@@ -29,4 +29,6 @@ public interface MomoInfoView {
     void printTotalPaymentStatistics(List<TotalPayment> list);
 
     void printMonthlyPaymentStatistics(List<TotalPayment> list, Member session);
+
+    String selectYear(List<String> yearList);
 }

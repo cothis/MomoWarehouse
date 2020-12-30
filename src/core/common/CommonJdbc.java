@@ -12,6 +12,14 @@ public class CommonJdbc {
     private static final String userId = "whadmin";
     private static final String userPw = "whadmin";
 
+    static {
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static PreparedStatement getPreparedStatement(String sql) throws SQLException {
         pstmt = conn.prepareStatement(sql);
         return pstmt;
@@ -26,20 +34,11 @@ public class CommonJdbc {
         return pstmt.executeUpdate();
     }
 
-    public static Connection getConn() {
-        return conn;
-    }
-
     public static void execute() throws SQLException {
         pstmt.execute();
     }
 
     public static void connect() throws SQLException {
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         conn = DriverManager.getConnection(url, userId, userPw);
     }
 

@@ -1,7 +1,9 @@
 package core.momoinfo;
 
+import core.common.CommonJdbc;
 import core.common.exception.EmptyListException;
 import core.common.exception.HasIncomingException;
+import core.common.exception.NoPaymentHistoryException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.DetailsOption;
@@ -208,7 +210,7 @@ public class MomoInfoDao {
         return list;
     }
 
-    public List<TotalPayment> findMonthlyPaymentByUser() throws EmptyListException {
+    public List<TotalPayment> findMonthlyPaymentByUser(String year) throws EmptyListException {
 
         List<TotalPayment> list = new ArrayList<>();
 
@@ -238,7 +240,7 @@ public class MomoInfoDao {
                 "        , DECODE(TO_CHAR(IN_TIME,'MM'), '11', PAYMENT, 0) AS \"11\"\n" +
                 "        , DECODE(TO_CHAR(IN_TIME,'MM'), '12', PAYMENT, 0) AS \"12\"\n" +
                 "        FROM MOMOINFO\n" +
-                "        WHERE TO_CHAR(IN_TIME,'YYYY') = 2020\n" +
+                "        WHERE TO_CHAR(IN_TIME,'YYYY') = ?\n" +
                 ")" +
                 condition +
                 " GROUP BY MEMBER_ID, YYYY\n" +
@@ -247,8 +249,9 @@ public class MomoInfoDao {
             connect();
 
             PreparedStatement pstmt = getPreparedStatement(sql);
+            pstmt.setString(1, year);
             if (isUser) {
-                pstmt.setString(1, selectedUser.getMemberId());
+                pstmt.setString(2, selectedUser.getMemberId());
             }
 
             ResultSet rs = executeQuery();
@@ -284,5 +287,46 @@ public class MomoInfoDao {
         int userTotalPayment = rs.getInt("USER_TOTAL_PAYMENT");
 
         return new TotalPayment(member_id, monthly, userTotalPayment);
+    }
+
+    public List<String> findPaymentYearsByUser() throws NoPaymentHistoryException {
+        List<String> list = new ArrayList<>();
+
+        String condition = "";
+        boolean isUser = selectedUser.getGrade().equalsIgnoreCase("USER");
+        if (isUser) {
+            condition = " and MEMBER_ID = ?";
+        }
+
+        try {
+            connect();
+
+            String sql = "select TO_CHAR(OUT_TIME, 'YYYY') as YEAR from MOMOINFO where status = '출고'\n" +
+                    condition +
+                    " group by TO_CHAR(OUT_TIME, 'YYYY')";
+
+            PreparedStatement pstmt = getPreparedStatement(sql);
+            if (isUser) {
+                pstmt.setString(1, selectedUser.getMemberId());
+            }
+
+            ResultSet rs = executeQuery();
+
+            while(rs.next()) {
+                String year = rs.getString("YEAR");
+                list.add(year);
+            }
+            if (list.isEmpty()) {
+                throw new NoPaymentHistoryException();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+
+
+        return list;
     }
 }

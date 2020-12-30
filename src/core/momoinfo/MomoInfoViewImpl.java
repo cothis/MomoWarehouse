@@ -1,10 +1,8 @@
 package core.momoinfo;
 
 import core.common.Color;
-import core.common.exception.EmptyListException;
 import core.common.exception.ExitException;
 import core.common.exception.NoIncomingException;
-import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.DetailsOption;
 import core.momoinfo.option.InOutOption;
@@ -105,7 +103,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
                 }
                 return any.get();
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | IllegalStateException e) {
                 System.out.println("잘못 입력하셨습니다.");
             }
         }
@@ -143,5 +141,17 @@ public class MomoInfoViewImpl implements MomoInfoView {
     public String statisticsMenu() {
         String[] commands = {"Total", "Monthly"};
         return inputUserChoice("Statistics Menu", commands);
+    }
+
+    @Override
+    public String selectYear(List<String> yearList) {
+        String[] commands = new String[yearList.size()];
+
+        for (int i = 0; i < yearList.size(); i++) {
+            commands[i] = yearList.get(i);
+        }
+
+        return inputUserChoice("Payment Year", commands);
+
     }
 }

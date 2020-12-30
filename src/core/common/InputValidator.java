@@ -11,7 +11,7 @@ public class InputValidator {
     public static Scanner sc = new Scanner(System.in);
 
     public static String inputString(String valueName) throws ExitException {
-        System.out.println(valueName + "을 입력해주세요. 취소(exit)");
+        System.out.println(valueName + "을(를) 입력해주세요. 취소(exit)");
 
         String str = null;
         boolean exit = false;
@@ -50,7 +50,6 @@ public class InputValidator {
                     if (i == list.size() - 1) {
                         message = ANSI_RED + message + ANSI_RESET;
                     }
-//                    content.append(String.format("%d.%s  ", i + 1, list.get(i)));
                     content.append(message);
                 }
                 String format = String.format(" %-" + (length() -3) + "s", content.toString());
