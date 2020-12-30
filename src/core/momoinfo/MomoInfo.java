@@ -6,15 +6,15 @@ import java.sql.Date;
 import java.text.DecimalFormat;
 
 public class MomoInfo {
-	private int momoId;
-	private int spotId;
-	private int itemId;
-	private String memberId;
-	private Date inTime;
-	private Date outTime;
-	private int priceByHour;
-	private int payment;
-	private String status;
+	private final int momoId;
+	private final int spotId;
+	private final int itemId;
+	private final String memberId;
+	private final Date inTime;
+	private final Date outTime;
+	private final int priceByHour;
+	private final int payment;
+	private final String status;
 	
 	public MomoInfo(int momoId, int spotId, int itemId, String memberId, Date inTime, Date outTime, int priceByHour,
 			int payment, String status) {
@@ -34,72 +34,12 @@ public class MomoInfo {
 		return momoId;
 	}
 
-	public void setMomoId(int momoId) {
-		this.momoId = momoId;
-	}
-
-	public int getSpotId() {
-		return spotId;
-	}
-
-	public void setSpotId(int spotId) {
-		this.spotId = spotId;
-	}
-
-	public int getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
-
-	public String getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
-	}
-
 	public Date getInTime() {
 		return inTime;
 	}
 
-	public void setInTime(Date inTime) {
-		this.inTime = inTime;
-	}
-
-	public Date getOutTime() {
-		return outTime;
-	}
-
-	public void setOutTime(Date outTime) {
-		this.outTime = outTime;
-	}
-
 	public int getPriceByHour() {
 		return priceByHour;
-	}
-
-	public void setPriceByHour(int priceByHour) {
-		this.priceByHour = priceByHour;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public int getPayment() {
-		return payment;
-	}
-
-	public void setPayment(int payment) {
-		this.payment = payment;
 	}
 
 	@Override

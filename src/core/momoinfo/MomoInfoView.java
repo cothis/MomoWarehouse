@@ -1,6 +1,7 @@
 package core.momoinfo;
 
 import core.common.exception.ExitException;
+import core.common.exception.NoIncomingException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.DetailsOption;
@@ -12,20 +13,20 @@ import java.util.Optional;
 
 public interface MomoInfoView {
 
-    DetailsOption details();
-
     InOutOption inOut();
 
+    DetailsOption details();
+
+    String statisticsMenu();
+
+    // 하위 기능들
     void printList(List<MomoInfo> list, String header);
 
     Optional<Member> selectUser(List<Member> list) throws ExitException;
 
-    Optional<Item> selectItem(List<Item> read) throws Exception;
-
-    Optional<MomoInfo> selectOutItem(List<MomoInfo> inItems) throws ExitException;
+    MomoInfo selectOutItem(List<MomoInfo> inItems) throws ExitException, NoIncomingException;
 
     void printTotalPaymentStatistics(List<TotalPayment> list);
-    void printMonthlyPaymentStatistics(List<TotalPayment> list, Member session);
 
-    String staticMenu();
+    void printMonthlyPaymentStatistics(List<TotalPayment> list, Member session);
 }

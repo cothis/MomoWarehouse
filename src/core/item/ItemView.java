@@ -11,4 +11,6 @@ public interface ItemView {
     Item deleteUI(List<Item> list) throws ExitException, EmptyListException;
     Item updateUI(List<Item> list) throws ExitException, EmptyListException;
     void printList(List<Item> list);
+
+    Item selectItem(List<Item> read) throws ExitException, EmptyListException;
 }

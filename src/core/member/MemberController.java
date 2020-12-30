@@ -32,5 +32,5 @@ public interface MemberController {
 	void adminMenu();
 
 	//가격을 입력받고 결제 처리 후에 성공여부 리턴
-	void updateCash(int newMoney) throws Exception;
+	void updateCashToPayment(int payPrice) throws ChargeMoneyException, LessMoneyException;
 }

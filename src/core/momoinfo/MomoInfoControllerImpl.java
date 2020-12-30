@@ -40,8 +40,8 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     }
 
     @Override
-    public void inOutMenu(Member member) throws Exception {
-        session = member;
+    public void inOutMenu(Member session) throws Exception {
+        this.session = session;
         selectUser();
 
         boolean exit = false;
@@ -50,37 +50,31 @@ public class MomoInfoControllerImpl implements MomoInfoController {
 
             switch (select) {
                 case IN_SPOT: {
-                    List<Item> read = getItemController().read();
-                    if (read.size() > 0) {
-                        Optional<Item> item = view.selectItem(read);
-                        item.ifPresent(dao::create);
+                    try {
+                        Item item = getItemController().selectItem();
+
+                        dao.create(item);
+                        printMessage("입고가 정상적으로 완료되었습니다.");
+                    } catch (ExitException | EmptyListException e) {
+                        noticeError(e);
                     }
-                    printMessage("입고가 정상적으로 완료되었습니다.");
                     break;
                 }
                 case OUT_SPOT: {
                     try {
                         List<MomoInfo> inItems = dao.find(IN_DETAILS);
-                        if (inItems.size() == 0) throw new NoIncomingException();
+                        MomoInfo momoItem = view.selectOutItem(inItems);
 
-                        Optional<MomoInfo> momoInfo = view.selectOutItem(inItems);
-                        if (!momoInfo.isPresent()) break;
-
-                        MomoInfo momoItem = momoInfo.get();
                         int payPrice = calculateStoragePrice(momoItem);
-                        int newMoney = session.getCash() - payPrice;
-                        if (newMoney < 0) {
-                            throw new LessMoneyException(payPrice, session.getCash());
-                        }
+                        getMemberController().updateCashToPayment(payPrice);
 
-                        getMemberController().updateCash(newMoney);
                         dao.update(momoItem, payPrice);
-                        printMessage("결제금액 : " + payPrice + ", 현재잔액 : " + session.getCash());
+
+                        printMessage("결제금액 : " + payPrice + ", 현재잔액 : " + this.session.getCash());
                         printMessage("출고가 정상적으로 완료되었습니다.");
                     } catch (LessMoneyException | ExitException | NoIncomingException e) {
                         noticeError(e);
                     }
-
                     break;
                 }
                 case EXIT_SPOT: {
@@ -96,41 +90,25 @@ public class MomoInfoControllerImpl implements MomoInfoController {
         Date inTime = momoInfo.getInTime();
         Date outTime = new Date(System.currentTimeMillis());
         int elapsedTime = (int) ((outTime.getTime() - inTime.getTime()) / 1000);
-        int elapsedHour = elapsedTime / 3600; //원래 3600인데 임시로 분당 요금으로 처리
+        int elapsedHour = elapsedTime / 3600;
 
         return priceByHour * elapsedHour;
     }
 
     @Override
-    public void inOutDetails(Member member) throws ExitException {
-        session = member;
+    public void inOutDetails(Member session) throws ExitException {
+        this.session = session;
         selectUser();
 
-        boolean exit = false;
-        while(!exit) {
+        while(true) {
             DetailsOption select = view.details();
 
-            switch (select) {
-                case IN_DETAILS: {
-                    List<MomoInfo> list = dao.find(IN_DETAILS);
-                    view.printList(list, "Incoming Details");
-                    break;
-                }
-                case OUT_DETAILS: {
-                    List<MomoInfo> list = dao.find(OUT_DETAILS);
-                    view.printList(list, "Outgoing Details");
-                    break;
-                }
-                case ALL_DETAILS: {
-                    List<MomoInfo> list = dao.find(ALL_DETAILS);
-                    view.printList(list, "In Out Details");
-                    break;
-                }
-                case EXIT_DETAILS: {
-                    exit = true;
-                    break;
-                }
+            if (select == EXIT_DETAILS) {
+                break;
             }
+
+            List<MomoInfo> list = dao.find(select);
+            view.printList(list, select.getHeader());
         }
     }
 
@@ -140,13 +118,13 @@ public class MomoInfoControllerImpl implements MomoInfoController {
     }
 
     @Override
-    public void statistics(Member member) throws EmptyListException, ExitException {
-        session = member;
+    public void statistics(Member session) throws EmptyListException, ExitException {
+        this.session = session;
         selectUser();
 
         boolean exit = false;
         while(!exit){
-            String select = view.staticMenu();
+            String select = view.statisticsMenu();
 
             switch (select){
                 case "TOTAL" : {
@@ -156,7 +134,7 @@ public class MomoInfoControllerImpl implements MomoInfoController {
                 }
                 case "MONTHLY" : {
                     List<TotalPayment> list = dao.findMonthlyPaymentByUser();
-                    view.printMonthlyPaymentStatistics(list, session);
+                    view.printMonthlyPaymentStatistics(list, this.session);
                     break;
                 }
                 case "EXIT": {

@@ -4,6 +4,7 @@ import core.common.exception.EmptyListException;
 import core.common.exception.ExitException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static core.common.CommonView.*;
 import static core.common.InputValidator.*;
@@ -96,4 +97,28 @@ public class ItemViewImpl implements ItemView {
         return item;
     }
 
+    @Override
+    public Item selectItem(List<Item> read) throws ExitException, EmptyListException {
+        if (read.size() <= 0) {
+            throw new EmptyListException();
+        }
+        for (Item item : read) {
+            System.out.println(item);
+        }
+        while (true) {
+            try {
+                String select = inputString("아이템 ID");
+
+                Optional<Item> any = read.stream()
+                        .filter(item -> item.getItemId() == Integer.parseInt(select))
+                        .findAny();
+                if (!any.isPresent()) {
+                    throw new IllegalStateException("잘못 입력하셨습니다.");
+                }
+                return any.get();
+            } catch (IllegalStateException e) {
+                noticeError(e);
+            }
+        }
+    }
 }

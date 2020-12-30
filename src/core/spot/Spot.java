@@ -15,10 +15,6 @@ public class Spot {
 		this.name = name;
 		this.location = location;
 	}
-	
-	public Spot() {
-		
-	}
 
 	public int getId() {
 		return id;
@@ -71,11 +67,8 @@ public class Spot {
 		} else if (!location.equals(other.location))
 			return false;
 		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+			return other.name == null;
+		} else return name.equals(other.name);
 	}
 
 	@Override

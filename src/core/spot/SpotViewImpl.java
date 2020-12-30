@@ -1,5 +1,8 @@
 package core.spot;
 
+import core.common.exception.EmptyListException;
+import core.common.exception.ExitException;
+
 import java.util.List;
 
 import static core.common.CommonView.*;
@@ -13,7 +16,7 @@ public class SpotViewImpl implements SpotView {
     }
 
     @Override
-    public Spot addUI() throws Exception {
+    public Spot addUI() throws ExitException {
         printHead("Add Spot Menu");
         String name;
         String location;
@@ -25,7 +28,7 @@ public class SpotViewImpl implements SpotView {
     }
 
     @Override
-    public Spot deleteUI(List<Spot> list) throws Exception {
+    public Spot deleteUI(List<Spot> list) throws ExitException, EmptyListException {
         printHead("Delete Spot Menu");
         return selectOneSpot(list);
     }
@@ -43,7 +46,7 @@ public class SpotViewImpl implements SpotView {
 
 
     @Override
-    public Spot updateUI(List<Spot> list) throws Exception {
+    public Spot updateUI(List<Spot> list) throws ExitException, EmptyListException {
         printHead("Change Spot Menu");
 
         Spot Spot = selectOneSpot(list);
@@ -56,12 +59,11 @@ public class SpotViewImpl implements SpotView {
         return Spot;
     }
 
-    private Spot selectOneSpot(List<Spot> list) throws Exception {
+    private Spot selectOneSpot(List<Spot> list) throws ExitException, EmptyListException {
         Spot Spot = null;
 
         if(list == null || list.size() ==0) {
-            System.out.println("보관소가 없습니다");
-            return null;
+            throw new EmptyListException();
         }
         printList(list);
 

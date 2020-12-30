@@ -217,7 +217,12 @@ public class MemberControllerImpl implements MemberController {
     }
 
     @Override
-    public void updateCash(int newMoney) throws ChargeMoneyException {
-        dao.updateCash(session, newMoney);
+    public void updateCashToPayment(int payPrice) throws ChargeMoneyException, LessMoneyException {
+        int newMoney = session.getCash() - payPrice;
+        if (newMoney < 0) {
+            throw new LessMoneyException(payPrice, session.getCash());
+        }
+
+        dao.updateCash(session, payPrice);
     }
 }

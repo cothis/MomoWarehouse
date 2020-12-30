@@ -1,5 +1,8 @@
 package core.spot;
 
+import core.common.exception.EmptyListException;
+import core.common.exception.ExitException;
+
 import java.util.List;
 
 import static core.common.CommonView.*;
@@ -43,8 +46,8 @@ public class SpotControllerImpl implements SpotController {
         try {
             Spot spot = view.addUI();
             dao.addSpot(spot);
-        } catch (Exception exception) {
-            noticeError(exception);
+        } catch (ExitException e) {
+            noticeError(e);
         }
     }
 
@@ -54,10 +57,9 @@ public class SpotControllerImpl implements SpotController {
         try {
             Spot spot = view.deleteUI(spots);
             dao.delete(spot);
-        } catch (Exception exception) {
-            noticeError(exception);
+        } catch (ExitException | EmptyListException e) {
+            noticeError(e);
         }
-
     }
 
     @Override
@@ -72,10 +74,9 @@ public class SpotControllerImpl implements SpotController {
         try {
             Spot spot = view.updateUI(spots);
             dao.update(spot);
-        } catch (Exception exception) {
-            noticeError(exception);
+        } catch (ExitException | EmptyListException e) {
+            noticeError(e);
         }
-
     }
 
     @Override

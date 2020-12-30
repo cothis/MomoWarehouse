@@ -1,7 +1,9 @@
 package core.momoinfo;
 
 import core.common.Color;
+import core.common.exception.EmptyListException;
 import core.common.exception.ExitException;
+import core.common.exception.NoIncomingException;
 import core.item.Item;
 import core.member.Member;
 import core.momoinfo.option.DetailsOption;
@@ -87,29 +89,9 @@ public class MomoInfoViewImpl implements MomoInfoView {
     }
 
     @Override
-    public Optional<Item> selectItem(List<Item> read) throws Exception {
-        for (Item item : read) {
-            System.out.println(item);
-        }
-        while (true) {
-            try {
-                String select = inputString("아이템 ID");
+    public MomoInfo selectOutItem(List<MomoInfo> inItems) throws ExitException, NoIncomingException {
+        if (inItems.size() == 0) throw new NoIncomingException();
 
-                Optional<Item> any = read.stream()
-                        .filter(item -> item.getItemId() == Integer.parseInt(select))
-                        .findAny();
-                if (!any.isPresent()) {
-                    throw new IllegalStateException("잘못 입력하셨습니다.");
-                }
-                return any;
-            } catch (IllegalStateException e) {
-                noticeError(e);
-            }
-        }
-    }
-
-    @Override
-    public Optional<MomoInfo> selectOutItem(List<MomoInfo> inItems) throws ExitException {
         printList(inItems, "Incoming Items");
 
         while(true) {
@@ -122,7 +104,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
                 if (!any.isPresent()) {
                     throw new IllegalStateException("잘못 입력하셨습니다.");
                 }
-                return any;
+                return any.get();
             } catch (NumberFormatException e) {
                 System.out.println("잘못 입력하셨습니다.");
             }
@@ -158,7 +140,7 @@ public class MomoInfoViewImpl implements MomoInfoView {
     }
 
     @Override
-    public String staticMenu() {
+    public String statisticsMenu() {
         String[] commands = {"Total", "Monthly"};
         return inputUserChoice("Statistics Menu", commands);
     }

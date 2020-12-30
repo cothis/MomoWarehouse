@@ -5,6 +5,7 @@ import core.common.exception.ExitException;
 
 import java.util.List;
 
+import static core.ApplicationConfig.getItemController;
 import static core.common.CommonView.*;
 
 public class ItemControllerImpl implements ItemController {
@@ -20,7 +21,7 @@ public class ItemControllerImpl implements ItemController {
     @Override
     public void itemMenu() {
         boolean exit = false;
-        while(!exit) {
+        while (!exit) {
             String select = view.itemIndex();
             switch (select) {
                 case "ADD":
@@ -30,8 +31,7 @@ public class ItemControllerImpl implements ItemController {
                     delete();
                     break;
                 case "VIEW":
-                    List<Item> read = read();
-                    view.printList(read);
+                    read();
                     break;
                 case "CHANGE":
                     update();
@@ -65,18 +65,29 @@ public class ItemControllerImpl implements ItemController {
     }
 
     @Override
-    public List<Item> read() {
-        return dao.selectAll();
+    public void read() {
+        view.printList(findAll());
     }
 
     @Override
     public void update() {
-        List<Item> items = read();
+        List<Item> items = findAll();
         try {
             Item item = view.updateUI(items);
             dao.update(item);
         } catch (ExitException | EmptyListException e) {
             noticeError(e);
         }
+    }
+
+    @Override
+    public List<Item> findAll() {
+        return dao.selectAll();
+    }
+
+    @Override
+    public Item selectItem() throws ExitException, EmptyListException {
+        List<Item> read = getItemController().findAll();
+        return view.selectItem(read);
     }
 }
