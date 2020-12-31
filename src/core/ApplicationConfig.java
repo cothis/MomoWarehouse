@@ -56,6 +56,7 @@ public class ApplicationConfig {
 
 	public static void start() {
 		CommonView.logo();
+		System.out.println("반가워요");
 		memberController.indexMenu();
 	}
 }
