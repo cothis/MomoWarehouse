@@ -90,7 +90,7 @@ public class MemberViewImpl implements MemberView {
 
 	@Override
 	public InfoItem selectInformationToChange() {
-		String[] commands = {PASSWORD.name(), NAME.name(), PHONE.name(), EMAIL.name(), EXIT.name()};
+		String[] commands = {PW.name(), NAME.name(), PHONE.name(), EMAIL.name(), EXIT.name()};
 		String selectedItem = inputUserChoice("Change Information", commands);
 		return InfoItem.valueOf(selectedItem);
 	}

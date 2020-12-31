@@ -145,7 +145,7 @@ public class MemberDao {
 			PreparedStatement pstmt = getPreparedStatement(sql);
 
 			switch (infoItem) {
-				case PASSWORD: {
+				case PW: {
 					if(member.getPw().length() < 4) {
 						throw new PasswordLengthException();
 					} else {

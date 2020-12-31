@@ -1,7 +1,7 @@
 package core.member.option;
 
 public enum InfoItem {
-    PASSWORD,
+    PW,
     NAME,
     PHONE,
     EMAIL,
