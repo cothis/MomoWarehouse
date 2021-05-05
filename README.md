@@ -31,4 +31,5 @@
 > > - 보관소 CRUD
 > > - 월별 매출금액 통계 코드 작성
 > > 
-> > 
+> > ![image](https://user-images.githubusercontent.com/50898502/117153507-02795c00-adf6-11eb-8ac4-794eea5e16a1.png)
+
