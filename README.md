@@ -16,14 +16,15 @@
 > > - 패키지 구조 설계
 > > - 핵심 로직(MomoInfo Controller) 인터페이스 설계
 > > - ApplicationConfig 클래스 개발(Dependency Injection, Singleton)
-> 
+>
+
 > 공통 코드 개발
-> > Exception common.exception.*
-> > Console 화면 Color 기능(common.Color)
-> > Jdbc 접속 기능(common.CommonJdbc)
-> > Console 화면 Layout 기능(common.CommonView)
-> > InputValidator 기능(common.InputValidator)
-> 
+> > - Exception common.exception
+> > - Console 화면 Color 기능(common.Color)
+> > - Jdbc 접속 기능(common.CommonJdbc)
+> > - Console 화면 Layout 기능(common.CommonView)
+> > - InputValidator 기능(common.InputValidator)
+
 > 개인 업무
 > > - 입출고 기능 개발
 > > - 입출고 내역 조회(유저/관리자 구분)
